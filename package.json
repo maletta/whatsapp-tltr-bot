@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/index.mjs",
     "devjs": "nodemon src/index.mjs",
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn  src/index.ts",
-    "test": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn  src/test.ts"
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --ignore-watch src/server.ts --respawn  src/server.ts",
+    "test": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules  --respawn  src/test.ts"
   },
   "keywords": [],
   "author": "",

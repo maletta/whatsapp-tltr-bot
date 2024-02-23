@@ -2,7 +2,8 @@
 import dotenv from 'dotenv';
 import { Client, LocalAuth } from 'whatsapp-web.js';
 
-import { IChat } from './@types/augmentation';
+import { getChats } from './functions/getChats';
+import { onMessage } from './functions/onMessage';
 import { QRCodeDisplay } from './QRCodeDisplay';
 
 dotenv.config();
@@ -27,31 +28,11 @@ client.on('remote_session_saved', (session) => {
 
 client.on('ready', async () => {
   console.log('Client is ready!');
-  const isGroup = Boolean(process.env.IS_GROUP);
-  const chatName = process.env.CHAT_NAME;
-  const chatCreateTimestamp = Number(process.env.CHAT_CREATION_TIMESTAMP);
 
-  const chat = await client.getChats().then((chats) => {
-    const filteredChats = chats.filter((c) => {
-      const chatAugmented = c as unknown as IChat;
-      if (chatAugmented.name === chatName) {
-        if (
-          chatAugmented.isGroup &&
-          chatAugmented.groupMetadata
-          // chatAugmented.groupMetadata.creation === chatCreateTimestamp
-        ) {
-          return true;
-        }
-      }
-
-      return false;
-    });
-
-    return filteredChats;
-  });
-
-  // console.log(chat);
-  console.dir(chat, { depth: null });
+  // const chat = await getChats(client, process.env.CHAT_NAME);
+  // console.dir(chat, { depth: null });
 });
+
+client.on('message', onMessage);
 
 client.initialize();
