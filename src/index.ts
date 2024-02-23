@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import dotenv from 'dotenv';
-import wwjsPkg from 'whatsapp-web.js';
+import { Client, LocalAuth } from 'whatsapp-web.js';
 
-import { QRCodeDisplay } from './QRCodeDisplay.mjs';
+import { IChat } from './@types/augmentation';
+import { QRCodeDisplay } from './QRCodeDisplay';
 
 dotenv.config();
-
-const { Client, LocalAuth } = wwjsPkg;
 
 const client = new Client({
   // puppeteer: { headless: true },
@@ -33,11 +33,12 @@ client.on('ready', async () => {
 
   const chat = await client.getChats().then((chats) => {
     const filteredChats = chats.filter((c) => {
-      if (c.name === chatName) {
+      const chatAugmented = c as unknown as IChat;
+      if (chatAugmented.name === chatName) {
         if (
-          c.isGroup &&
-          c.groupMetadata &&
-          c.groupMetadata.creation === chatCreateTimestamp
+          chatAugmented.isGroup &&
+          chatAugmented.groupMetadata
+          // chatAugmented.groupMetadata.creation === chatCreateTimestamp
         ) {
           return true;
         }
@@ -49,7 +50,8 @@ client.on('ready', async () => {
     return filteredChats;
   });
 
-  console.log(chat);
+  // console.log(chat);
+  console.dir(chat, { depth: null });
 });
 
 client.initialize();
