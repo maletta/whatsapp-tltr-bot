@@ -15,14 +15,21 @@ WORKDIR /app
 # Copie o package.json e o package-lock.json
 COPY package*.json ./
 
+# Copiando arquivos necessários para compilação
+COPY src/ src/
+COPY .env .env
+
 # Instale as dependências do projeto
 RUN npm install
 
-# Copie o restante dos arquivos do projeto
-COPY . .
+# Execute o script de build
+RUN npm run build
+
+# Copie os arquivos da pasta dist para o contêiner
+COPY ./dist ./dist
 
 # Exponha a porta que seu app usa
 EXPOSE 3000
 
 # Comando para iniciar o seu app
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]
