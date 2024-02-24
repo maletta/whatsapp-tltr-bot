@@ -14,6 +14,9 @@ abstract class WhatsAppClient {
     if (WhatsAppClient.client === null || WhatsAppClient.client === undefined) {
       WhatsAppClient.client = new Client({
         authStrategy: new LocalAuth(),
+        puppeteer: {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        },
       });
     }
 

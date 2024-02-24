@@ -1,5 +1,5 @@
 # Escolha uma imagem base do Node.js
-FROM node:14
+FROM node:20
 
 # Atualize o sistema e instale os pacotes necessários
 RUN apt-get update && apt-get install -y \
@@ -9,12 +9,18 @@ RUN apt-get update && apt-get install -y \
   libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
   libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 
+
+# Crie um usuário não-root e use-o
+RUN useradd -m myuser
+USER myuser
+
+
 # Defina o diretório de trabalho
 WORKDIR /app
 
 # Copie o package.json e o package-lock.json
 COPY package*.json ./
-
+COPY *.json ./
 # Copiando arquivos necessários para compilação
 COPY src/ src/
 COPY .env .env
@@ -24,9 +30,6 @@ RUN npm install
 
 # Execute o script de build
 RUN npm run build
-
-# Copie os arquivos da pasta dist para o contêiner
-COPY ./dist ./dist
 
 # Exponha a porta que seu app usa
 EXPOSE 3000

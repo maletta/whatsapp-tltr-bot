@@ -6,6 +6,8 @@ import { WhatsAppClient } from './WhatsAppClient';
 
 dotenv.config();
 
+console.log('v2');
+
 const bot = WhatsAppClient.getClient();
 
 bot.on('ready', () => console.log('client is ready!'));
