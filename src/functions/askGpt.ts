@@ -9,9 +9,12 @@ async function askChatGPT(text: string): Promise<string> {
   const prompt = generatePrompt(text);
   try {
     const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
+      // 'https://api.openai.com/v1/completions',
+      // 'https://api.openai.com/v1/chat/completions',
+      'https://api.openai.com/v1/completions',
       {
-        model: 'text-davinci-002',
+        // model: 'gpt-3.5-turbo-instruct',
+        model: 'text-davinci-003',
         messages: [
           {
             role: 'user',
@@ -30,7 +33,13 @@ async function askChatGPT(text: string): Promise<string> {
     // Retorna a resposta do ChatGPT
     return response.data.choices[0].message.content;
   } catch (error) {
-    console.error('Erro ao enviar requisição para a API do ChatGPT:', error);
+    if (error.response.data) {
+      console.error(
+        'Erro ao enviar requisição para a API do ChatGPT:',
+        error.response.data,
+      );
+    }
+    // console.error('Erro ao enviar requisição para a API do ChatGPT:', error);
     return null;
   }
 }

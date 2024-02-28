@@ -26,7 +26,7 @@ const isTimestampBetween = {
     new Date().getTime() - new Date(timestamp * 1000).getTime() <= 30 * 1000,
 };
 
-function concatMessages(mensagens) {
+function concatMessages(mensagens): string[] {
   const mensagensConcatenadas = [];
   let strAtual = '';
 
