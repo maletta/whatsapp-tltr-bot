@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@deathabyss/wwebjs-sender": "^1.93.2",
+    "@google-cloud/language": "^6.2.0",
     "axios": "^1.6.7",
     "chatgpt": "^5.2.5",
     "dotenv": "^16.4.5",
