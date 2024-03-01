@@ -1,42 +1,61 @@
 import WwebjsSender from '@deathabyss/wwebjs-sender';
-import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
+import { Chat, Client, Contact, Message, MessageTypes } from 'whatsapp-web.js';
 
-import { askChatGPT, sendPromptToOpenAI } from './askGpt';
+import { commandEveryOne } from './commands';
 import { concatMessages, isMessageToBot, isTimestampBetween } from './shared';
+
+async function removeMentionFromBody(
+  body: string,
+  contact: Contact[],
+): Promise<string> {
+  const mentions: string[] = contact.map((c) => c.id.user);
+  const regex = new RegExp(
+    mentions.map((mention) => `@${mention}`).join('|'),
+    'gi',
+  );
+
+  return body.replace(regex, '').trim();
+}
+
+async function selectCommand(client: Client, message: Message) {
+  const contacts = await message.getMentions();
+  const content = await removeMentionFromBody(message.body, contacts); //  body: '@5511964869895 !resumo',
+
+  console.log('---content------', content);
+
+  switch (content) {
+    case '!resumo':
+      console.log('resumir');
+      break;
+
+    case '!todos':
+      console.log('marcar todos');
+      commandEveryOne(client, message);
+      break;
+
+    case '!f':
+    case '!figurinha':
+    case '!s':
+    case '!sticker':
+      console.log('fazer figurinha');
+      break;
+    default:
+      console.log('nenhumn comando relacionado');
+      break;
+  }
+}
 
 async function onMessage(client: Client, message: Message) {
   const isValidMessage = await isMessageToBot(message);
+
   if (!isValidMessage) {
     return;
   }
-  const chat = await message.getChat();
-  const contact = await message.getContact();
 
-  const allMessages: Message[] = await chat
-    .fetchMessages({
-      limit: 1000,
-    })
-    .then((foundMessages) => {
-      return foundMessages.filter(
-        (msg) =>
-          msg.type === MessageTypes.TEXT &&
-          isTimestampBetween.fourHours(msg.timestamp),
-      );
-    });
+  await selectCommand(client, message);
 
-  const concat = concatMessages(allMessages);
-
-  try {
-    // const gptresponse = await chatGPT.sendMessage('quanto é 1 + 1');
-
-    await chat.sendMessage(`Respota @${contact.id.user} `, {
-      mentions: [contact],
-    });
-  } catch (error) {
-    console.log(error);
-  }
   // console.log(allMessages.map((msg) => msg.body));
-  // console.dir(chat, { depth: 2 });
+  // console.dir(message, { depth: 2 });
 }
 
 export { onMessage };

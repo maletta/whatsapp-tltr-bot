@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import dotenv from 'dotenv';
 
 import { getAccessToken, makeRequest } from './functions/askGeminiHttp';

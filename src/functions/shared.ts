@@ -1,4 +1,4 @@
-import { Message } from 'whatsapp-web.js';
+import { Message, MessageTypes } from 'whatsapp-web.js';
 
 async function isMessageToBot(message: Message): Promise<boolean> {
   const mentions = await message.getMentions();
@@ -26,7 +26,10 @@ const isTimestampBetween = {
     new Date().getTime() - new Date(timestamp * 1000).getTime() <= 30 * 1000,
 };
 
-function concatMessages(mensagens): string[] {
+function concatMessages(
+  mensagens: Message[],
+  { maxTokens = 3800 } = {},
+): string[] {
   const mensagensConcatenadas = [];
   let strAtual = '';
 
@@ -35,7 +38,7 @@ function concatMessages(mensagens): string[] {
     const msg = mensagens[i].body; // Supondo que 'body' é a propriedade que contém o texto da mensagem
 
     // Verifica se a adição da próxima mensagem excederá o limite de 3800 caracteres
-    if (strAtual.length + msg.length > 3800) {
+    if (strAtual.length + msg.length > maxTokens) {
       // Se exceder, adiciona a string atual ao array de mensagens concatenadas
       mensagensConcatenadas.push(strAtual);
       // Começa uma nova string com a mensagem atual
@@ -54,4 +57,27 @@ function concatMessages(mensagens): string[] {
   return mensagensConcatenadas;
 }
 
-export { isMessageToBot, isTimestampBetween, concatMessages };
+async function filterMessagesByHour(messages: Message[]): Promise<Message[]> {
+  const chat = await messages[0].getChat();
+
+  const allMessages: Message[] = await chat
+    .fetchMessages({
+      limit: 1000,
+    })
+    .then((foundMessages) => {
+      return foundMessages.filter(
+        (msg) =>
+          msg.type === MessageTypes.TEXT &&
+          isTimestampBetween.oneHours(msg.timestamp),
+      );
+    });
+
+  return allMessages;
+}
+
+export {
+  isMessageToBot,
+  concatMessages,
+  isTimestampBetween,
+  filterMessagesByHour,
+};
