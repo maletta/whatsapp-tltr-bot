@@ -1,4 +1,4 @@
-import { Message, MessageTypes } from 'whatsapp-web.js';
+import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
 
 async function isMessageToBot(message: Message): Promise<boolean> {
   const mentions = await message.getMentions();
@@ -57,12 +57,13 @@ function concatMessages(
   return mensagensConcatenadas;
 }
 
-async function filterMessagesByHour(messages: Message[]): Promise<Message[]> {
-  const chat = await messages[0].getChat();
-
+async function filterMessagesByHour(
+  chat: Chat,
+  limit: number = 200,
+): Promise<Message[]> {
   const allMessages: Message[] = await chat
     .fetchMessages({
-      limit: 1000,
+      limit,
     })
     .then((foundMessages) => {
       return foundMessages.filter(
