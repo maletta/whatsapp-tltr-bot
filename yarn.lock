@@ -83,6 +83,13 @@
   dependencies:
     google-gax "^4.0.3"
 
+"@google-cloud/vertexai@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/vertexai/-/vertexai-0.5.0.tgz#c332fcfdd418bc9a60cae9186b553573a823a4f2"
+  integrity sha512-qIFHYTXA5UCLdm9JG+Xf1suomCXxRqa1PKdYjqXuhZsCm8mn37Rb0Tf8djlhDzuRVWyWoQTmsWpsk28ZTmbqJg==
+  dependencies:
+    google-auth-library "^9.1.0"
+
 "@grpc/grpc-js@~1.10.0":
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.10.1.tgz#be450560c990c08274bc19d514e181ea205ccaa8"
@@ -1944,7 +1951,7 @@ globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
-google-auth-library@^9.3.0:
+google-auth-library@^9.1.0, google-auth-library@^9.3.0, google-auth-library@^9.6.3:
   version "9.6.3"
   resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-9.6.3.tgz#add8935bc5b842a8e80f84fef2b5ed9febb41d48"
   integrity sha512-4CacM29MLC2eT9Cey5GDVK4Q8t+MMp8+OEdOaqD9MG6b0dOyLORaaeJMPQ7EESVgm/+z5EKYyFLxgzBJlJgyHQ==
