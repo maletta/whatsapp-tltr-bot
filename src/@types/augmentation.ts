@@ -45,8 +45,8 @@ export interface IGroupMetadata {
 
 interface IGroupChat extends Chat {
   isGroup: true;
-  groupMetadata: IGroupMetadata;
   pinned: boolean;
+  groupMetadata: IGroupMetadata;
 }
 
 interface INonGroupChat extends Chat {

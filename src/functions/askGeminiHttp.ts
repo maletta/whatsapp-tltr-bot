@@ -1,7 +1,6 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-restricted-syntax */
 import axios from 'axios';
-import fs from 'fs/promises';
 import { GoogleAuth } from 'google-auth-library';
 
 interface IPart {
