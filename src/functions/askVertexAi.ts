@@ -48,7 +48,8 @@ async function createNonStreamingMultipartContent(messages: string) {
   // Select the text from the response
   const fullTextResponse = aggregatedResponse.candidates[0].content.parts[0];
 
-  console.log(fullTextResponse);
+  // console.dir(fullTextResponse);
+  console.dir(fullTextResponse, { depth: null });
 
   return fullTextResponse.text;
 }

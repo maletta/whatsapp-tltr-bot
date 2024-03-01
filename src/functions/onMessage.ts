@@ -1,7 +1,7 @@
 import WwebjsSender from '@deathabyss/wwebjs-sender';
 import { Chat, Client, Contact, Message, MessageTypes } from 'whatsapp-web.js';
 
-import { commandEveryOne } from './commands';
+import { commandEveryOne, commandSummarizeMessages } from './commands';
 import { concatMessages, isMessageToBot, isTimestampBetween } from './shared';
 
 async function removeMentionFromBody(
@@ -26,6 +26,7 @@ async function selectCommand(client: Client, message: Message) {
   switch (content) {
     case '!resumo':
       console.log('resumir');
+      commandSummarizeMessages(client, message);
       break;
 
     case '!todos':

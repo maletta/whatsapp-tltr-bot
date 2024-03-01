@@ -2,6 +2,7 @@
 import { IChat } from 'src/@types/augmentation';
 import { Message, Contact, Client } from 'whatsapp-web.js';
 
+import { createNonStreamingMultipartContent } from './askVertexAi';
 import { filterMessagesByHour } from './shared';
 
 async function getQuotedMessage(message: Message): Promise<Message | null> {
@@ -28,11 +29,8 @@ export async function commandEveryOne(
       responseText.push(`@${p.id.user}`);
     });
   }
-  const text = responseText.join('');
+  //   const text = responseText.join('');
   const quotedMessage = await getQuotedMessage(message);
-
-  console.log('mentions', mentions);
-  console.log('responseText', text);
 
   await client.sendMessage(message.from, 'Vejam todos', {
     mentions: mentions as unknown as Contact[],
@@ -47,7 +45,10 @@ export async function commandSummarizeMessages(
   message: Message,
 ) {
   const chat = await message.getChat();
-  const filteredMessages = await filterMessagesByHour(chat, 200);
+  const filteredMessages = await filterMessagesByHour(chat, 350);
+  const messageInText = filteredMessages.map((m) => m.body).join('');
 
-  message.reply('Mensagem');
+  const response = await createNonStreamingMultipartContent(messageInText);
+
+  message.reply(response);
 }
