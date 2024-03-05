@@ -1,0 +1,43 @@
+interface Command {
+  execute(client: Client, message: Message): Promise<void>;
+}
+
+class SelectCommand implements Command {
+  async execute(client: Client, message: Message): Promise<void> {
+    // Implementação do comando Select
+  }
+}
+
+class OnMessageCommand implements Command {
+  async execute(client: Client, message: Message): Promise<void> {
+    // Implementação do comando OnMessage
+  }
+}
+
+class CommandEveryOne implements Command {
+  async execute(client: Client, message: Message): Promise<void> {
+    // Implementação do comando CommandEveryOne
+  }
+}
+
+class CommandSummarizeMessages implements Command {
+  async execute(client: Client, message: Message): Promise<void> {
+    // Implementação do comando CommandSummarizeMessages
+  }
+}
+
+class CommandHandler {
+  private commands = new Map<string, Command>();
+
+  registerCommand(commandName: string, command: Command) {
+    this.commands.set(commandName, command);
+  }
+
+  async handleCommand(commandName: string, client: Client, message: Message) {
+    const command = this.commands.get(commandName);
+    if (!command) {
+      throw new Error(`Command ${commandName} not found`);
+    }
+    await command.execute(client, message);
+  }
+}
