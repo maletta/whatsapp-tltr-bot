@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-syntax */
+import WwebjsSender from '@deathabyss/wwebjs-sender';
 import dotenv from 'dotenv';
 
 import { getAccessToken, makeRequest } from './functions/askGeminiHttp';
@@ -29,7 +30,47 @@ bot.on('qr', (qr) => {
 
 bot.on('authenticated', () => console.log('authenticated!'));
 
-bot.on('message', (message) => onMessage(bot, message));
+bot.on('message', (message) => {
+  // onMessage(bot, message)
+  const { from } = message;
+
+  console.log('Embed criado com sucesso!'); // Adicione uma mensagem mais descritiva
+
+  const botao1 = {
+    type: 'button',
+    buttonText: {
+      text: 'Botão 1',
+    },
+    event: {
+      type: 'reply',
+      reply: {
+        title: 'Botão 1 pressionado',
+        text: 'Você pressionou o botão 1!',
+      },
+    },
+  };
+
+  const botao2 = {
+    type: 'button',
+    buttonText: {
+      text: 'Botão 2',
+    },
+    event: {
+      type: 'reply',
+      reply: {
+        title: 'Botão 2 pressionado',
+        text: 'Você pressionou o botão 2!',
+      },
+    },
+  };
+
+  const codigoBotoes = {
+    type: 'buttons',
+    buttons: [botao1, botao2],
+  };
+
+  bot.sendMessage(from, JSON.stringify(codigoBotoes));
+});
 
 bot.initialize();
 

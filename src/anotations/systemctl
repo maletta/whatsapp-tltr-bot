@@ -1,0 +1,9 @@
+comandos para automatizar inicialização do projeto em ambiente linux
+
+sudo systemctl daemon-reload
+
+sudo systemctl status your_service
+
+sudo systemctl start your_service
+
+sudo systemctl enable your_service

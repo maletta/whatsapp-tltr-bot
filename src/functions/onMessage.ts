@@ -1,8 +1,9 @@
-import WwebjsSender from '@deathabyss/wwebjs-sender';
-import { Chat, Client, Contact, Message, MessageTypes } from 'whatsapp-web.js';
+import { Client, Contact, Message } from 'whatsapp-web.js';
 
-import { commandEveryOne, commandSummarizeMessages } from './commands';
-import { concatMessages, isMessageToBot, isTimestampBetween } from './shared';
+import { createEmbed } from './commands/embed';
+import { commandEveryOne } from './commands/everyone';
+import { commandSummarizeMessages } from './commands/summarize';
+import { isMessageToBot } from './shared';
 
 async function removeMentionFromBody(
   body: string,
@@ -39,6 +40,9 @@ async function selectCommand(client: Client, message: Message) {
     case '!s':
     case '!sticker':
       console.log('fazer figurinha');
+      break;
+    case '!embed':
+      createEmbed(client, message);
       break;
     default:
       console.log('nenhumn comando relacionado');

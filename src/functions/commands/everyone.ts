@@ -2,9 +2,6 @@
 import { IChat } from 'src/@types/augmentation';
 import { Message, Contact, Client } from 'whatsapp-web.js';
 
-import { createNonStreamingMultipartContent } from './askVertexAi';
-import { filterMessagesByHour } from './shared';
-
 async function getQuotedMessage(message: Message): Promise<Message | null> {
   if (message.hasQuotedMsg) {
     return message.getQuotedMessage();
@@ -38,17 +35,4 @@ export async function commandEveryOne(
       ? quotedMessage.id._serialized
       : message.id._serialized,
   });
-}
-
-export async function commandSummarizeMessages(
-  client: Client,
-  message: Message,
-) {
-  const chat = await message.getChat();
-  const filteredMessages = await filterMessagesByHour(chat, 350);
-  const messageInText = filteredMessages.map((m) => m.body).join('');
-
-  const response = await createNonStreamingMultipartContent(messageInText);
-
-  message.reply(response);
 }
