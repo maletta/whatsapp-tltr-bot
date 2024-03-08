@@ -1,4 +1,4 @@
-import { EnumTimeLimit } from './pattern/model/TimeLimit';
+import { EnumTimeLimit } from './TimeLimit';
 
 interface ISummaryDTO {
   id?: string;
@@ -21,20 +21,6 @@ class Summary {
     this.createdAt = createdAt;
     this.expiresIn = expiresIn;
   }
-
-  public hasExpired(timestamp: Date) {
-    return timestamp.getTime() < this.timeLimit * 100;
-  }
 }
 
 export { ISummaryDTO, Summary };
-
-const test = new Summary({
-  content: 'content',
-  createdAt: new Date('2021-08-31T14:57:09Z'),
-  expiresIn: new Date('2021-09-01T14:57:09Z'),
-  id: 'test',
-  timeLimit: EnumTimeLimit['1_HOUR'],
-});
-
-console.log(test);
