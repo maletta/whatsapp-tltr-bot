@@ -1,13 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import WwebjsSender from '@deathabyss/wwebjs-sender';
 import dotenv from 'dotenv';
 
-import { getAccessToken, makeRequest } from './functions/askGeminiHttp';
-import { askChatGPT } from './functions/askGpt';
-import { createNonStreamingMultipartContent } from './functions/askVertexAi';
-import { gcpAsk } from './functions/gcpAsk';
-import { mock01 } from './functions/mocks';
-import { onMessage } from './functions/onMessage';
 import { QRCodeDisplay } from './QRCodeDisplay';
 import { WhatsAppClient } from './WhatsAppClient';
 

@@ -1,8 +1,5 @@
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
-import { createEmbed } from './commands/embed';
-import { commandEveryOne } from './commands/everyone';
-import { commandSummarizeMessages } from './commands/summarize';
 import { isMessageToBot } from './shared';
 
 async function removeMentionFromBody(
@@ -27,12 +24,12 @@ async function selectCommand(client: Client, message: Message) {
   switch (content) {
     case '!resumo':
       console.log('resumir');
-      commandSummarizeMessages(client, message);
+      // commandSummarizeMessages(client, message);
       break;
 
     case '!todos':
       console.log('marcar todos');
-      commandEveryOne(client, message);
+      // commandEveryOne(client, message);
       break;
 
     case '!f':
@@ -42,7 +39,7 @@ async function selectCommand(client: Client, message: Message) {
       console.log('fazer figurinha');
       break;
     case '!embed':
-      createEmbed(client, message);
+      // createEmbed(client, message);
       break;
     default:
       console.log('nenhumn comando relacionado');

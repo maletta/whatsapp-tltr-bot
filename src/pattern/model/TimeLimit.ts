@@ -7,6 +7,6 @@ enum EnumTimeLimit {
   '6_HOURS' = 360,
 }
 
-type TimeLimitKey = keyof typeof EnumTimeLimit;
+type TimeLimitOption = keyof typeof EnumTimeLimit;
 
-export { EnumTimeLimit, TimeLimitKey };
+export { EnumTimeLimit, TimeLimitOption };
