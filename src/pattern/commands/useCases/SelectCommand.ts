@@ -3,7 +3,11 @@ import { Client, Contact, Message } from 'whatsapp-web.js';
 import { ICommand } from '../ICommand';
 
 class SelectCommands implements ICommand {
-  async execute(client: Client, message: Message): Promise<void> {
+  async execute(
+    args: string[],
+    client: Client,
+    message: Message,
+  ): Promise<void> {
     const contacts = await message.getMentions();
     const content = await this.removeMentionFromBody(message.body, contacts); //  body: '@5511964869895 !resumo',
 

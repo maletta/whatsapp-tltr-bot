@@ -7,18 +7,18 @@ import { GroupManager } from './GroupManager';
 
 class BotMediator {
   public groups: GroupManager;
-  private commandHandle: CommandHandler;
+  private commandHandler: CommandHandler;
 
   constructor() {
     this.groups = new GroupManager();
-    this.commandHandle = new CommandHandler();
+    this.commandHandler = new CommandHandler();
 
     this.registerCommands();
   }
 
   private registerCommands(): void {
-    this.commandHandle.registerCommand('!resuma', new CommandSummarize());
-    this.commandHandle.registerCommand('!todos', new CommandEveryone());
+    this.commandHandler.registerCommand('!resuma', new CommandSummarize());
+    this.commandHandler.registerCommand('!todos', new CommandEveryone());
   }
 
   public selectCommand(
@@ -26,7 +26,14 @@ class BotMediator {
     client: Client,
     message: Message,
   ): void {
-    this.selectCommand(commandName, client, message);
+    const [command, args] = this.getArgs(commandName);
+    this.commandHandler.selectCommand(command, args, client, message);
+  }
+
+  private getArgs(command: string): [string, string[]] {
+    const args = command.includes(' ') ? command.split(' ') : [command];
+
+    return [args[0].toLowerCase(), args.slice(1)];
   }
 }
 

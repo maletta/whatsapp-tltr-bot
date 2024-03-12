@@ -18,6 +18,8 @@ class CommandSummarize implements ICommand {
 
     message.reply(response);
   }
+
+  // to create a function to check whether the arguments are of type LimitHour enum or not
 }
 
 export { CommandSummarize };
