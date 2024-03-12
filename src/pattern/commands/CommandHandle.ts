@@ -2,8 +2,13 @@ import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
 
+type ICommands = Map<string, ICommand>;
 class CommandHandler {
-  private commands = new Map<string, ICommand>();
+  private commands: ICommands;
+
+  constructor() {
+    this.commands = new Map<string, ICommand>();
+  }
 
   public registerCommand(commandName: string, command: ICommand) {
     this.commands.set(commandName, command);
@@ -11,6 +16,7 @@ class CommandHandler {
 
   async selectCommand(
     commandName: string,
+    args: string[],
     client: Client,
     message: Message,
   ): Promise<void> {
@@ -20,7 +26,7 @@ class CommandHandler {
       throw new Error(`Command ${commandName} not found`);
     }
 
-    await command.execute(client, message);
+    await command.execute(args, client, message);
   }
 }
 

@@ -5,7 +5,11 @@ import { Client, Contact, Message } from 'whatsapp-web.js';
 import { ICommand } from '../ICommand';
 
 class CommandEveryone implements ICommand {
-  async execute(client: Client, message: Message): Promise<void> {
+  async execute(
+    args: string[],
+    client: Client,
+    message: Message,
+  ): Promise<void> {
     const chat = (await message.getChat()) as unknown as IChat;
     const mentions: string[] = [];
     const responseText: string[] = [];

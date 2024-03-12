@@ -1,0 +1,21 @@
+receber mensagem
+
+ver se é um comando válido
+
+caso seja comando resumir
+  verificar qual o grupo do chat
+  verficar se o grupo do chat já foi cadastrado 
+
+  SE grupo cadastrado
+      OK verificar se tem resumo válido
+
+          OK devolver resumo
+          NÃO OK resumir conversas
+            adicionar resumo no grupo
+            enviar resumo
+
+      NÃO OK cadastrar grupo
+        resumir conversas
+        adicionar resumo no grupo
+        enviar resumo
+  
