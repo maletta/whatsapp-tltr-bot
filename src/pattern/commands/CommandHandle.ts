@@ -24,10 +24,13 @@ class CommandHandler {
     const command = this.commands.get(commandName);
 
     if (!command) {
-      throw new Error(`Command ${commandName} not found`);
+      // throw new Error(`Command ${commandName} not found`);
+      console.log(`Command ${commandName} not found`);
     }
 
-    await command.execute(args, client, message);
+    if (command) {
+      await command.execute(args, client, message);
+    }
   }
 }
 

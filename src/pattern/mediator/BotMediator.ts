@@ -15,6 +15,7 @@ export enum EnumValidCommands {
 
 export enum EnumSystemCommands {
   INVALID = '!invalido',
+  DO_NOTHING = '!nao_enviar_mensagem',
 }
 
 export type EnumAllCommands = EnumValidCommands | EnumSystemCommands;
@@ -69,11 +70,15 @@ class BotMediator {
 
     const [, command, ...rest] = args; // first args is the bot number mention
 
-    if (command.startsWith('!') && this.isValidCommand(command)) {
+    if (command.startsWith('!')) {
+      if (!this.isValidCommand(command)) {
+        return [EnumSystemCommands.INVALID, []];
+      }
+
       return [command.toLowerCase() as EnumValidCommands, rest];
     }
 
-    return [EnumSystemCommands.INVALID, []];
+    return [EnumSystemCommands.DO_NOTHING, []];
   }
 
   isValidCommand(

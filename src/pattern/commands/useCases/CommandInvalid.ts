@@ -13,12 +13,21 @@ class CommandInvalid implements ICommand {
     console.log('args ', args);
     console.log('message ', message.body);
 
-    const validCommands = Object.values(EnumValidCommands).map(
-      (commands) => `*${commands.toLowerCase()}* \n`,
-    );
+    const validCommands = Object.values(EnumValidCommands)
+      .map((commands) => `*${commands.toLowerCase()}* \n`)
+      .join('');
 
-    const responseMessage = `Comando inválido! Use um dos comandos abaixo:\n${validCommands.join('')}`;
-    message.reply(responseMessage);
+    const responseMessage = `Comando inválido! Use um dos comandos abaixo:\n${validCommands}`;
+    const summarizeValidOptions = [
+      `${EnumValidCommands.SUMMARIZE} 30m`,
+      `${EnumValidCommands.SUMMARIZE} 1h`,
+      `${EnumValidCommands.SUMMARIZE} 2h`,
+      `${EnumValidCommands.SUMMARIZE} 4h`,
+      `${EnumValidCommands.SUMMARIZE} 6h`,
+    ].join('\n');
+    const summarizeValidOptionMessage = `\nComando válido para resumo:\n${summarizeValidOptions}`;
+
+    message.reply(`${responseMessage}${summarizeValidOptionMessage}`);
   }
 }
 

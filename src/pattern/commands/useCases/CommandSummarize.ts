@@ -1,6 +1,5 @@
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
-import { createNonStreamingMultipartContent } from '../../../functions/askVertexAi';
 import { EnumTimeLimit } from '../../model/TimeLimit';
 import { ICommand } from '../ICommand';
 
@@ -20,19 +19,32 @@ class CommandSummarize implements ICommand {
     const filteredMessages = await this.filterMessagesByHour(
       chat,
       EnumTimeLimit[timeLimit],
-      500,
+      1000,
     );
-    const messageInText = filteredMessages.map((m) => m.body).join('');
+    const messageJoin = filteredMessages.map((m) => m.body).join();
+    const messageFormatted = this.removeMentionsAndCommands(messageJoin);
 
-    const prompt =
-      'Resuma as mensagens dessa conversa em tópicos dos assuntos mais relevantes: ';
+    console.log('Time limit ', timeLimit);
 
-    const response = await createNonStreamingMultipartContent(
-      prompt,
-      messageInText,
-    );
+    console.log(messageFormatted);
 
-    message.reply(response);
+    // const test = await this.filterMessagesByHour(
+    //   chat,
+    //   EnumTimeLimit['6_HOURS'],
+    //   100,
+    // ).then((message) => message.map((msg) => msg.body));
+    // console.log('--- messages join ');
+    // console.log(this.removeMentionsAndCommands(test.join()));
+
+    // const prompt =
+    //   'Resuma as mensagens dessa conversa em tópicos dos assuntos abrangidos pelas pessoas: ';
+
+    // const response = await createNonStreamingMultipartContent(
+    //   prompt,
+    //   messageInText,
+    // );
+
+    // message.reply(response);
   }
 
   // get the number args for command summarize
@@ -54,11 +66,13 @@ class CommandSummarize implements ICommand {
   public async filterMessagesByHour(
     chat: Chat,
     timeLimit: EnumTimeLimit,
-    limit: number = 500,
+    limit: number = 1000,
   ): Promise<Message[]> {
+    console.log('filterMessagesByHour ', 'limit ', limit);
     const allMessages: Message[] = await chat
       .fetchMessages({
         limit,
+        fromMe: false,
       })
       .then((foundMessages) => {
         return foundMessages.filter(
@@ -73,8 +87,24 @@ class CommandSummarize implements ICommand {
 
   // valid if  timestamp is between start and end of given time limit
   public isBetweenTimeLimit(timestamp: number, timeLimit: EnumTimeLimit) {
-    const now = Date.now();
-    return now - new Date(timestamp * 1000).getTime() <= timeLimit * 1000;
+    const timestampMilli = new Date(timestamp * 1000); // converte para milissegundos
+    const agora = Date.now();
+
+    const diffInMilli = agora - timestampMilli.getTime();
+    const diffInMinutes = Math.floor(diffInMilli / 60000);
+
+    console.log(
+      'diff minutes ',
+      diffInMinutes,
+      'timelimite ',
+      timeLimit,
+      diffInMinutes < timeLimit,
+    );
+    return diffInMinutes < timeLimit;
+  }
+
+  private removeMentionsAndCommands(message: string): string {
+    return message.replace(/[@!]\w+/g, '');
   }
 }
 
