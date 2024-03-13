@@ -8,6 +8,10 @@ class SelectCommands implements ICommand {
     client: Client,
     message: Message,
   ): Promise<void> {
+    console.log('Command Select Command - execute ');
+    console.log('args ', args);
+    console.log('message ', message.body);
+
     const contacts = await message.getMentions();
     const content = await this.removeMentionFromBody(message.body, contacts); //  body: '@5511964869895 !resumo',
 

@@ -1,6 +1,9 @@
 import { VertexAI } from '@google-cloud/vertexai'; // Importe a classe correta
 
-async function createNonStreamingMultipartContent(messages: string) {
+async function createNonStreamingMultipartContent(
+  prompt: string,
+  messages: string,
+) {
   const projectId = process.env.PROJECT_ID;
   const location = 'us-central1';
   const model = 'gemini-1.0-pro-vision';
@@ -24,7 +27,7 @@ async function createNonStreamingMultipartContent(messages: string) {
 
   const textPart = {
     // text: 'O que significa a cor azul',
-    text: `Resuma as mensagens dessa conversa em tópicos dos assuntos mais relevantes: ${messages}`,
+    text: `${prompt} ${messages}`,
   };
 
   const request = {
@@ -51,6 +54,6 @@ async function createNonStreamingMultipartContent(messages: string) {
   // console.dir(fullTextResponse);
   console.dir(fullTextResponse, { depth: null });
 
-  return fullTextResponse.text;
+  return fullTextResponse.text.replace(/\*\*/g, '*');
 }
 export { createNonStreamingMultipartContent };

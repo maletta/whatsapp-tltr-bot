@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import dotenv from 'dotenv';
 
+import { BotMediator } from './pattern/mediator/BotMediator';
 import { QRCodeDisplay } from './QRCodeDisplay';
 import { WhatsAppClient } from './WhatsAppClient';
 
@@ -14,6 +15,7 @@ console.log('v2');
 // createNonStreamingMultipartContent('mensagem para resumir');
 
 const bot = WhatsAppClient.getClient();
+const botMediator = new BotMediator();
 
 bot.on('ready', () => console.log('client is ready!'));
 
@@ -24,45 +26,7 @@ bot.on('qr', (qr) => {
 bot.on('authenticated', () => console.log('authenticated!'));
 
 bot.on('message', (message) => {
-  // onMessage(bot, message)
-  const { from } = message;
-
-  console.log('Embed criado com sucesso!'); // Adicione uma mensagem mais descritiva
-
-  const botao1 = {
-    type: 'button',
-    buttonText: {
-      text: 'Botão 1',
-    },
-    event: {
-      type: 'reply',
-      reply: {
-        title: 'Botão 1 pressionado',
-        text: 'Você pressionou o botão 1!',
-      },
-    },
-  };
-
-  const botao2 = {
-    type: 'button',
-    buttonText: {
-      text: 'Botão 2',
-    },
-    event: {
-      type: 'reply',
-      reply: {
-        title: 'Botão 2 pressionado',
-        text: 'Você pressionou o botão 2!',
-      },
-    },
-  };
-
-  const codigoBotoes = {
-    type: 'buttons',
-    buttons: [botao1, botao2],
-  };
-
-  bot.sendMessage(from, JSON.stringify(codigoBotoes));
+  botMediator.selectCommand(bot, message);
 });
 
 bot.initialize();
