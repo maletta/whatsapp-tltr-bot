@@ -2,30 +2,32 @@
 
 ![WhatsApp TLTR Bot Logo](https://github.com/maletta/whatsapp-tltr-bot/blob/main/assets/commands.png)
 
-O WhatsApp TLTR Bot é um aplicativo Express que utiliza a biblioteca whatsapp-web.js para criar um bot capaz de resumir conversas longas do WhatsApp, tornando-as mais fáceis e rápidas de ler.
+The WhatsApp TLTR Bot is an Express application that leverages the whatsapp-web.js library to create a bot capable of summarizing lengthy WhatsApp conversations, making them easier and quicker to read.
 
-## Funcionalidades
+## Features
 
-- Analisa conversas de grupos do WhatsApp.
-- Gera um resumo das principais discussões e tópicos abordados.
-- Personalizável e extensível para atender às necessidades específicas do grupo.
+- Analyzes group conversations on WhatsApp.
+- Generates a summary of the main discussions and topics covered.
+- Customizable and extensible to meet the specific needs of the group.
 
-## Como Usar
+## Getting Started
 
-1. Clone este repositório:
+1. Clone this repository:
 
-```bash
 git clone https://github.com/maletta/whatsapp-tltr-bot.git
-```
 
-2. Comandos disponíveis
-- `.resuma`: Resume as conversas do chat com alguma IA generativa.
-Aceita os seguintes argumentos para definir o limite de horas
-  - `1` para 1 hora
-  - `2` para 2 horas
-  - `4` para 4 horas
-  - `6` para 6 horas
-  - `30` para 30 minutos
-- `.sticker`: Transforme uma imagem marcada ou menciona em sticker.
-- `.todos`: Menciona todos os participantes do grupo na mensagem 
+2. Install the dependencies:
+
+npm install
+
+## Available Commands
+
+- .summarize: Summarizes the chat conversations using a generative AI. Accepts the following arguments to set the time limit:
+  - 1 for 1 hour
+  - 2 for 2 hours
+  - 4 for 4 hours
+  - 6 for 6 hours
+  - 30 for 30 minutes
+- .sticker: Transforms a tagged or mentioned image into a sticker.
+- .all: Mentions all participants of the group in the message.
 
