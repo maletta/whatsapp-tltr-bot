@@ -54,12 +54,12 @@ class BotMediator {
       new CommandRandomMessage(),
     );
     this.commandHandler.registerCommand(
-      EnumSystemCommands.INVALID,
-      new CommandInvalid(this.prefix),
-    );
-    this.commandHandler.registerCommand(
       EnumValidCommands.STICKER,
       new CommandStickerImage(),
+    );
+    this.commandHandler.registerCommand(
+      EnumSystemCommands.INVALID,
+      new CommandInvalid(this.prefix),
     );
   }
 

@@ -1,30 +1,4 @@
-import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
-
-async function isMessageToBot(message: Message): Promise<boolean> {
-  const mentions = await message.getMentions();
-
-  return (
-    mentions.length === 1 &&
-    mentions.some((mention) => mention.isMe && mention.isMyContact)
-  );
-}
-
-const isTimestampBetween = {
-  sixHours: (timestamp: number) =>
-    new Date().getTime() - new Date(timestamp * 1000).getTime() <=
-    6 * 60 * 1000,
-  fourHours: (timestamp: number) =>
-    new Date().getTime() - new Date(timestamp * 1000).getTime() <=
-    4 * 60 * 1000,
-  twoHours: (timestamp: number) =>
-    new Date().getTime() - new Date(timestamp * 1000).getTime() <=
-    2 * 60 * 1000,
-  oneHours: (timestamp: number) =>
-    new Date().getTime() - new Date(timestamp * 1000).getTime() <=
-    1 * 60 * 1000,
-  thirtyMinutes: (timestamp: number) =>
-    new Date().getTime() - new Date(timestamp * 1000).getTime() <= 30 * 1000,
-};
+import { Message } from 'whatsapp-web.js';
 
 function concatMessages(
   mensagens: Message[],
@@ -57,28 +31,4 @@ function concatMessages(
   return mensagensConcatenadas;
 }
 
-async function filterMessagesByHour(
-  chat: Chat,
-  limit: number = 200,
-): Promise<Message[]> {
-  const allMessages: Message[] = await chat
-    .fetchMessages({
-      limit,
-    })
-    .then((foundMessages) => {
-      return foundMessages.filter(
-        (msg) =>
-          msg.type === MessageTypes.TEXT &&
-          isTimestampBetween.oneHours(msg.timestamp),
-      );
-    });
-
-  return allMessages;
-}
-
-export {
-  isMessageToBot,
-  concatMessages,
-  isTimestampBetween,
-  filterMessagesByHour,
-};
+export { concatMessages };
