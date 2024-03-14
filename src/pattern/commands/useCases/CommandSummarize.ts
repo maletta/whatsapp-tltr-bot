@@ -1,9 +1,12 @@
+import { ITextSummarize } from 'src/pattern/services/ITextSummarize';
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import { EnumTimeLimit } from '../../model/TimeLimit';
 import { ICommand } from '../ICommand';
 
 class CommandSummarize implements ICommand {
+  constructor(private textSummarize: ITextSummarize) {}
+
   async execute(
     args: string[],
     client: Client,
@@ -36,13 +39,9 @@ class CommandSummarize implements ICommand {
     // console.log('--- messages join ');
     // console.log(this.removeMentionsAndCommands(test.join()));
 
-    // const prompt =
-    //   'Resuma as mensagens dessa conversa em tópicos dos assuntos abrangidos pelas pessoas: ';
+    // const prompt = `Resuma as mensagens dessa conversa em tópicos dos assuntos abrangidos pelas pessoas: ${messagesToSummarize}`;
 
-    // const response = await createNonStreamingMultipartContent(
-    //   prompt,
-    //   messageInText,
-    // );
+    // const response = await this.textSummarize.summarize(prompt);
 
     // message.reply(response);
   }

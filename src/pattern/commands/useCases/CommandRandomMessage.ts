@@ -1,9 +1,15 @@
+import { ITextSummarize } from 'src/pattern/services/ITextSummarize';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { createNonStreamingMultipartContent } from '../../../functions/askVertexAi';
 import { ICommand } from '../ICommand';
 
 class CommandRandomMessage implements ICommand {
+  private textSummarize: ITextSummarize;
+
+  constructor(textSummarize: ITextSummarize) {
+    this.textSummarize = textSummarize;
+  }
+
   async execute(
     args: string[],
     client: Client,
@@ -18,7 +24,7 @@ class CommandRandomMessage implements ICommand {
 
     const prompt = Date.now() % 2 ? promptFunFact : promptJoke;
 
-    const response = await createNonStreamingMultipartContent(prompt, '');
+    const response = await this.textSummarize.summarize(prompt);
 
     message.reply(response);
   }

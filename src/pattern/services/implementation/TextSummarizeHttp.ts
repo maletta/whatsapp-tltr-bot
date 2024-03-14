@@ -3,7 +3,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { ITextSummarize } from '../ITextSummarize';
 
 class TextSummarizeHttp implements ITextSummarize {
-  async summarize(text: string): Promise<string> {
+  async summarize(prompt: string): Promise<string> {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
     const model = 'gemini-1.0-pro-vision';
@@ -12,15 +12,13 @@ class TextSummarizeHttp implements ITextSummarize {
 
     const generativeVisionModel = vertexAI.getGenerativeModel({ model });
 
-    const promptQuestion =
-      'Resuma as mensagens dessas conversas realizadas em um chat de grupo do whatsapp em tópicos dos assuntos mais relevantes:';
-    const prompt = {
-      text: `${promptQuestion} ${text}`,
+    const promptQuestion = {
+      text: `${prompt}`,
     };
 
     const request = {
       // contents: [{ role: 'user', parts: [filePart, textPart] }],
-      contents: [{ role: 'user', parts: [prompt] }],
+      contents: [{ role: 'user', parts: [promptQuestion] }],
     };
 
     console.log('Prompt Text:');
@@ -40,7 +38,7 @@ class TextSummarizeHttp implements ITextSummarize {
     // console.dir(fullTextResponse);
     console.dir(fullTextResponse, { depth: null });
 
-    return fullTextResponse.text;
+    return fullTextResponse.text.replace(/\*\*/g, '*');
   }
 }
 

@@ -6,6 +6,7 @@ import { CommandInvalid } from '../commands/useCases/CommandInvalid';
 import { CommandRandomMessage } from '../commands/useCases/CommandRandomMessage';
 import { CommandStickerImage } from '../commands/useCases/CommandStickerImage';
 import { CommandSummarize } from '../commands/useCases/CommandSummarize';
+import { TextSummarizeHttp } from '../services/implementation/TextSummarizeHttp';
 import { GroupManager } from './GroupManager';
 
 export enum EnumValidCommands {
@@ -43,7 +44,7 @@ class BotMediator {
   private registerCommands(): void {
     this.commandHandler.registerCommand(
       EnumValidCommands.SUMMARIZE,
-      new CommandSummarize(),
+      new CommandSummarize(new TextSummarizeHttp()),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.EVERYONE,
@@ -51,7 +52,7 @@ class BotMediator {
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.RANDOM_MESSAGE,
-      new CommandRandomMessage(),
+      new CommandRandomMessage(new TextSummarizeHttp()),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.STICKER,
