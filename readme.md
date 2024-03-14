@@ -9,6 +9,8 @@ The WhatsApp TLTR Bot is an Express application that leverages the whatsapp-web.
 - Analyzes group conversations on WhatsApp.
 - Generates a summary of the main discussions and topics covered.
 - Customizable and extensible to meet the specific needs of the group.
+- Transform image into stickers.
+- Send Jokes and Fun Facts.
 
 ## Getting Started
 
@@ -27,12 +29,12 @@ npm install
 
 ## Available Commands
 
-- .summarize: Summarizes the chat conversations using a generative AI. Accepts the following arguments to set the time limit:
+- .resuma: Summarizes the chat conversations using a generative AI. Accepts the following arguments to set the time limit:
   - 1 for 1 hour
   - 2 for 2 hours
   - 4 for 4 hours
   - 6 for 6 hours
   - 30 for 30 minutes
 - .sticker: Transforms a tagged or mentioned image into a sticker.
-- .all: Mentions all participants of the group in the message.
+- .todos: Mentions all participants of the group in the message.
 
