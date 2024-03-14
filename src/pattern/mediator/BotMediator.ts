@@ -4,6 +4,7 @@ import { CommandHandler } from '../commands/CommandHandle';
 import { CommandEveryone } from '../commands/useCases/CommandEveryOne';
 import { CommandInvalid } from '../commands/useCases/CommandInvalid';
 import { CommandRandomMessage } from '../commands/useCases/CommandRandomMessage';
+import { CommandStickerImage } from '../commands/useCases/CommandStickerImage';
 import { CommandSummarize } from '../commands/useCases/CommandSummarize';
 import { GroupManager } from './GroupManager';
 
@@ -11,6 +12,7 @@ export enum EnumValidCommands {
   EVERYONE = 'todos',
   RANDOM_MESSAGE = 'aleatorio',
   SUMMARIZE = 'resuma',
+  STICKER = 'sticker',
 }
 
 export enum EnumSystemCommands {
@@ -54,6 +56,10 @@ class BotMediator {
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,
       new CommandInvalid(this.prefix),
+    );
+    this.commandHandler.registerCommand(
+      EnumValidCommands.STICKER,
+      new CommandStickerImage(),
     );
   }
 
