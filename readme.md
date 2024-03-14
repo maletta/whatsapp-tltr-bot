@@ -35,6 +35,7 @@ npm install
   - 4 for 4 hours
   - 6 for 6 hours
   - 30 for 30 minutes
-- .sticker: Transforms a tagged or mentioned image into a sticker.
+- .aleatorio: send fun facts and jokes.
 - .todos: Mentions all participants of the group in the message.
+- .sticker: Transforms a tagged or mentioned image into a sticker.
 
