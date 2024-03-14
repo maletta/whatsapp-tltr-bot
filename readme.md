@@ -14,11 +14,16 @@ The WhatsApp TLTR Bot is an Express application that leverages the whatsapp-web.
 
 1. Clone this repository:
 
+```bash
 git clone https://github.com/maletta/whatsapp-tltr-bot.git
+```
 
 2. Install the dependencies:
 
+```bash
 npm install
+```
+
 
 ## Available Commands
 
