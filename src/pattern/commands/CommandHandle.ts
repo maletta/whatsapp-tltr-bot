@@ -3,20 +3,20 @@ import { Client, Message } from 'whatsapp-web.js';
 import { EnumAllCommands } from '../mediator/BotMediator';
 import { ICommand } from './ICommand';
 
-type ICommands = Map<string, ICommand>;
+type ICommands = Map<EnumAllCommands, ICommand>;
 class CommandHandler {
   private commands: ICommands;
 
   constructor() {
-    this.commands = new Map<string, ICommand>();
+    this.commands = new Map<EnumAllCommands, ICommand>();
   }
 
   public registerCommand(commandName: EnumAllCommands, command: ICommand) {
     this.commands.set(commandName, command);
   }
 
-  async selectCommand(
-    commandName: string,
+  public async selectCommand(
+    commandName: EnumAllCommands,
     args: string[],
     client: Client,
     message: Message,

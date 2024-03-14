@@ -8,25 +8,30 @@ import { CommandSummarize } from '../commands/useCases/CommandSummarize';
 import { GroupManager } from './GroupManager';
 
 export enum EnumValidCommands {
-  EVERYONE = '!todos',
-  RANDOM_MESSAGE = '!aleatorio',
-  SUMMARIZE = '!resuma',
+  EVERYONE = 'todos',
+  RANDOM_MESSAGE = 'aleatorio',
+  SUMMARIZE = 'resuma',
 }
 
 export enum EnumSystemCommands {
-  INVALID = '!invalido',
-  DO_NOTHING = '!nao_enviar_mensagem',
+  INVALID = 'invalido',
+  DO_NOTHING = 'nao_enviar_mensagem',
 }
 
 export type EnumAllCommands = EnumValidCommands | EnumSystemCommands;
 
 // type ValidCommandOptions = keyof typeof EnumValidCommands;
 
+type IBotMediatorDTO = {
+  prefix: string;
+};
 class BotMediator {
   public groups: GroupManager;
   private commandHandler: CommandHandler;
+  private prefix: string;
 
-  constructor() {
+  constructor(args: Partial<IBotMediatorDTO> = {}) {
+    this.prefix = args.prefix || '.';
     this.groups = new GroupManager();
     this.commandHandler = new CommandHandler();
 
@@ -48,7 +53,7 @@ class BotMediator {
     );
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,
-      new CommandInvalid(),
+      new CommandInvalid(this.prefix),
     );
   }
 
@@ -70,23 +75,24 @@ class BotMediator {
 
     const [, command, ...rest] = args; // first args is the bot number mention
 
-    if (command.startsWith('!')) {
+    if (command.startsWith(this.prefix)) {
       if (!this.isValidCommand(command)) {
         return [EnumSystemCommands.INVALID, []];
       }
 
-      return [command.toLowerCase() as EnumValidCommands, rest];
+      return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
     }
 
     return [EnumSystemCommands.DO_NOTHING, []];
   }
 
-  isValidCommand(
+  private isValidCommand(
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
+    const validation = (enumItem) => this.prefix + enumItem === command;
     return (
-      Object.values(EnumValidCommands).includes(command as EnumValidCommands) ||
-      Object.values(EnumSystemCommands).includes(command as EnumSystemCommands)
+      Object.values(EnumValidCommands).some(validation) ||
+      Object.values(EnumSystemCommands).some(validation)
     );
   }
 }
