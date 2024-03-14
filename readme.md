@@ -15,7 +15,7 @@ O WhatsApp TLTR Bot é um aplicativo Express que utiliza a biblioteca whatsapp-w
 1. Clone este repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/whatsapp-tltr-bot.git
+git clone https://github.com/maletta/whatsapp-tltr-bot.git
 ```
 
 2. Comandos disponíveis
