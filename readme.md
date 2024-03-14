@@ -1,6 +1,6 @@
 # WhatsApp TLTR Bot
 
-![WhatsApp TLTR Bot Logo](https://github.com/maletta/whatsapp-tltr-bot/assets/commands.png)
+![WhatsApp TLTR Bot Logo](https://github.com/maletta/whatsapp-tltr-bot/tree/main/assets/commands.png)
 
 O WhatsApp TLTR Bot é um aplicativo Express que utiliza a biblioteca whatsapp-web.js para criar um bot capaz de resumir conversas longas do WhatsApp, tornando-as mais fáceis e rápidas de ler.
 
