@@ -2,7 +2,7 @@ import { Message } from 'whatsapp-web.js';
 
 function concatMessages(
   mensagens: Message[],
-  { maxTokens = 3800 } = {},
+  { maxTokens = 10000 } = {},
 ): string[] {
   const mensagensConcatenadas = [];
   let strAtual = '';

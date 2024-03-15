@@ -1,11 +1,25 @@
-import { ITextSummarize } from 'src/pattern/services/ITextSummarize';
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
+import {
+  brasilIndependence,
+  deathNoteMock,
+  dragonBallZMock,
+  fullMetalAlchemistMock,
+  narutoMock,
+  onePieceMock,
+} from '../../../mocks/animesMock';
+import { createMessageMock } from '../../../mocks/messagesMock';
+import { concatMessages } from '../../../utils/shared';
+import { GroupManager } from '../../mediator/GroupManager';
 import { EnumTimeLimit } from '../../model/TimeLimit';
+import { ITextSummarize } from '../../services/ITextSummarize';
 import { ICommand } from '../ICommand';
 
 class CommandSummarize implements ICommand {
-  constructor(private textSummarize: ITextSummarize) {}
+  constructor(
+    private textSummarize: ITextSummarize,
+    private groups: GroupManager,
+  ) {}
 
   async execute(
     args: string[],
@@ -18,18 +32,34 @@ class CommandSummarize implements ICommand {
     console.log('args ', args);
     console.log('message ', message.body);
 
-    const chat = await message.getChat();
-    const filteredMessages = await this.filterMessagesByHour(
-      chat,
-      EnumTimeLimit[timeLimit],
-      1000,
-    );
-    const messageJoin = filteredMessages.map((m) => m.body).join();
-    const messageFormatted = this.removeMentionsAndCommands(messageJoin);
+    console.log('from ', message.from);
+    const summary = this.groups.getSummaryById(message.from, timeLimit);
+    const haveValidSummary = summary && summary.isValid();
+
+    if (haveValidSummary) {
+      const { content, formatCreatedAt, formatExpiration, timeLimit } = summary;
+      message.reply(
+        this.formatSummaryResponse(
+          content,
+          formatCreatedAt(),
+          formatExpiration(),
+          timeLimit,
+        ),
+      );
+    }
+
+    // const chat = await message.getChat();
+    // const filteredMessages = await this.filterMessagesByHour(
+    //   chat,
+    //   EnumTimeLimit[timeLimit],
+    //   1000,
+    // );
+    // const messageJoin = filteredMessages.map((m) => m.body).join();
+    // const messageFormatted = this.removeMentionsAndCommands(messageJoin);
 
     console.log('Time limit ', timeLimit);
 
-    console.log(messageFormatted);
+    // console.log(messageFormatted);
 
     // const test = await this.filterMessagesByHour(
     //   chat,
@@ -104,6 +134,49 @@ class CommandSummarize implements ICommand {
 
   private removeMentionsAndCommands(message: string): string {
     return message.replace(/[@!]\w+/g, '');
+  }
+
+  private formatSummaryResponse(
+    summary: string,
+    createdAt: string,
+    expiresIn: string,
+    timeLimit: keyof typeof EnumTimeLimit,
+  ): string {
+    return (
+      `Criado em: *${createdAt}*` +
+      `\nPróxima atualização: *${expiresIn}*` +
+      `\nTipo de resumo: *${EnumTimeLimit[timeLimit]}*` +
+      `\n*Resumo:*\n> ${summary}`
+    );
+  }
+  private async testMessages(): Promise<string[]> {
+    const messagesMock: string[] = [
+      narutoMock,
+      onePieceMock,
+      fullMetalAlchemistMock,
+      dragonBallZMock,
+      deathNoteMock,
+      brasilIndependence,
+    ];
+
+    const messagesMountedMock: Message[] = messagesMock.map((m) =>
+      createMessageMock(m),
+    );
+
+    const messagesByTokenLimit: string[] = concatMessages(messagesMountedMock, {
+      maxTokens: 14000,
+    });
+
+    console.log('messagesByTokenLimit', messagesByTokenLimit.length);
+
+    const promptMock = `Organize detalhadamente os tópicos abrangidos nessas conversas:`;
+
+    const response = await this.textSummarize.summarizeBatch(
+      promptMock,
+      messagesByTokenLimit,
+    );
+
+    return response;
   }
 }
 

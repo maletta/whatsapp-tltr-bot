@@ -47,7 +47,7 @@ class BotMediator {
   private registerCommands(): void {
     this.commandHandler.registerCommand(
       EnumValidCommands.SUMMARIZE,
-      new CommandSummarize(new TextSummarizeHttp()),
+      new CommandSummarize(new TextSummarizeHttp(), this.groups),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.EVERYONE,

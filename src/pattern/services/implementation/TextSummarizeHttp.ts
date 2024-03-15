@@ -3,7 +3,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { ITextSummarize } from '../ITextSummarize';
 
 class TextSummarizeHttp implements ITextSummarize {
-  async summarize(prompt: string): Promise<string> {
+  async summarize(prompt: string, message: string): Promise<string> {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
     const model = 'gemini-1.0-pro-vision';
@@ -13,7 +13,7 @@ class TextSummarizeHttp implements ITextSummarize {
     const generativeVisionModel = vertexAI.getGenerativeModel({ model });
 
     const promptQuestion = {
-      text: `${prompt}`,
+      text: `${prompt}${message}`,
     };
 
     const request = {
@@ -39,6 +39,37 @@ class TextSummarizeHttp implements ITextSummarize {
     console.dir(fullTextResponse, { depth: null });
 
     return fullTextResponse.text.replace(/\*\*/g, '*');
+  }
+
+  async summarizeBatch(prompt: string, messages: string[]): Promise<string[]> {
+    const firstSummaryPromise: Promise<string>[] = [];
+    const finalSummaryPromise: Promise<string>[] = [];
+
+    // Use array method `forEach` instead of a loop for cleaner syntax
+    messages.forEach(async (message) => {
+      try {
+        const summary = this.summarize(prompt, message);
+        firstSummaryPromise.push(summary);
+      } catch (err) {
+        console.error(`Error first summarizeBatch prompt "${prompt}"`);
+        console.error(err);
+      }
+    });
+
+    // Wait for all asynchronous operations to finish before returning
+    const summaryResponses = await Promise.all(firstSummaryPromise);
+
+    try {
+      const summary = this.summarize(prompt, summaryResponses.join());
+      finalSummaryPromise.push(summary);
+    } catch (err) {
+      console.error(`Error final summarizeBatch prompt "${prompt}"`);
+      console.error(err);
+    }
+
+    const finalSummaryResponses = await Promise.all(finalSummaryPromise);
+
+    return finalSummaryResponses;
   }
 }
 

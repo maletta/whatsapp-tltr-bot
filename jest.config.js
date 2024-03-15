@@ -1,4 +1,9 @@
 module.exports = {
+  detectOpenHandles: true,
+  detectLeaks: true,
+  watch: false,
+  debug: true, // Habilita o modo de depuração do Jest
+
   bail: true,
 
   clearMocks: true,

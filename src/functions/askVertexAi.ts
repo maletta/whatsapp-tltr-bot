@@ -56,4 +56,5 @@ async function createNonStreamingMultipartContent(
 
   return fullTextResponse.text.replace(/\*\*/g, '*');
 }
+
 export { createNonStreamingMultipartContent };
