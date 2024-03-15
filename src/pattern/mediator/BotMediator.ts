@@ -1,4 +1,4 @@
-import { Client, Message } from 'whatsapp-web.js';
+import { Client, Contact, Message } from 'whatsapp-web.js';
 
 import { CommandHandler } from '../commands/CommandHandle';
 import { CommandEveryone } from '../commands/useCases/CommandEveryOne';
@@ -32,11 +32,14 @@ class BotMediator {
   public groups: GroupManager;
   private commandHandler: CommandHandler;
   private prefix: string;
+  private client: Client;
+  private me: Contact | undefined | null;
 
-  constructor(args: Partial<IBotMediatorDTO> = {}) {
+  constructor(client: Client, args: Partial<IBotMediatorDTO> = {}) {
     this.prefix = args.prefix || '.';
     this.groups = new GroupManager();
     this.commandHandler = new CommandHandler();
+    this.client = client;
 
     this.registerCommands();
   }
@@ -64,23 +67,23 @@ class BotMediator {
     );
   }
 
-  public selectCommand(client: Client, message: Message): void {
-    const [command, args] = this.getArgs(message.body);
+  public async selectCommand(client: Client, message: Message): Promise<void> {
+    const [command, args] = await this.getArgs(message.body);
     console.log('select command ', command, args);
     this.commandHandler.selectCommand(command, args, client, message);
   }
 
-  private getArgs(
+  private async getArgs(
     message: string,
-  ): [EnumValidCommands | EnumSystemCommands, string[]] {
+  ): Promise<[EnumValidCommands | EnumSystemCommands, string[]]> {
     const args = message.split(' ');
 
-    if (args.length === 1 || args.length === 0) {
+    const [command, ...rest] = args;
+
+    if (args.length === 1 && (await this.isMe(command))) {
       // args have only bot number mention
       return [EnumValidCommands.RANDOM_MESSAGE, []];
     }
-
-    const [, command, ...rest] = args; // first args is the bot number mention
 
     if (command.startsWith(this.prefix)) {
       if (!this.isValidCommand(command)) {
@@ -101,6 +104,22 @@ class BotMediator {
       Object.values(EnumValidCommands).some(validation) ||
       Object.values(EnumSystemCommands).some(validation)
     );
+  }
+
+  private async getMe(): Promise<Contact | undefined> {
+    const contacts = await this.client.getContacts();
+    const me = contacts.find((c) => c.isMe);
+    return me;
+  }
+
+  private async isMe(mention: string) {
+    if (this.me === undefined || this.me === null) {
+      const me = await this.getMe();
+      this.me = me;
+    }
+    console.log('Me ', mention, this.me);
+
+    return `@${this.me?.id.user}` === mention;
   }
 }
 

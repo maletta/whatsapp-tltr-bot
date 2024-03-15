@@ -24,6 +24,8 @@ class CommandStickerImage implements ICommand {
       const options: MessageSendOptions = { sendMediaAsSticker: true };
       message.reply(media, message.from, options);
     }
+
+    message.reply('Marque imagem válida.');
   }
 
   private async getMedia(message: Message): Promise<MessageMedia | null> {

@@ -15,7 +15,7 @@ console.log('v2');
 // createNonStreamingMultipartContent('mensagem para resumir');
 
 const bot = WhatsAppClient.getClient();
-const botMediator = new BotMediator();
+const botMediator = new BotMediator(bot);
 
 bot.on('ready', () => console.log('client is ready!'));
 
