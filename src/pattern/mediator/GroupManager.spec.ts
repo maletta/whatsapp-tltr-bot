@@ -1,5 +1,4 @@
 import { Summary, ISummaryDTO } from '../model/Summary';
-import { EnumTimeLimit } from '../model/TimeLimit';
 import { GroupManager } from './GroupManager';
 import { SummariesManager } from './SummarizeManager';
 

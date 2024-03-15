@@ -48,32 +48,57 @@ class CommandSummarize implements ICommand {
       );
     }
 
-    // const chat = await message.getChat();
-    // const filteredMessages = await this.filterMessagesByHour(
-    //   chat,
-    //   EnumTimeLimit[timeLimit],
-    //   1000,
-    // );
-    // const messageJoin = filteredMessages.map((m) => m.body).join();
-    // const messageFormatted = this.removeMentionsAndCommands(messageJoin);
+    const chat = await message.getChat();
+    const filteredMessages = await this.filterMessagesByHour(
+      chat,
+      EnumTimeLimit[timeLimit],
+      3000,
+    );
+
+    const messagesByTokenLimit = this.createBatchOfMessages(filteredMessages, {
+      maxTokens: 14000,
+    });
 
     console.log('Time limit ', timeLimit);
 
-    // console.log(messageFormatted);
+    console.log('messagesByTokenLimit', messagesByTokenLimit.length);
 
-    // const test = await this.filterMessagesByHour(
-    //   chat,
-    //   EnumTimeLimit['6_HOURS'],
-    //   100,
-    // ).then((message) => message.map((msg) => msg.body));
-    // console.log('--- messages join ');
-    // console.log(this.removeMentionsAndCommands(test.join()));
+    const promptMock = `Organize detalhadamente os tópicos abrangidos nessas conversas:`;
 
-    // const prompt = `Resuma as mensagens dessa conversa em tópicos dos assuntos abrangidos pelas pessoas: ${messagesToSummarize}`;
+    const messagesToResponse: string[] = [];
 
-    // const response = await this.textSummarize.summarize(prompt);
+    if (messagesByTokenLimit.length > 1) {
+      const response = await this.textSummarize.summarizeBatch(
+        promptMock,
+        messagesByTokenLimit,
+      );
 
-    // message.reply(response);
+      messagesToResponse.concat(response);
+    } else {
+      const response = await this.textSummarize.summarize(
+        promptMock,
+        messagesByTokenLimit[0],
+      );
+
+      messagesToResponse.push(response);
+    }
+
+    const summaryManager = this.groups.addSummary(
+      message.from,
+      timeLimit,
+      messagesToResponse.join('\n\n'),
+    );
+
+    const newSummary = summaryManager.getSummaryById(timeLimit);
+
+    message.reply(
+      this.formatSummaryResponse(
+        newSummary.content,
+        newSummary.formatCreatedAt(),
+        newSummary.formatExpiration(),
+        timeLimit,
+      ),
+    );
   }
 
   // get the number args for command summarize
@@ -149,6 +174,38 @@ class CommandSummarize implements ICommand {
       `\n*Resumo:*\n> ${summary}`
     );
   }
+
+  private createBatchOfMessages(
+    messages: Message[],
+    { maxTokens = 10000 } = {},
+  ): string[] {
+    const messagesBatches = [];
+    let currentString = '';
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < messages.length; i++) {
+      const msg = this.removeMentionsAndCommands(messages[i].body); // Supondo que 'body' é a propriedade que contém o texto da mensagem
+
+      // Verifica se a adição da próxima mensagem excederá o limite de 3800 caracteres
+      if (currentString.length + msg.length > maxTokens) {
+        // Se exceder, adiciona a string atual ao array de mensagens concatenadas
+        messagesBatches.push(currentString);
+        // Começa uma nova string com a mensagem atual
+        currentString = msg;
+      } else {
+        // Se não exceder, adiciona a mensagem à string atual
+        currentString += msg;
+      }
+    }
+
+    // Adiciona a última string ao array de mensagens concatenadas
+    if (currentString !== '') {
+      messagesBatches.push(currentString);
+    }
+
+    return messagesBatches;
+  }
+
   private async testMessages(): Promise<string[]> {
     const messagesMock: string[] = [
       narutoMock,

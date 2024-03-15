@@ -15,16 +15,20 @@ class GroupManager {
     groupId: IGroupId,
     timeLimitOption: TimeLimitOption,
     text: string,
-  ): void {
+  ): SummariesManager {
     if (this.has(groupId)) {
       console.log(`Group already exists with id ${groupId}`);
       const group = this.groups.get(groupId);
       group.add(timeLimitOption, text);
+
+      return group;
     }
 
     const summary = new SummariesManager();
     summary.add(timeLimitOption, text);
     this.groups.set(groupId, summary);
+
+    return summary;
   }
 
   public getGroupById(groupId: IGroupId): SummariesManager | null {
