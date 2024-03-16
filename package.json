@@ -4,7 +4,7 @@
   "description": "Um aplicativo Express que usa a biblioteca whatsapp-web.js",
   "main": "src/index.mjs",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "devjs": "nodemon src/index.mjs",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn  src/server.ts",
     "test": "jest",
