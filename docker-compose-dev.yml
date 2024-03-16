@@ -13,3 +13,4 @@ services:
       - ./package.json:/app/package.json
       - ./.env:/app/.env
       - ./tsconfig.ts:/app/tsconfig.ts
+      - .gcp:/app/.gcp
