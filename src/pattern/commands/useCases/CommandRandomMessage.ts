@@ -1,4 +1,4 @@
-import { ITextSummarize } from 'src/pattern/services/ITextSummarize';
+import { ITextSummarize } from 'pattern/services/ITextSummarize';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from '../ICommand';
@@ -24,7 +24,7 @@ class CommandRandomMessage implements ICommand {
 
     const prompt = Date.now() % 2 ? promptFunFact : promptJoke;
 
-    const response = await this.textSummarize.summarize(prompt);
+    const response = await this.textSummarize.summarize(prompt, '');
 
     message.reply(response);
   }
