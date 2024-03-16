@@ -1,0 +1,15 @@
+version: '3'
+services:
+  whatsapp-bot-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['npm', 'run', 'dev']
+    environment:
+      CHAT_NAME: ${CHAT_NAME}
+    volumes:
+      # - .:/app
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./.env:/app/.env
+      - ./tsconfig.ts:/app/tsconfig.ts
