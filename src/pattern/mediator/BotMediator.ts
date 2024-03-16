@@ -117,7 +117,6 @@ class BotMediator {
       const me = await this.getMe();
       this.me = me;
     }
-    console.log('Me ', mention, this.me);
 
     return `@${this.me?.id.user}` === mention;
   }
