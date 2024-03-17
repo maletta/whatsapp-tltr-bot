@@ -40,35 +40,33 @@ class TextSummarizeHttp implements ITextSummarize {
     return fullTextResponse.text.replace(/\*\*/g, '*');
   }
 
-  async summarizeBatch(prompt: string, messages: string[]): Promise<string[]> {
+  async summarizeBatch(
+    prompt: string,
+    messages: string[],
+  ): Promise<string | null> {
     const firstSummaryPromise: Promise<string>[] = [];
-    const finalSummaryPromise: Promise<string>[] = [];
-
-    // Use array method `forEach` instead of a loop for cleaner syntax
-    messages.forEach(async (message) => {
-      try {
-        const summary = this.summarize(prompt, message);
-        firstSummaryPromise.push(summary);
-      } catch (err) {
-        console.error(`Error first summarizeBatch prompt "${prompt}"`);
-        console.error(err);
-      }
-    });
-
-    // Wait for all asynchronous operations to finish before returning
-    const summaryResponses = await Promise.all(firstSummaryPromise);
 
     try {
-      const summary = this.summarize(prompt, summaryResponses.join());
-      finalSummaryPromise.push(summary);
+      messages.forEach(async (message) => {
+        const summary = this.summarize(prompt, message);
+        firstSummaryPromise.push(summary);
+      });
     } catch (err) {
-      console.error(`Error final summarizeBatch prompt "${prompt}"`);
+      console.error(`Error first summarizeBatch prompt "${prompt}"`);
       console.error(err);
+      return null;
     }
 
-    const finalSummaryResponses = await Promise.all(finalSummaryPromise);
+    try {
+      const summaryResponses = await Promise.all(firstSummaryPromise);
+      const summary = await this.summarize(prompt, summaryResponses.join());
 
-    return finalSummaryResponses;
+      return summary;
+    } catch (err) {
+      console.error(`Error second summarizeBatch prompt "${prompt}"`);
+      console.error(err);
+      return null;
+    }
   }
 }
 

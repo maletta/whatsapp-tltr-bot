@@ -6,6 +6,11 @@ enum EnumTimeLimit {
   '4_HOURS' = 240,
   '6_HOURS' = 360,
 }
+type TimeLimitOption = keyof typeof EnumTimeLimit;
+
+export type TimeLimitTranslation = {
+  [key in TimeLimitOption]: string;
+};
 
 class TimeLimit {
   // valid if  timestamp is between start and end of given time limit
@@ -21,8 +26,18 @@ class TimeLimit {
 
     return diffInMinutes < timeLimit;
   }
-}
 
-type TimeLimitOption = keyof typeof EnumTimeLimit;
+  public static translateTimeLimit(timelimit: TimeLimitOption) {
+    const translated: TimeLimitTranslation = {
+      '30_MINUTES': '30 minuitos',
+      '1_HOUR': '1 hora',
+      '2_HOURS': '2 horas',
+      '4_HOURS': '4 horas',
+      '6_HOURS': '6 horas',
+    };
+
+    return translated[timelimit];
+  }
+}
 
 export { EnumTimeLimit, TimeLimitOption, TimeLimit };

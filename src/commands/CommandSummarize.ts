@@ -24,44 +24,42 @@ class CommandSummarize implements ICommand {
     console.log('args ', args);
     console.log('message ', message.body);
 
-    const summary = this.groups.getSummaryById(message.from, timeLimit);
-    const haveValidSummary = summary && summary.isValid();
-
-    if (haveValidSummary) {
-      const { content, formatCreatedAt, formatExpiration, timeLimit } = summary;
-      message.reply(
-        this.formatSummaryResponse(
-          content,
-          formatCreatedAt(),
-          formatExpiration(),
-          timeLimit,
-        ),
-      );
-
-      return;
-    }
-
     try {
-      const newSummary = await this.createSummary(message, timeLimit);
+      const summary = this.groups.getSummaryById(message.from, timeLimit);
+      const haveValidSummary = summary && summary.isValid();
 
-      message.reply(
-        this.formatSummaryResponse(
-          newSummary.content,
-          newSummary.formatCreatedAt(),
-          newSummary.formatExpiration(),
-          timeLimit,
-        ),
-      );
+      let summaryToReplyWith: Summary | null | undefined;
+
+      if (haveValidSummary) {
+        summaryToReplyWith = summary;
+      } else {
+        summaryToReplyWith = await this.createSummary(message, timeLimit);
+      }
+
+      if (summaryToReplyWith) {
+        const { content, formatCreatedAt, formatExpiration, timeLimit } =
+          summaryToReplyWith;
+
+        message.reply(
+          this.formatSummaryResponse(
+            content,
+            formatCreatedAt(),
+            formatExpiration(),
+            timeLimit,
+          ),
+        );
+      } else {
+        console.error('Failed to retrieve or create a valid summary');
+      }
     } catch (error) {
-      console.log('Error on create new Summary');
-      console.log(error);
+      console.error('Error during summary execution:', error);
     }
   }
 
   private async createSummary(
     message: Message,
     timeLimit: TimeLimitOption,
-  ): Promise<Summary> {
+  ): Promise<Summary | null> {
     const chat = await message.getChat();
     const filteredMessages = await this.filterMessagesByHour(
       chat,
@@ -83,33 +81,33 @@ class CommandSummarize implements ICommand {
     const promptMock = `Aqui está uma lista de mensagens trocadas por usuários que estão separadas por ';'.
     Organize e detalhe os assuntos abrangidos nessas conversas:`;
 
-    const messagesToResponse: string[] = [];
+    let messagesToResponse: string | null | undefined = null;
 
-    if (messagesByTokenLimit.length > 1) {
-      const response = await this.textSummarize.summarizeBatch(
+    if (messagesByTokenLimit.length > 0) {
+      messagesToResponse = await this.textSummarize.summarizeBatch(
         promptMock,
         messagesByTokenLimit,
       );
-
-      messagesToResponse.concat(response);
     } else {
-      const response = await this.textSummarize.summarize(
+      messagesToResponse = await this.textSummarize.summarize(
         promptMock,
         messagesByTokenLimit[0],
       );
-
-      messagesToResponse.push(response);
     }
 
-    const summaryManager = this.groups.addSummary(
-      message.from,
-      timeLimit,
-      messagesToResponse.join('\n\n'),
-    );
+    if (messagesToResponse !== null || messagesToResponse !== undefined) {
+      const summaryManager = this.groups.addSummary(
+        message.from,
+        timeLimit,
+        messagesToResponse,
+      );
 
-    const newSummary = summaryManager.getSummaryById(timeLimit);
+      const newSummary = summaryManager.getSummaryById(timeLimit);
 
-    return newSummary;
+      return newSummary;
+    }
+
+    return null;
   }
 
   // get the number args for command summarize 30m, 1hr, 2hr, 4hr, 6hr
@@ -156,7 +154,7 @@ class CommandSummarize implements ICommand {
     return (
       `Criado em: *${createdAt}*` +
       `\nPróxima atualização: *${expiresIn}*` +
-      `\nTipo de resumo: *${EnumTimeLimit[timeLimit]}*` +
+      `\nTipo de resumo: *${TimeLimit.translateTimeLimit(timeLimit)}*` +
       `\n\n*Resumo:*\n> ${summary}`
     );
   }
