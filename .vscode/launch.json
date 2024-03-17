@@ -1,8 +1,14 @@
 {
     "version": "0.2.0",
     "configurations": [
-
-
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "TS Paths Debbugger",
+        "program": "${workspaceFolder}/src/server.ts",
+        "runtimeArgs": ["-r", "ts-node/register", "-r", "tsconfig-paths/register"],
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+      },
       {
         "type": "node",
         "request": "launch",
