@@ -1,12 +1,13 @@
+import { CommandEveryone } from '@commands/CommandEveryOne';
+import { CommandHandler } from '@commands/CommandHandle';
+import { CommandInvalid } from '@commands/CommandInvalid';
+import { CommandRandomMessage } from '@commands/CommandRandomMessage';
+import { CommandStickerImage } from '@commands/CommandStickerImage';
+import { CommandSummarize } from '@commands/CommandSummarize';
+import { BotConfiguration } from '@config/Configuration';
+import { TextSummarizeHttp } from '@services/implementation/TextSummarizeHttp';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
-import { CommandHandler } from '../commands/CommandHandle';
-import { CommandEveryone } from '../commands/useCases/CommandEveryOne';
-import { CommandInvalid } from '../commands/useCases/CommandInvalid';
-import { CommandRandomMessage } from '../commands/useCases/CommandRandomMessage';
-import { CommandStickerImage } from '../commands/useCases/CommandStickerImage';
-import { CommandSummarize } from '../commands/useCases/CommandSummarize';
-import { TextSummarizeHttp } from '../services/implementation/TextSummarizeHttp';
 import { GroupManager } from './GroupManager';
 
 export enum EnumValidCommands {
@@ -68,9 +69,16 @@ class BotMediator {
   }
 
   public async selectCommand(client: Client, message: Message): Promise<void> {
-    const [command, args] = await this.getArgs(message.body);
-    console.log('select command ', command, args);
-    this.commandHandler.selectCommand(command, args, client, message);
+    if (
+      BotConfiguration.isProduction() ||
+      BotConfiguration.isDevelopmentChat([message.from])
+    ) {
+      const [command, args] = await this.getArgs(message.body);
+      console.log('select command ', command, args);
+      this.commandHandler.selectCommand(command, args, client, message);
+    } else {
+      console.log('Not is valid chat in development mode ', message.from);
+    }
   }
 
   private async getArgs(

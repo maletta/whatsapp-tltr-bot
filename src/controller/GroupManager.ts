@@ -1,5 +1,6 @@
-import { Summary } from '../model/Summary';
-import { TimeLimitOption } from '../model/TimeLimit';
+import { Summary } from '@model/Summary';
+import { TimeLimitOption } from '@model/TimeLimit';
+
 import { SummariesManager } from './SummarizeManager';
 
 type IGroupId = string;

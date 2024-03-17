@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
-import { IChat } from '../../../@types/augmentation';
-import { ICommand } from '../ICommand';
+import { IChat } from '../@types/augmentation';
+import { ICommand } from './ICommand';
 
 class CommandEveryone implements ICommand {
   async execute(

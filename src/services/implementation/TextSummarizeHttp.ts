@@ -1,6 +1,5 @@
 import { VertexAI } from '@google-cloud/vertexai';
-
-import { ITextSummarize } from '../ITextSummarize';
+import { ITextSummarize } from '@services/ITextSummarize';
 
 class TextSummarizeHttp implements ITextSummarize {
   async summarize(prompt: string, message: string): Promise<string> {

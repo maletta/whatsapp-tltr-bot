@@ -6,7 +6,7 @@ import {
   MessageTypes,
 } from 'whatsapp-web.js';
 
-import { ICommand } from '../ICommand';
+import { ICommand } from './ICommand';
 
 class CommandStickerImage implements ICommand {
   async execute(

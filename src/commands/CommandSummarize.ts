@@ -1,3 +1,4 @@
+import { GroupManager } from '@controller/GroupManager';
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import {
@@ -7,13 +8,12 @@ import {
   fullMetalAlchemistMock,
   narutoMock,
   onePieceMock,
-} from '../../../mocks/animesMock';
-import { createMessageMock } from '../../../mocks/messagesMock';
-import { concatMessages } from '../../../utils/shared';
-import { GroupManager } from '../../mediator/GroupManager';
-import { EnumTimeLimit } from '../../model/TimeLimit';
-import { ITextSummarize } from '../../services/ITextSummarize';
-import { ICommand } from '../ICommand';
+} from '../mocks/animesMock';
+import { createMessageMock } from '../mocks/messagesMock';
+import { EnumTimeLimit } from '../model/TimeLimit';
+import { ITextSummarize } from '../services/ITextSummarize';
+import { concatMessages } from '../utils/shared';
+import { ICommand } from './ICommand';
 
 class CommandSummarize implements ICommand {
   constructor(

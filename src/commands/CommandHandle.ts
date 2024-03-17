@@ -1,6 +1,6 @@
+import { EnumAllCommands } from '@controller/BotMediator';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { EnumAllCommands } from '../mediator/BotMediator';
 import { ICommand } from './ICommand';
 
 type ICommands = Map<EnumAllCommands, ICommand>;

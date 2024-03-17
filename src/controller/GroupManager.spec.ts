@@ -1,4 +1,5 @@
-import { Summary, ISummaryDTO } from '../model/Summary';
+import { ISummaryDTO, Summary } from '@model/Summary';
+
 import { GroupManager } from './GroupManager';
 import { SummariesManager } from './SummarizeManager';
 

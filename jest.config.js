@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+// eslint-disable-next-line import/no-unresolved
+const { pathsToModuleNameMapper } = require('ts-jest');
+
+const { compilerOptions } = require('./tsconfig.json');
+
 module.exports = {
   detectOpenHandles: true,
   detectLeaks: true,
@@ -19,7 +25,11 @@ module.exports = {
 
   verbose: true,
 
-  moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/src/$1',
-  },
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/',
+  }),
+
+  // moduleNameMapper: {
+  //   '^src/(.*)$': '<rootDir>/src/$1',
+  // },
 };

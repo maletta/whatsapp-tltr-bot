@@ -1,6 +1,6 @@
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
-import { ICommand } from '../ICommand';
+import { ICommand } from './ICommand';
 
 class SelectCommands implements ICommand {
   async execute(

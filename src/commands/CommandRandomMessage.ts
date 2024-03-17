@@ -1,7 +1,7 @@
-import { ITextSummarize } from 'pattern/services/ITextSummarize';
+import { ITextSummarize } from '@services/ITextSummarize';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from '../ICommand';
+import { ICommand } from './ICommand';
 
 class CommandRandomMessage implements ICommand {
   private textSummarize: ITextSummarize;
