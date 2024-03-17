@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { IChat } from 'types/augmentation';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 

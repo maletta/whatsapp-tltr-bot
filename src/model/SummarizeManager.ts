@@ -1,5 +1,4 @@
-import { Summary } from '@model/Summary';
-
+import { Summary } from './Summary';
 import { TimeLimitOption } from './TimeLimit';
 
 class SummariesManager {
