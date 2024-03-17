@@ -29,16 +29,16 @@ class Summary {
     return minutes * 60 * 1000;
   }
 
-  public isValid(): boolean {
+  public isValid = (): boolean => {
     const now = Date.now();
     if (now < this.expiresIn.getTime()) {
       return true;
     }
 
     return false;
-  }
+  };
 
-  public formatExpiration(): string {
+  public formatExpiration = (): string => {
     const expirationTimeMs = this.expiresIn.getTime() - Date.now();
 
     if (expirationTimeMs < 0) {
@@ -48,13 +48,13 @@ class Summary {
     const expiration = new Date(now.getTime() + expirationTimeMs);
 
     return this.formatDate(expiration);
-  }
+  };
 
-  public formatCreatedAt(): string {
+  public formatCreatedAt = (): string => {
     return this.formatDate(this.createdAt);
-  }
+  };
 
-  private formatDate(date: Date): string {
+  private formatDate = (date: Date): string => {
     const dd = String(date.getUTCDate()).padStart(2, '0');
     const mm = String(date.getUTCMonth() + 1).padStart(2, '0'); // Janeiro é 0!
     const yy = String(date.getUTCFullYear()).slice(-2);
@@ -63,7 +63,7 @@ class Summary {
     const ss = String(date.getUTCSeconds()).padStart(2, '0');
 
     return `${dd}-${mm}-${yy} ${hh}:${min}:${ss}`;
-  }
+  };
 }
 
 export { ISummaryDTO, Summary };

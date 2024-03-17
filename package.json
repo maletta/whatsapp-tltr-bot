@@ -7,6 +7,7 @@
     "start": "node dist/src/server.js",
     "devjs": "nodemon src/index.mjs",
     "dev": "ts-node-dev --require tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn  src/server.ts",
+    "dev-debug": "ts-node-dev --inspect --require tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn  src/server.ts",
     "docker-dev": "docker compose -f docker-compose-dev.yml up",
     "docker-compose-dev": "docker-compose -f docker-compose-dev.yml up",
     "test": "jest",
