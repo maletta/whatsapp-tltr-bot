@@ -5,10 +5,9 @@ import { CommandRandomMessage } from '@commands/CommandRandomMessage';
 import { CommandStickerImage } from '@commands/CommandStickerImage';
 import { CommandSummarize } from '@commands/CommandSummarize';
 import { BotConfiguration } from '@config/Configuration';
+import { GroupManager } from '@model/GroupManager';
 import { TextSummarizeHttp } from '@services/implementation/TextSummarizeHttp';
 import { Client, Contact, Message } from 'whatsapp-web.js';
-
-import { GroupManager } from './GroupManager';
 
 export enum EnumValidCommands {
   EVERYONE = 'todos',

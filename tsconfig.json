@@ -21,7 +21,7 @@
       "@utils/*": ["./utils/*"],
       "@functions/*": ["./functions/*"],
       "@commands/*": ["./commands/*"],
-      "@types/*": ["./@types/*"],
+      "@types/*": ["./types/*"],
       "@annotations/*": ["./annotations/*"]
     }
   },

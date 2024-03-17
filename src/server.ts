@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log('initalize bot');
+console.log('initialize bot');
 
 const bot = WhatsAppClient.getClient();
 const botMediator = new BotMediator(bot);
@@ -25,5 +25,3 @@ bot.on('message', (message) => {
 });
 
 bot.initialize();
-
-// sudo ssh -i ~/.ssh/my-aws/CHAVE-WHATSAPP-BOT.pem ec2-user@ip-public

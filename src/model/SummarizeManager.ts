@@ -1,6 +1,6 @@
 import { Summary } from '@model/Summary';
 
-import { TimeLimitOption } from '../model/TimeLimit';
+import { TimeLimitOption } from './TimeLimit';
 
 class SummariesManager {
   // The `summaries` map holds TimeLimitKey as keys and Summary as values.
