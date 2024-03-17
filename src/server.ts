@@ -6,12 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// askChatGPT('olá eu gosto de azul');
-
-console.log('v2');
-
-// makeRequest();
-// createNonStreamingMultipartContent('mensagem para resumir');
+console.log('initalize bot');
 
 const bot = WhatsAppClient.getClient();
 const botMediator = new BotMediator(bot);
@@ -19,7 +14,8 @@ const botMediator = new BotMediator(bot);
 bot.on('ready', () => console.log('client is ready!'));
 
 bot.on('qr', (qr) => {
-  console.log('QR RECEIVED', QRCodeDisplay.display(qr));
+  console.log('QR RECEIVED');
+  QRCodeDisplay.display(qr);
 });
 
 bot.on('authenticated', () => console.log('authenticated!'));
