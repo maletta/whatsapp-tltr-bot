@@ -19,10 +19,29 @@ class CommandRandomMessage implements ICommand {
     console.log('args ', args);
     console.log('message ', message.body);
 
-    const promptJoke = 'conte uma piada aleatória';
-    const promptFunFact = 'fale uma curiosidade aleatória sobre qualquer coisa';
+    const randomNumber = Math.floor(Math.random() * 5) + 1;
 
-    const prompt = Date.now() % 2 ? promptFunFact : promptJoke;
+    let prompt;
+
+    switch (randomNumber) {
+      case 1:
+        prompt = 'conte uma piada aleatória';
+        break;
+      case 2:
+        prompt = 'fale uma curiosidade aleatória sobre qualquer coisa';
+        break;
+      case 3:
+        prompt = 'me mande uma mensagem mal educada e breve';
+        break;
+      case 4:
+        prompt = 'mande um elogio criativo e  emotes se quiser e nada mais';
+        break;
+      case 5:
+        prompt = 'mande uma citação famosa e o author';
+        break;
+      default:
+        prompt = 'me manda algo aleatório e nada mais';
+    }
 
     const response = await this.textSummarize.summarize(prompt, '');
 
