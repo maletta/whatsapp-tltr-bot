@@ -86,7 +86,7 @@ class CommandSummarize implements ICommand {
 
     let messagesToResponse: string | null | undefined = null;
 
-    if (messagesByTokenLimit.length > 0) {
+    if (messagesByTokenLimit.length > 1) {
       messagesToResponse = await this.textSummarize.summarizeBatch(
         promptMock,
         messagesByTokenLimit,
