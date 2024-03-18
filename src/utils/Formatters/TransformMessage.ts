@@ -31,7 +31,7 @@ class TransformMessages {
         currentString = messageStringfy;
       } else {
         // Se não exceder, adiciona a mensagem à string atual
-        currentString += `;${messageStringfy}`;
+        currentString += `,${messageStringfy}`;
       }
     }
 
