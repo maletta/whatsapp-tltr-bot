@@ -10,7 +10,8 @@ services:
     volumes:
       # - .:/app
       - ./src:/app/src
+      - ./logs:/app/logs
       - ./package.json:/app/package.json
       - ./.env:/app/.env
-      - ./tsconfig.ts:/app/tsconfig.ts
+      - ./tsconfig.json:/app/tsconfig.json
       - .gcp:/app/.gcp
