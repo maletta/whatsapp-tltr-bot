@@ -13,7 +13,8 @@
     "test": "jest",
     "test2": "ts-node-dev --require tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn  src/test.ts",
     "build": "node -r tsconfig-paths/register ./node_modules/.bin/tsc",
-    "build2": "tsc --project tsconfig.json"
+    "build2": "tsc --project tsconfig.json",
+    "morph": "ts-node-dev --require tsconfig-paths/register src/utils/morph.ts"
   },
   "keywords": [],
   "author": "",
