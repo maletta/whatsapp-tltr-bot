@@ -82,8 +82,7 @@ class CommandSummarize implements ICommand {
 
     console.log('messagesByTokenLimit', messagesByTokenLimit.length);
 
-    const promptMock = `Aqui está uma lista de mensagens trocadas por usuários que estão separadas por ';'.
-    Organize e detalhe os assuntos abrangidos nessas conversas:`;
+    const promptMock = `Leia esse conjunto json de mensagens enviadas em grupo do whatsapp. Cada conjunto é composto pelo atributo userId que disintgue o usuário, pelo atributo timestamp que representa o horário de envio da mensagem e pelo atributo body que representa a mensagem enviada. Me diga o que foi conversado em tópicos, mas mantenha sigilo sobre a identidade do usuário : `;
 
     let messagesToResponse: string | null | undefined = null;
 

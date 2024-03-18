@@ -51,22 +51,26 @@ class TextSummarizeHttp implements ITextSummarize {
         const summary = this.summarize(prompt, message);
         firstSummaryPromise.push(summary);
       });
+
+      const summaryResponses = await Promise.all(firstSummaryPromise);
+
+      return summaryResponses.join('\n\n');
     } catch (err) {
       console.error(`Error first summarizeBatch prompt "${prompt}"`);
       console.error(err);
       return null;
     }
 
-    try {
-      const summaryResponses = await Promise.all(firstSummaryPromise);
-      const summary = await this.summarize(prompt, summaryResponses.join());
+    // try {
+    //   const summaryResponses = await Promise.all(firstSummaryPromise);
+    //   const summary = await this.summarize(prompt, summaryResponses.join());
 
-      return summary;
-    } catch (err) {
-      console.error(`Error second summarizeBatch prompt "${prompt}"`);
-      console.error(err);
-      return null;
-    }
+    //   return summary;
+    // } catch (err) {
+    //   console.error(`Error second summarizeBatch prompt "${prompt}"`);
+    //   console.error(err);
+    //   return null;
+    // }
   }
 }
 
