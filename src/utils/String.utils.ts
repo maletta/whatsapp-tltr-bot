@@ -1,7 +1,13 @@
 class StringUtils {
-  static removeAccents(str: string) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  }
+  static removeAccents = (str: string) => {
+    console.log('sting to replace ', str);
+    try {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
 
   static formatDateToString = (date: Date): string => {
     const dd = String(date.getDate()).padStart(2, '0');

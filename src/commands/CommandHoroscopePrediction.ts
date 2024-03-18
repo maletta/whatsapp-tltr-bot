@@ -27,6 +27,7 @@ class CommandHoroscopePrediction implements ICommand {
       this.getHoroscopeFromCommand(args);
 
     if (horoscopeEnum === null) {
+      message.reply(`*Comando inválido*\n\n*.horoscopo* _seu-signo_`);
       return;
     }
 
@@ -44,15 +45,18 @@ class CommandHoroscopePrediction implements ICommand {
       } else {
         const horoscopePredictionMessage =
           await this.horoscopePrediction.prediction(horoscopeEnum);
-        horoscopeToReply = new Horoscope({
-          content: horoscopePredictionMessage,
-          sign: horoscopeEnum,
-        });
+
+        const horoscopeManager = this.groups.addHoroscope(
+          message.from,
+          horoscopeEnum,
+          horoscopePredictionMessage,
+        );
+
+        horoscopeToReply = horoscopeManager.getHoroscopeById(horoscopeEnum);
       }
 
-      if (horoscopeToReply) {
+      if (horoscopeToReply !== null) {
         const { content, createdAt, expiresIn, sign } = horoscopeToReply;
-
         message.reply(
           this.formatResponse({
             content,
@@ -61,10 +65,6 @@ class CommandHoroscopePrediction implements ICommand {
             expiresIn: StringUtils.formatDateToString(expiresIn),
           }),
         );
-      } else {
-        console.error(
-          'Failed to retrieve or create a valid horoscope prediction',
-        );
       }
     } catch (error) {
       console.error('Error during prediction execution:', error);
@@ -72,7 +72,7 @@ class CommandHoroscopePrediction implements ICommand {
   }
 
   public getHoroscopeFromCommand = (args: string[]): EnumHoroscope | null => {
-    const sign = args.length > 0 ? args[1] : '';
+    const sign = args.length > 0 ? args[0] : '';
 
     return HoroscopeValidator.getValidHoroscope(sign);
   };

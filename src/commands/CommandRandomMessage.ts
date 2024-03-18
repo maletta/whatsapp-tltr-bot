@@ -25,7 +25,7 @@ class CommandRandomMessage implements ICommand {
 
     switch (randomNumber) {
       case 1:
-        prompt = 'conte uma piada aleatória';
+        prompt = 'conte uma piada aleatória do brasil';
         break;
       case 2:
         prompt = 'fale uma curiosidade aleatória sobre qualquer coisa';

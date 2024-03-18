@@ -13,7 +13,7 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
 
     const generativeVisionModel = vertexAI.getGenerativeModel({ model });
 
-    const prompt = 'Faça a previsão para o horóscopo do dia para o signo: ';
+    const prompt = 'O que esperar para o signo: ';
 
     const promptQuestion = {
       text: `${prompt}${sign}`,
@@ -35,6 +35,10 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
     // Wait for the response stream to complete
     const aggregatedResponse = await responseStream.response;
 
+    console.log('All response ');
+    console.dir(aggregatedResponse, { depth: null });
+
+    console.log('Default response ');
     // Select the text from the response
     const fullTextResponse = aggregatedResponse.candidates[0].content.parts[0];
 

@@ -1,5 +1,7 @@
+import { CommandCancel } from '@commands/CommandCancel';
 import { CommandEveryone } from '@commands/CommandEveryOne';
 import { CommandHandler } from '@commands/CommandHandle';
+import { CommandHoroscopePrediction } from '@commands/CommandHoroscopePrediction';
 import { CommandInvalid } from '@commands/CommandInvalid';
 import { CommandRandomMessage } from '@commands/CommandRandomMessage';
 import { CommandStickerImage } from '@commands/CommandStickerImage';
@@ -7,7 +9,9 @@ import { CommandSummarize } from '@commands/CommandSummarize';
 import { BotConfiguration } from '@config/Configuration';
 import { EnumSystemCommands, EnumValidCommands } from '@enums/Commands';
 import { GroupManager } from '@services/GroupManager/GroupManager';
+import { HoroscopePredictioHttp } from '@services/HoroscopePrediction/implementation/HoroscopePredictionHttp';
 import { TextSummarizeHttp } from '@services/TextSummarize/implementation/TextSummarizeHttp';
+import { StringUtils } from '@utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 // type ValidCommandOptions = keyof typeof EnumValidCommands;
@@ -47,6 +51,18 @@ class BotMediator {
     this.commandHandler.registerCommand(
       EnumValidCommands.STICKER,
       new CommandStickerImage(),
+    );
+    this.commandHandler.registerCommand(
+      EnumValidCommands.HOROSCOPE,
+      new CommandHoroscopePrediction(new HoroscopePredictioHttp(), this.groups),
+    );
+    this.commandHandler.registerCommand(
+      EnumValidCommands.CANCELF,
+      new CommandCancel(new TextSummarizeHttp()),
+    );
+    this.commandHandler.registerCommand(
+      EnumValidCommands.CANCELM,
+      new CommandCancel(new TextSummarizeHttp()),
     );
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,
@@ -93,7 +109,9 @@ class BotMediator {
   private isValidCommand(
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
-    const validation = (enumItem) => this.prefix + enumItem === command;
+    const validation = (enumItem) =>
+      this.prefix + enumItem ===
+      StringUtils.removeAccents(command).toLowerCase();
     return (
       Object.values(EnumValidCommands).some(validation) ||
       Object.values(EnumSystemCommands).some(validation)

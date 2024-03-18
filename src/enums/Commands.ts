@@ -3,6 +3,9 @@ export enum EnumValidCommands {
   RANDOM_MESSAGE = 'aleatorio',
   SUMMARIZE = 'resuma',
   STICKER = 'sticker',
+  CANCELM = 'cancelado',
+  CANCELF = 'cancelada',
+  HOROSCOPE = 'horoscopo',
 }
 
 export enum EnumSystemCommands {

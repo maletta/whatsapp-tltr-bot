@@ -15,6 +15,7 @@ class GroupManager {
 
   constructor() {
     this.summarys = new Map();
+    this.horoscopes = new Map();
   }
 
   public addSummary(
