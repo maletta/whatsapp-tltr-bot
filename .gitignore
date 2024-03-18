@@ -2,3 +2,4 @@ node_modules
 .wwebjs*
 .env
 dist
+logs

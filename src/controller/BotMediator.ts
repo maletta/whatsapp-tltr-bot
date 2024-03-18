@@ -6,7 +6,7 @@ import { CommandStickerImage } from '@commands/CommandStickerImage';
 import { CommandSummarize } from '@commands/CommandSummarize';
 import { BotConfiguration } from '@config/Configuration';
 import { GroupManager } from '@model/GroupManager';
-import { TextSummarizeHttp } from '@services/implementation/TextSummarizeHttp';
+import { TextSummarizeHttp } from '@services/TextSummarize/implementation/TextSummarizeHttp';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 export enum EnumValidCommands {

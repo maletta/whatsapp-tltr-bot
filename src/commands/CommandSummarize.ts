@@ -1,10 +1,13 @@
 import { GroupManager } from '@model/GroupManager';
 import { Summary } from '@model/Summary';
 import { EnumTimeLimit, TimeLimit, TimeLimitOption } from '@model/TimeLimit';
-import { ITextSummarize } from '@services/ITextSummarize';
+import { ILoggerFiles } from '@services/LoggerFiles/ILoggerFiles';
+import { LoggerFiles } from '@services/LoggerFiles/implementation/LoggerFiles';
+import { ITextSummarize } from '@services/TextSummarize/ITextSummarize';
 import { TransformMessages } from '@utils/Formatters/TransformMessage';
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
+import { FormmatSummaryLoggers } from './FormmatLoggers/FormmatSummaryLoggers';
 import { ICommand } from './ICommand';
 
 class CommandSummarize implements ICommand {
@@ -104,6 +107,8 @@ class CommandSummarize implements ICommand {
 
       const newSummary = summaryManager.getSummaryById(timeLimit);
 
+      this.logSummary(chat, newSummary, messagesByTokenLimit);
+
       return newSummary;
     }
 
@@ -111,7 +116,7 @@ class CommandSummarize implements ICommand {
   }
 
   // get the number args for command summarize 30m, 1hr, 2hr, 4hr, 6hr
-  public getSummarizeTimeFromCommand(args: string[]): TimeLimitOption {
+  public getSummarizeTimeFromCommand = (args: string[]): TimeLimitOption => {
     const firstArs = args.length > 0 ? args[0] : '';
     if (firstArs.includes('1')) return '1_HOUR';
 
@@ -122,7 +127,7 @@ class CommandSummarize implements ICommand {
     if (firstArs.includes('6')) return '6_HOURS';
 
     return '30_MINUTES';
-  }
+  };
 
   public async filterMessagesByHour(
     chat: Chat,
@@ -158,6 +163,30 @@ class CommandSummarize implements ICommand {
       `\n\n*Resumo:*\n> ${summary}`
     );
   }
+
+  private logSummary = (
+    chat: Chat,
+    summary: Summary,
+    messages: string[],
+  ): void => {
+    const groupId = `${chat.id.user}${chat.id.server}`;
+    try {
+      const logger: ILoggerFiles = LoggerFiles.getInstance();
+      const formmatSummaryLoggers = FormmatSummaryLoggers.formmat(
+        chat.name,
+        summary,
+        messages.join('\n\n------TokenLimit----\n\n'),
+      );
+      const fileName = FormmatSummaryLoggers.formatDateForFileName(
+        summary.createdAt,
+      );
+
+      logger.log(groupId, fileName, formmatSummaryLoggers);
+    } catch (error) {
+      console.log(`Error on save summary log file. Group id ${groupId}`);
+      console.log(error);
+    }
+  };
 }
 
 export { CommandSummarize };
