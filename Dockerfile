@@ -14,8 +14,8 @@ RUN ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && echo America
 
 
 # Crie um usuário não-root e use-o
-RUN useradd -m myuser
-USER myuser
+# RUN useradd -m myuser
+# USER myuser
 
 
 # Defina o diretório de trabalho
