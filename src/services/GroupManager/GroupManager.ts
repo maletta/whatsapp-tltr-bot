@@ -1,7 +1,7 @@
-import { Summary } from '@model/Summary';
-import { TimeLimitOption } from '@model/TimeLimit';
+import { TimeLimitOption } from '@enums/TimeLimit';
+import { Summary } from '@models/Summary';
 
-import { SummariesManager } from './SummarizeManager';
+import { SummariesManager } from '../SummarizeManager';
 
 type IGroupId = string;
 type IGroups = Map<IGroupId, SummariesManager>;

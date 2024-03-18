@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import { BotMediator } from '@controller/BotMediator';
-import { WhatsAppClient } from '@controller/WhatsAppClient';
+import { BotMediator } from '@controllers/BotMediator';
+import { WhatsAppClient } from '@controllers/WhatsAppClient';
 import { QRCodeDisplay } from '@utils/QRCodeDisplay';
 import dotenv from 'dotenv';
 

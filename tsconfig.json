@@ -13,16 +13,16 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "paths": {
-      "@config/*": ["./config/*"],
-      "@controller/*": ["./controller/*"],
-      "@model/*": ["./model/*"],
-      "@mocks/*": ["./mocks/*"],
-      "@services/*": ["./services/*"],
-      "@utils/*": ["./utils/*"],
-      "@functions/*": ["./functions/*"],
+      "@annotations/*": ["./annotations/*"],
       "@commands/*": ["./commands/*"],
+      "@config/*": ["./config/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@enums/*": ["./enums/*"],
+      "@mocks/*": ["./mocks/*"],
+      "@models/*": ["./models/*"],
+      "@services/*": ["./services/*"],
       "@types/*": ["./types/*"],
-      "@annotations/*": ["./annotations/*"]
+      "@utils/*": ["./utils/*"]
     }
   },
   "include": [

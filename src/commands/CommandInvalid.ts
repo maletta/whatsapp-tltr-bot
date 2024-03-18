@@ -1,4 +1,4 @@
-import { EnumValidCommands } from '@controller/BotMediator';
+import { EnumValidCommands } from '@enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

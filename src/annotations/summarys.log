@@ -1,0 +1,24 @@
+Enviar objetos json que representam as mensagens:
+id: Um identificador único para cada mensagem.
+timestamp: A hora em que a mensagem foi enviada.
+sender: O remetente da mensagem.
+message: O conteúdo da mensagem.
+
+-- Exemplo de prompt
+“Resuma a conversa sobre o tópico X.”
+“Quais foram os principais pontos discutidos na conversa?”
+“Quais foram os sentimentos expressos na conversa?”
+
+-- Exemplos de prompt 
+Resumo geral: "Resuma os principais pontos desta conversa."
+Resumo por tópico: "Resuma os principais pontos da conversa sobre [tópico]."
+Identificar tópicos: "Identifique os principais tópicos discutidos nesta conversa."
+Extrair informações: "Extraia as seguintes informações desta conversa: [lista de informações]."
+Analisar sentimento: "Analise o sentimento geral desta conversa."
+
+-- Exemplos de prompts:
+
+"Resumo dos principais pontos da conversa sobre o planejamento da viagem."
+"Identifique os principais tópicos discutidos na reunião de equipe."
+"Extraia as seguintes informações da conversa: data da próxima reunião, local da reunião, agenda da reunião."
+"Analise o sentimento geral da conversa entre o cliente e o representante de vendas."

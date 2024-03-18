@@ -5,23 +5,10 @@ import { CommandRandomMessage } from '@commands/CommandRandomMessage';
 import { CommandStickerImage } from '@commands/CommandStickerImage';
 import { CommandSummarize } from '@commands/CommandSummarize';
 import { BotConfiguration } from '@config/Configuration';
-import { GroupManager } from '@model/GroupManager';
+import { EnumSystemCommands, EnumValidCommands } from '@enums/Commands';
+import { GroupManager } from '@services/GroupManager/GroupManager';
 import { TextSummarizeHttp } from '@services/TextSummarize/implementation/TextSummarizeHttp';
 import { Client, Contact, Message } from 'whatsapp-web.js';
-
-export enum EnumValidCommands {
-  EVERYONE = 'todos',
-  RANDOM_MESSAGE = 'aleatorio',
-  SUMMARIZE = 'resuma',
-  STICKER = 'sticker',
-}
-
-export enum EnumSystemCommands {
-  INVALID = 'invalido',
-  DO_NOTHING = 'nao_enviar_mensagem',
-}
-
-export type EnumAllCommands = EnumValidCommands | EnumSystemCommands;
 
 // type ValidCommandOptions = keyof typeof EnumValidCommands;
 

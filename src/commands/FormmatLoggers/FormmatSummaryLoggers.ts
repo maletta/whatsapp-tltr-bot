@@ -1,5 +1,5 @@
-import { Summary } from '@model/Summary';
-import { TimeLimitOption } from '@model/TimeLimit';
+import { TimeLimitOption } from '@enums/TimeLimit';
+import { Summary } from '@models/Summary';
 
 class FormmatSummaryLoggers {
   static formmat(

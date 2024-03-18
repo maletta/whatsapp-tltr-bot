@@ -1,6 +1,6 @@
+import { ISummaryDTO, Summary } from '../../model/Summary';
+import { SummariesManager } from '../SummarizeManager';
 import { GroupManager } from './GroupManager';
-import { SummariesManager } from './SummarizeManager';
-import { ISummaryDTO, Summary } from './Summary';
 
 describe('Summary', () => {
   test('isValid() should return true if the summary is not expired', () => {

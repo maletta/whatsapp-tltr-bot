@@ -1,12 +1,4 @@
-// in minutes
-enum EnumTimeLimit {
-  '30_MINUTES' = 30,
-  '1_HOUR' = 60,
-  '2_HOURS' = 120,
-  '4_HOURS' = 240,
-  '6_HOURS' = 360,
-}
-type TimeLimitOption = keyof typeof EnumTimeLimit;
+import { EnumTimeLimit, TimeLimitOption } from '@enums/TimeLimit';
 
 export type TimeLimitTranslation = {
   [key in TimeLimitOption]: string;
@@ -14,6 +6,7 @@ export type TimeLimitTranslation = {
 
 class TimeLimit {
   // valid if  timestamp is between start and end of given time limit
+
   public static isBetweenTimeLimit(
     timestamp: number,
     timeLimit: EnumTimeLimit,
@@ -40,4 +33,4 @@ class TimeLimit {
   }
 }
 
-export { EnumTimeLimit, TimeLimitOption, TimeLimit };
+export { TimeLimit };

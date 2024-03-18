@@ -1,4 +1,4 @@
-import { EnumTimeLimit, TimeLimitOption } from './TimeLimit';
+import { EnumTimeLimit, TimeLimitOption } from '@enums/TimeLimit';
 
 interface ISummaryDTO {
   id?: string;
