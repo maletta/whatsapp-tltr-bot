@@ -20,11 +20,16 @@ class CommandStickerImage implements ICommand {
 
     const media = await this.getMedia(message);
 
-    if (media !== null) {
-      const options: MessageSendOptions = { sendMediaAsSticker: true };
-      message.reply(media, message.from, options);
-    } else {
-      message.reply('Marque imagem ou gif válidos.');
+    try {
+      if (media !== null) {
+        const options: MessageSendOptions = { sendMediaAsSticker: true };
+        message.reply(media, message.from, options);
+      } else {
+        message.reply('Marque imagem válida.');
+      }
+    } catch (error) {
+      console.log('Error on transforme image into sticker');
+      message.reply('Marque imagem válida.');
     }
   }
 
