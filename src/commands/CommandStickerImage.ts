@@ -18,33 +18,38 @@ class CommandStickerImage implements ICommand {
     console.log('args ', args);
     console.log('message ', message.body);
 
-    const media = await this.getMedia(message);
+    const options: MessageSendOptions = { sendMediaAsSticker: true };
+    const media = await this.selectMedia(message);
 
-    try {
-      if (media !== null) {
-        const options: MessageSendOptions = { sendMediaAsSticker: true };
-        message.reply(media, message.from, options);
-      } else {
-        message.reply('Marque imagem válida.');
-      }
-    } catch (error) {
-      console.log('Error on transforme image into sticker');
-      message.reply('Marque imagem válida.');
+    if (media !== null) {
+      message
+        .reply(media, message.from, options)
+        .then((reponseMessage) => reponseMessage.react('😼'))
+        .catch((error) => {
+          console.log('Error on transforme image into sticker');
+          console.log(error);
+        });
+    } else {
+      message.reply('Marque imagem válida 😼');
     }
   }
 
+  private selectMedia = async (
+    message: Message,
+  ): Promise<MessageMedia | null> => {
+    if (message.hasQuotedMsg) {
+      const quotedMessage = await message.getQuotedMessage();
+      return this.getMedia(quotedMessage);
+    }
+
+    return this.getMedia(message);
+  };
+
   private async getMedia(message: Message): Promise<MessageMedia | null> {
     try {
-      if (this.isValidType(message) && message.hasQuotedMsg) {
-        const quotedMsg = await message.getQuotedMessage();
-
-        if (this.isValidType(quotedMsg)) {
-          return quotedMsg.downloadMedia();
-        }
-      } else if (this.isValidType(message)) {
+      if (this.isValidType(message)) {
         return message.downloadMedia();
       }
-
       return null;
     } catch (error) {
       console.log('Error on download media');
@@ -54,7 +59,9 @@ class CommandStickerImage implements ICommand {
   }
 
   private isValidType(message: Message): boolean {
-    return message.type === MessageTypes.TEXT || message.isGif;
+    return (
+      (message.hasMedia && message.type === MessageTypes.TEXT) || message.isGif
+    );
   }
 }
 
