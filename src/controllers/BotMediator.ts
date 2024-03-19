@@ -10,6 +10,7 @@ import { BotConfiguration } from '@config/Configuration';
 import { EnumSystemCommands, EnumValidCommands } from '@enums/Commands';
 import { GroupManager } from '@services/GroupManager/GroupManager';
 import { HoroscopePredictioHttp } from '@services/HoroscopePrediction/implementation/HoroscopePredictionHttp';
+import { TextCancenlingHttp } from '@services/TextCanceling/implementation/TextCancelingHttp';
 import { TextSummarizeHttp } from '@services/TextSummarize/implementation/TextSummarizeHttp';
 import { StringUtils } from '@utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
@@ -58,11 +59,11 @@ class BotMediator {
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.CANCELF,
-      new CommandCancel(new TextSummarizeHttp()),
+      new CommandCancel(new TextCancenlingHttp()),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.CANCELM,
-      new CommandCancel(new TextSummarizeHttp()),
+      new CommandCancel(new TextCancenlingHttp()),
     );
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,

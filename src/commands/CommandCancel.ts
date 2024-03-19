@@ -1,12 +1,12 @@
-import { ITextSummarize } from '@services/TextSummarize/ITextSummarize';
+import { ITextCanceling } from '@services/TextCanceling/ITextCanceling';
 import { Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
 
 class CommandCancel implements ICommand {
-  private textSummarize: ITextSummarize;
+  private textSummarize: ITextCanceling;
 
-  constructor(textSummarize: ITextSummarize) {
+  constructor(textSummarize: ITextCanceling) {
     this.textSummarize = textSummarize;
   }
 
@@ -23,16 +23,23 @@ class CommandCancel implements ICommand {
       const messageQuoted = await message.getQuotedMessage();
 
       if (messageQuoted.type === MessageTypes.TEXT) {
-        const prompt = `Problematize a seguinte fala em até 2 frases e nada mais: "${messageQuoted.body}" `;
+        console.log('message ', message);
+        console.log('message quoted', messageQuoted);
+        const prompt = `Problematize a seguinte fala em até 2 frases e nada mais: `;
         try {
-          const response = await this.textSummarize.summarize(prompt, '');
+          const response = await this.textSummarize.canceling(
+            prompt,
+            messageQuoted.body,
+          );
 
-          message.reply(response);
+          messageQuoted.reply(response);
         } catch (error) {
           console.log('Error on send Command Cancel ');
           console.log(error);
         }
       }
+    } else {
+      message.reply(`Marque alguém para cancelar`);
     }
   }
 }
