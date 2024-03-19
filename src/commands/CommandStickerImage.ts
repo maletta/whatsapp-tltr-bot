@@ -48,7 +48,7 @@ class CommandStickerImage implements ICommand {
   private async getMedia(message: Message): Promise<MessageMedia | null> {
     try {
       if (this.isValidType(message)) {
-        return message.downloadMedia();
+        return await message.downloadMedia();
       }
       return null;
     } catch (error) {
@@ -59,8 +59,9 @@ class CommandStickerImage implements ICommand {
   }
 
   private isValidType(message: Message): boolean {
+    console.log('isValidType ', message.hasMedia, message.type, message.isGif);
     return (
-      (message.hasMedia && message.type === MessageTypes.TEXT) || message.isGif
+      (message.hasMedia && message.type === MessageTypes.IMAGE) || message.isGif
     );
   }
 }
