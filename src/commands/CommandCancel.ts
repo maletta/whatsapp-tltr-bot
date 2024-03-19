@@ -39,7 +39,7 @@ class CommandCancel implements ICommand {
         }
       }
     } else {
-      message.reply(`Marque alguém para cancelar`);
+      message.reply(`Marque uma mensagem para cancelar`);
     }
   }
 }
