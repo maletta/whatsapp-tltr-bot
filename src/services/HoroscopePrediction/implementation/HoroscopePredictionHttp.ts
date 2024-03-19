@@ -13,7 +13,7 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
 
     const generativeVisionModel = vertexAI.getGenerativeModel({ model });
 
-    const prompt = 'Breve do dia resumo para o signo: ';
+    const prompt = 'Breve resumo do dia para o signo: ';
 
     const promptQuestion = {
       text: `${prompt}${sign}`,

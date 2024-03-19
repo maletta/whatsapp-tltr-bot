@@ -24,24 +24,26 @@ class CommandStickerImage implements ICommand {
       const options: MessageSendOptions = { sendMediaAsSticker: true };
       message.reply(media, message.from, options);
     } else {
-      message.reply('Marque imagem válida.');
+      message.reply('Marque imagem ou gif válidos.');
     }
   }
 
   private async getMedia(message: Message): Promise<MessageMedia | null> {
-    if (message.type === MessageTypes.TEXT && message.hasQuotedMsg) {
+    if (this.isValidType(message) && message.hasQuotedMsg) {
       const quotedMsg = await message.getQuotedMessage();
 
-      if (quotedMsg.type === MessageTypes.IMAGE) {
+      if (this.isValidType(quotedMsg)) {
         return quotedMsg.downloadMedia();
       }
-    }
-
-    if (message.type === MessageTypes.IMAGE) {
+    } else if (this.isValidType(message)) {
       return message.downloadMedia();
     }
 
     return null;
+  }
+
+  private isValidType(message: Message): boolean {
+    return message.type === MessageTypes.TEXT || message.isGif;
   }
 }
 
