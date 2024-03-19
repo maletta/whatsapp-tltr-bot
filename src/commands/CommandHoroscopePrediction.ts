@@ -1,3 +1,4 @@
+import { EnumValidCommands } from '@enums/Commands';
 import { EnumHoroscope } from '@enums/Horoscope';
 import { Horoscope } from '@models/Horoscope';
 import { GroupManager } from '@services/GroupManager/GroupManager';
@@ -27,7 +28,9 @@ class CommandHoroscopePrediction implements ICommand {
       this.getHoroscopeFromCommand(args);
 
     if (horoscopeEnum === null) {
-      message.reply(`*Comando inválido*\n\n*.horoscopo* _seu-signo_`);
+      message.reply(
+        `*Comando inválido*\n\n*.${EnumValidCommands.HOROSCOPE}* _seu-signo_`,
+      );
       return;
     }
 
