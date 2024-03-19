@@ -4,6 +4,7 @@ import {
   type ContactId,
   type GroupParticipant,
   type ChatId,
+  Message,
 } from 'whatsapp-web.js';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -55,3 +56,5 @@ interface INonGroupChat extends Chat {
 }
 
 export type IChat = IGroupChat | INonGroupChat;
+
+export type IMessage = Message & { caption?: string };
