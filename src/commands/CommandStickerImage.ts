@@ -34,17 +34,23 @@ class CommandStickerImage implements ICommand {
   }
 
   private async getMedia(message: Message): Promise<MessageMedia | null> {
-    if (this.isValidType(message) && message.hasQuotedMsg) {
-      const quotedMsg = await message.getQuotedMessage();
+    try {
+      if (this.isValidType(message) && message.hasQuotedMsg) {
+        const quotedMsg = await message.getQuotedMessage();
 
-      if (this.isValidType(quotedMsg)) {
-        return quotedMsg.downloadMedia();
+        if (this.isValidType(quotedMsg)) {
+          return quotedMsg.downloadMedia();
+        }
+      } else if (this.isValidType(message)) {
+        return message.downloadMedia();
       }
-    } else if (this.isValidType(message)) {
-      return message.downloadMedia();
-    }
 
-    return null;
+      return null;
+    } catch (error) {
+      console.log('Error on download media');
+      console.log(error);
+      return null;
+    }
   }
 
   private isValidType(message: Message): boolean {
