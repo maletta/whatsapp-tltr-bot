@@ -55,7 +55,7 @@ class CommandHoroscopePrediction implements ICommand {
         horoscopeToReply = horoscopeManager.getHoroscopeById(horoscopeEnum);
       }
 
-      if (horoscopeToReply !== null) {
+      if (horoscopeToReply !== null && horoscopeToReply !== undefined) {
         const { content, createdAt, expiresIn, sign } = horoscopeToReply;
         message.reply(
           this.formatResponse({

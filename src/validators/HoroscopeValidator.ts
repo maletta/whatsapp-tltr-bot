@@ -14,7 +14,6 @@ class HoroscopeValidator {
     const normalizedHoroscope =
       StringUtils.removeAccents(horoscope).toLowerCase();
     const foundHoroscope = Object.values(EnumHoroscope).find((h) => {
-      console.log('Imprimindo H ', h);
       return (
         StringUtils.removeAccents(String(h)).toLowerCase() ===
         normalizedHoroscope

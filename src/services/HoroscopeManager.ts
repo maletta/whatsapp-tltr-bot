@@ -13,8 +13,8 @@ class HoroscopeManager {
   // Adds a new horoscope to the `horoscopes` map using the provided key and horoscope.
   public add(key: EnumHoroscope, text: string) {
     this.delete(key);
-    const summary = new Horoscope({ content: text, sign: key });
-    this.horoscopes.set(key, summary);
+    const horoscope = new Horoscope({ content: text, sign: key });
+    this.horoscopes.set(key, horoscope);
   }
 
   public getHoroscopeById(key: EnumHoroscope): Horoscope | null {
