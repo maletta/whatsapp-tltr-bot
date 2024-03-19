@@ -20,21 +20,31 @@ class CommandEveryone implements ICommand {
 
     if (chat.isGroup === true) {
       const paricipants = chat.groupMetadata.participants;
+      const isAdmin = paricipants.some(
+        ({ id, isAdmin }) =>
+          `${id.user}@${id.server}` === message.author && isAdmin,
+      );
 
-      paricipants.forEach((p) => {
-        mentions.push(`${p.id.user}@c.us`);
-        responseText.push(`@${p.id.user}`);
-      });
+      if (isAdmin) {
+        paricipants.forEach((p) => {
+          mentions.push(`${p.id.user}@c.us`);
+          responseText.push(`@${p.id.user}`);
+        });
+
+        const quotedMessage = await this.getQuotedMessage(message);
+
+        await client.sendMessage(message.from, 'Vejam todos', {
+          mentions: mentions as unknown as Contact[],
+          quotedMessageId: quotedMessage
+            ? quotedMessage.id._serialized
+            : message.id._serialized,
+        });
+        message.react('👀');
+      } else {
+        message.react('😎');
+        message.reply('Somente administradores podem marcar todos');
+      }
     }
-    //   const text = responseText.join('');
-    const quotedMessage = await this.getQuotedMessage(message);
-
-    await client.sendMessage(message.from, 'Vejam todos', {
-      mentions: mentions as unknown as Contact[],
-      quotedMessageId: quotedMessage
-        ? quotedMessage.id._serialized
-        : message.id._serialized,
-    });
   }
 
   async getQuotedMessage(message: Message): Promise<Message | null> {
