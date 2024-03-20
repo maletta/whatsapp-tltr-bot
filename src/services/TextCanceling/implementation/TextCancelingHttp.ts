@@ -6,7 +6,8 @@ class TextCancenlingHttp implements ITextCanceling {
   async canceling(prompt: string, message: string): Promise<string> {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
-    const model = 'gemini-1.0-pro-vision';
+    // const model = 'gemini-1.0-pro-vision';
+    const model = 'gemini-1.0-pro';
 
     const vertexAI = new VertexAI({ project: projectId, location });
 

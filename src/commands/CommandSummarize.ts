@@ -42,13 +42,17 @@ class CommandSummarize implements ICommand {
       }
 
       if (summaryToReplyWith) {
-        const { content, formatCreatedAt, timeLimit, expiresIn } =
-          summaryToReplyWith;
+        const {
+          content,
+          createdAt,
+          key: timeLimit,
+          expiresIn,
+        } = summaryToReplyWith;
 
         message.reply(
           this.formatSummaryResponse(
             content,
-            formatCreatedAt(),
+            StringUtils.formatDateToString(createdAt),
             StringUtils.formatDateToString(expiresIn),
             timeLimit,
           ),
