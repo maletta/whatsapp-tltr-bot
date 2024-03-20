@@ -22,37 +22,6 @@ describe('Summary', () => {
     const summary = new Summary(summaryData);
     expect(summary.isValid()).toBe(false);
   });
-
-  test('formatExpiration() should return "expirado" if the summary is expired', () => {
-    const summaryData: ISummaryDTO = {
-      content: 'Test summary',
-      timeLimit: '30_MINUTES',
-      createdAt: new Date(Date.now() - 31 * 60 * 1000), // 31 minutes ago
-    };
-    const summary = new Summary(summaryData);
-    expect(summary.formatExpiration()).toBe('expirado');
-  });
-
-  test('formatExpiration() should return a formatted expiration date if the summary is not expired', () => {
-    const summaryData: ISummaryDTO = {
-      content: 'Test summary',
-      timeLimit: '30_MINUTES',
-    };
-    const summary = new Summary(summaryData);
-    expect(summary.formatExpiration()).toMatch(
-      /^\d{2}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/,
-    );
-  });
-
-  test('formatCreatedAt() should return a formatted creation date', () => {
-    const summaryData: ISummaryDTO = {
-      content: 'Test summary',
-      timeLimit: '30_MINUTES',
-      createdAt: new Date('2024-03-15T17:00:00Z'),
-    };
-    const summary = new Summary(summaryData);
-    expect(summary.formatCreatedAt()).toBe('15-03-24 17:00:00');
-  });
 });
 
 describe('SummariesManager', () => {

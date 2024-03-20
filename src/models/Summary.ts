@@ -1,15 +1,13 @@
 import { EnumTimeLimit, TimeLimitOption } from '@enums/TimeLimit';
+import { StringUtils } from '@utils/String.utils';
 
 interface ISummaryDTO {
-  id?: string;
   timeLimit: TimeLimitOption;
   content: string;
   createdAt?: Date;
-  expiresIn?: Date;
 }
 
 class Summary {
-  public id: string;
   public timeLimit: TimeLimitOption;
   public content: string;
   public createdAt: Date;
@@ -47,22 +45,11 @@ class Summary {
     const now = new Date();
     const expiration = new Date(now.getTime() + expirationTimeMs);
 
-    return this.formatDate(expiration);
+    return StringUtils.formatDateToString(expiration);
   };
 
   public formatCreatedAt = (): string => {
-    return this.formatDate(this.createdAt);
-  };
-
-  private formatDate = (date: Date): string => {
-    const dd = String(date.getDate()).padStart(2, '0');
-    const mm = String(date.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
-    const yy = String(date.getFullYear()).slice(-2);
-    const hh = String(date.getHours()).padStart(2, '0');
-    const min = String(date.getMinutes()).padStart(2, '0');
-    const ss = String(date.getSeconds()).padStart(2, '0');
-
-    return `${dd}-${mm}-${yy} ${hh}:${min}:${ss}`;
+    return StringUtils.formatDateToString(this.createdAt);
   };
 }
 

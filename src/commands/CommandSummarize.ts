@@ -5,6 +5,7 @@ import { ILoggerFiles } from '@services/LoggerFiles/ILoggerFiles';
 import { LoggerFiles } from '@services/LoggerFiles/implementation/LoggerFiles';
 import { ITextSummarize } from '@services/TextSummarize/ITextSummarize';
 import { TransformMessages } from '@utils/Formatters/TransformMessage';
+import { StringUtils } from '@utils/String.utils';
 import { TimeLimit } from '@utils/TimeLimit';
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
@@ -41,14 +42,14 @@ class CommandSummarize implements ICommand {
       }
 
       if (summaryToReplyWith) {
-        const { content, formatCreatedAt, formatExpiration, timeLimit } =
+        const { content, formatCreatedAt, timeLimit, expiresIn } =
           summaryToReplyWith;
 
         message.reply(
           this.formatSummaryResponse(
             content,
             formatCreatedAt(),
-            formatExpiration(),
+            StringUtils.formatDateToString(expiresIn),
             timeLimit,
           ),
         );
