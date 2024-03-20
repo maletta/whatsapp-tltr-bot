@@ -1,12 +1,12 @@
-import { EnumTimeLimit, TimeLimitOption } from '@enums/TimeLimit';
-import { Summary } from '@models/Summary';
-import { GroupManager } from '@services/GroupManager/GroupManager';
-import { ILoggerFiles } from '@services/LoggerFiles/ILoggerFiles';
-import { LoggerFiles } from '@services/LoggerFiles/implementation/LoggerFiles';
-import { ITextSummarize } from '@services/TextSummarize/ITextSummarize';
-import { TransformMessages } from '@utils/Formatters/TransformMessage';
-import { StringUtils } from '@utils/String.utils';
-import { TimeLimit } from '@utils/TimeLimit';
+import { EnumTimeLimit, TimeLimitOption } from 'enums/TimeLimit';
+import { Summary } from 'models/Summary';
+import { GroupManager } from 'services/GroupManager/GroupManager';
+import { ILoggerFiles } from 'services/LoggerFiles/ILoggerFiles';
+import { LoggerFiles } from 'services/LoggerFiles/implementation/LoggerFiles';
+import { ITextSummarize } from 'services/TextSummarize/ITextSummarize';
+import { TransformMessages } from 'utils/Formatters/TransformMessage';
+import { StringUtils } from 'utils/String.utils';
+import { TimeLimit } from 'utils/TimeLimit';
 import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import { FormmatSummaryLoggers } from './FormmatLoggers/FormmatSummaryLoggers';

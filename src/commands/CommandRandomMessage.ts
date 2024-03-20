@@ -1,4 +1,4 @@
-import { ITextSummarize } from '@services/TextSummarize/ITextSummarize';
+import { ITextSummarize } from 'services/TextSummarize/ITextSummarize';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

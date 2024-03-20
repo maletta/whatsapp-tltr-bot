@@ -1,5 +1,5 @@
-import { EnumHoroscope } from '@enums/Horoscope';
-import { StringUtils } from '@utils/String.utils';
+import { EnumHoroscope } from 'enums/Horoscope';
+import { StringUtils } from 'utils/String.utils';
 
 class HoroscopeValidator {
   static isValidHoroscope(horoscope: string): boolean {

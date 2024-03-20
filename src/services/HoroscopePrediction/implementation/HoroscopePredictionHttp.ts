@@ -1,5 +1,5 @@
-import { EnumHoroscope } from '@enums/Horoscope';
 import { VertexAI } from '@google-cloud/vertexai';
+import { EnumHoroscope } from 'enums/Horoscope';
 
 import { IHoroscopePrediction } from '../IHoroscopePrediction';
 

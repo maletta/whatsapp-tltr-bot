@@ -1,4 +1,4 @@
-import { EnumHoroscope } from '@enums/Horoscope';
+import { EnumHoroscope } from 'enums/Horoscope';
 
 interface IHoroscopePrediction {
   prediction(sign: EnumHoroscope): Promise<string>;

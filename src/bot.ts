@@ -1,5 +1,5 @@
-import { WhatsAppClient } from '@controllers/WhatsAppClient';
-import { QRCodeDisplay } from '@utils/QRCodeDisplay';
+import { WhatsAppClient } from 'controllers/WhatsAppClient';
+import { QRCodeDisplay } from 'utils/QRCodeDisplay';
 
 export const bot = WhatsAppClient.getClient();
 

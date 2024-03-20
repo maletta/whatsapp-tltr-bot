@@ -1,4 +1,4 @@
-import { EnumValidCommands } from '@enums/Commands';
+import { EnumValidCommands } from 'enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

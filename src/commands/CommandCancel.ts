@@ -1,5 +1,5 @@
-import { IMessage } from '@common/CustomTypes';
-import { ITextCanceling } from '@services/TextCanceling/ITextCanceling';
+import { IMessage } from 'common/CustomTypes';
+import { ITextCanceling } from 'services/TextCanceling/ITextCanceling';
 import { Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

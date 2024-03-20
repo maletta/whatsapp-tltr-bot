@@ -1,10 +1,10 @@
-import { EnumValidCommands } from '@enums/Commands';
-import { EnumHoroscope } from '@enums/Horoscope';
-import { Horoscope } from '@models/Horoscope';
-import { GroupManager } from '@services/GroupManager/GroupManager';
-import { IHoroscopePrediction } from '@services/HoroscopePrediction/IHoroscopePrediction';
-import { StringUtils } from '@utils/String.utils';
-import { HoroscopeValidator } from '@validators/HoroscopeValidator';
+import { EnumValidCommands } from 'enums/Commands';
+import { EnumHoroscope } from 'enums/Horoscope';
+import { Horoscope } from 'models/Horoscope';
+import { GroupManager } from 'services/GroupManager/GroupManager';
+import { IHoroscopePrediction } from 'services/HoroscopePrediction/IHoroscopePrediction';
+import { StringUtils } from 'utils/String.utils';
+import { HoroscopeValidator } from 'validators/HoroscopeValidator';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

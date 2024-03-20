@@ -1,5 +1,5 @@
-import { EnumHoroscope } from '@enums/Horoscope';
-import { Horoscope } from '@models/Horoscope';
+import { EnumHoroscope } from 'enums/Horoscope';
+import { Horoscope } from 'models/Horoscope';
 
 class HoroscopeManager {
   // The `horoscopes` map holds EnumHoroscope as keys and Horoscope as values.

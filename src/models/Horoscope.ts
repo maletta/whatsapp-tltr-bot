@@ -1,5 +1,5 @@
-import { EnumHoroscope } from '@enums/Horoscope';
-import { DateUtils } from '@utils/Date.utils';
+import { EnumHoroscope } from 'enums/Horoscope';
+import { DateUtils } from 'utils/Date.utils';
 
 interface IHoroscopeDTO {
   sign: EnumHoroscope;

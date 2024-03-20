@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { BotMediator } from '@controllers/BotMediator';
+import { BotMediator } from 'controllers/BotMediator';
 import dotenv from 'dotenv';
 
 import { bot } from './bot';

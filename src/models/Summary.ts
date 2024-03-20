@@ -1,5 +1,5 @@
-import { EnumTimeLimit, TimeLimitOption } from '@enums/TimeLimit';
-import { StringUtils } from '@utils/String.utils';
+import { EnumTimeLimit, TimeLimitOption } from 'enums/TimeLimit';
+import { StringUtils } from 'utils/String.utils';
 
 interface ISummaryDTO {
   timeLimit: TimeLimitOption;

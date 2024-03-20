@@ -1,5 +1,5 @@
-import { TimeLimitOption } from '@enums/TimeLimit';
-import { Summary } from '@models/Summary';
+import { TimeLimitOption } from 'enums/TimeLimit';
+import { Summary } from 'models/Summary';
 
 class SummariesManager {
   // The `summaries` map holds TimeLimitKey as keys and Summary as values.

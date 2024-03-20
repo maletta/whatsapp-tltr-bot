@@ -13,17 +13,17 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "paths": {
-      "@annotations/*": ["./src/annotations/*"],
-      "@commands/*": ["./src/commands/*"],
-      "@common/*": ["./src/common/*"],
-      "@config/*": ["./src/config/*"],
-      "@controllers/*": ["./src/controllers/*"],
-      "@enums/*": ["./src/enums/*"],
-      "@mocks/*": ["./src/mocks/*"],
-      "@models/*": ["./src/models/*"],
-      "@services/*": ["./src/services/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@validators/*": ["./src/validators/*"]
+      "annotations/*": ["./src/annotations/*"],
+      "commands/*": ["./src/commands/*"],
+      "common/*": ["./src/common/*"],
+      "config/*": ["./src/config/*"],
+      "controllers/*": ["./src/controllers/*"],
+      "enums/*": ["./src/enums/*"],
+      "mocks/*": ["./src/mocks/*"],
+      "models/*": ["./src/models/*"],
+      "services/*": ["./src/services/*"],
+      "utils/*": ["./src/utils/*"],
+      "validators/*": ["./src/validators/*"]
     }
   },
   "include": [
