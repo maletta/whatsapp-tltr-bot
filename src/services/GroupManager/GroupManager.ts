@@ -67,7 +67,7 @@ class GroupManager {
     horoscopeEnum: EnumHoroscope,
     text: string,
   ): HoroscopeManager {
-    if (this.hasSummary(groupId)) {
+    if (this.hasHoroscope(groupId)) {
       console.log(`Group already exists with id ${groupId}`);
       const group = this.horoscopes.get(groupId);
       group.add(horoscopeEnum, text);
