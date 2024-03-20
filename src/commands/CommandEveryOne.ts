@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { IChat } from 'types/augmentation';
+import { IChat } from '@common/CustomTypes';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

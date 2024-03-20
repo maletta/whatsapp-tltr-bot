@@ -2,8 +2,8 @@ import { EnumHoroscope } from '@enums/Horoscope';
 import { TimeLimitOption } from '@enums/TimeLimit';
 import { Horoscope } from '@models/Horoscope';
 import { Summary } from '@models/Summary';
-import { HoroscopeManager } from '@services/HoroscopeManager';
 
+import { HoroscopeManager } from '../HoroscopeManager';
 import { SummariesManager } from '../SummarizeManager';
 
 type IGroupId = string;

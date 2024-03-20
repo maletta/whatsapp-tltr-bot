@@ -5,7 +5,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",  
-    "baseUrl": "./src" ,
+    "baseUrl": "." ,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -13,16 +13,17 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "paths": {
-      "@annotations/*": ["./annotations/*"],
-      "@commands/*": ["./commands/*"],
-      "@config/*": ["./config/*"],
-      "@controllers/*": ["./controllers/*"],
-      "@enums/*": ["./enums/*"],
-      "@mocks/*": ["./mocks/*"],
-      "@models/*": ["./models/*"],
-      "@services/*": ["./services/*"],
-      "@types/*": ["./types/*"],
-      "@utils/*": ["./utils/*"]
+      "@annotations/*": ["./src/annotations/*"],
+      "@commands/*": ["./src/commands/*"],
+      "@common/*": ["./src/common/*"],
+      "@config/*": ["./src/config/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@enums/*": ["./src/enums/*"],
+      "@mocks/*": ["./src/mocks/*"],
+      "@models/*": ["./src/models/*"],
+      "@services/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@validators/*": ["./src/validators/*"]
     }
   },
   "include": [
