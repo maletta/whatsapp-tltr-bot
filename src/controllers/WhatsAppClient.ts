@@ -17,6 +17,7 @@ abstract class WhatsAppClient {
         puppeteer: {
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
         },
+        ffmpegPath: '/usr/bin/ffmpeg',
       });
     }
 

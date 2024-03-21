@@ -22,36 +22,53 @@ class CommandStickerImage implements ICommand {
     const media = await this.selectMedia(message);
 
     console.log('-----------', message);
-    if (media !== null || media !== undefined) {
-      console.log('media to sticker');
-      console.log(media);
+    if (media !== null && media !== undefined) {
+      console.log('response media to sticker');
+      // console.log(media);
       message
         .reply(media, message.from, options)
-        .then((reponseMessage) => reponseMessage.react('😍')) // 😼
+        .then((reponseMessage) => reponseMessage.react('😴')) // 😼
         .catch((error) => {
           console.log('Error on transforme image into sticker');
           console.log(error);
         });
     } else {
-      message.reply('Marque imagem válida 😍'); // 😼
+      message.reply('Marque imagem válida 😴'); // 😼
     }
   }
 
   private selectMedia = async (
     message: Message,
   ): Promise<MessageMedia | null> => {
+    console.log('select media function');
     if (message.hasQuotedMsg) {
       const quotedMessage = await message.getQuotedMessage();
-      return this.getMedia(quotedMessage);
+      console.log('downloaded quoted Media ');
+      const media = await this.getMedia(quotedMessage)
+        .then((response) => {
+          console.log('sucesso ao Get Media', response);
+          return response;
+        })
+        .catch((error) => {
+          console.log('error on download media ', error);
+          return null;
+        });
+      console.log(media);
+      return media;
     }
+    console.log('downloaded message media  ');
+    const media = await this.getMedia(message);
+    console.log(media);
 
-    return this.getMedia(message);
+    return media;
   };
 
   private async getMedia(message: Message): Promise<MessageMedia | null> {
+    console.log('Get Media function');
     try {
       if (this.isValidType(message)) {
-        return await message.downloadMedia();
+        const media = await message.downloadMedia();
+        return media;
       }
       return null;
     } catch (error) {
@@ -61,12 +78,16 @@ class CommandStickerImage implements ICommand {
     }
   }
 
-  private isValidType(message: Message): boolean {
+  private isValidType = (message: Message): boolean => {
     console.log('isValidType ', message.hasMedia, message.type, message.isGif);
     return (
-      (message.hasMedia && message.type === MessageTypes.IMAGE) || message.isGif
+      // (message.hasMedia && message.type === MessageTypes.IMAGE) || message.isGif
+      (message.hasMedia &&
+        (message.type === MessageTypes.IMAGE ||
+          message.type === MessageTypes.VIDEO)) ||
+      message.isGif
     );
-  }
+  };
 }
 
 export { CommandStickerImage };
