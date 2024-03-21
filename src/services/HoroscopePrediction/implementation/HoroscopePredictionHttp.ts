@@ -4,7 +4,7 @@ import { EnumHoroscope } from 'enums/Horoscope';
 import { IHoroscopePrediction } from '../IHoroscopePrediction';
 
 class HoroscopePredictioHttp implements IHoroscopePrediction {
-  async prediction(sign: EnumHoroscope): Promise<string> {
+  async prediction(sign: EnumHoroscope): Promise<string | null> {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
     const model = 'gemini-1.0-pro-vision';
@@ -28,21 +28,35 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
     console.log(request.contents[0].parts[0].text);
     console.log('Non-Streaming Response Text:');
 
-    // Create the response stream
-    const responseStream =
-      await generativeVisionModel.generateContentStream(request);
+    try {
+      // Create the response stream
+      const responseStream =
+        await generativeVisionModel.generateContentStream(request);
 
-    // Wait for the response stream to complete
-    const aggregatedResponse = await responseStream.response;
+      // Wait for the response stream to complete
+      const aggregatedResponse = await responseStream.response;
 
-    console.log('Default response ');
-    // Select the text from the response
-    const fullTextResponse = aggregatedResponse.candidates[0].content.parts[0];
+      console.dir(aggregatedResponse, { depth: null });
 
-    // console.dir(fullTextResponse);
-    // console.dir(fullTextResponse, { depth: null });
+      // Select the text from the response
+      const fullTextResponse =
+        aggregatedResponse.candidates[0].content.parts[0];
 
-    return fullTextResponse.text.replace(/\*\*/g, '*');
+      // console.dir(fullTextResponse);
+      console.dir(fullTextResponse, { depth: null });
+
+      const responseWithoutAsteristc = fullTextResponse.text.replace(
+        /\*\*/g,
+        '*',
+      );
+      return responseWithoutAsteristc.length > 0
+        ? responseWithoutAsteristc
+        : null;
+    } catch (error) {
+      console.log('Error on  generate content stream from generative api');
+      console.log(error);
+      return null;
+    }
   }
 }
 

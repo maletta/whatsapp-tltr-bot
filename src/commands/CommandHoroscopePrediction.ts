@@ -49,13 +49,16 @@ class CommandHoroscopePrediction implements ICommand {
         const horoscopePredictionMessage =
           await this.horoscopePrediction.prediction(horoscopeEnum);
 
-        const horoscopeManager = this.groups.addHoroscope(
-          message.from,
-          horoscopeEnum,
-          horoscopePredictionMessage,
-        );
+        // if horoscope predictions message is not null; but we need throw error and not null
+        if (horoscopePredictionMessage) {
+          const horoscopeManager = this.groups.addHoroscope(
+            message.from,
+            horoscopeEnum,
+            horoscopePredictionMessage,
+          );
 
-        horoscopeToReply = horoscopeManager.getHoroscopeById(horoscopeEnum);
+          horoscopeToReply = horoscopeManager.getHoroscopeById(horoscopeEnum);
+        }
       }
 
       if (horoscopeToReply !== null && horoscopeToReply !== undefined) {

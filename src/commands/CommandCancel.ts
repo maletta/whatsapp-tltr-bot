@@ -34,9 +34,11 @@ class CommandCancel implements ICommand {
         const prompt = `Problematize a seguinte fala "${userMessage}" em até 2 frases e nada mais: `;
         const response = await this.textSummarize.canceling(prompt, '');
 
-        messageQuoted
-          .reply(response)
-          .then((responseMessage) => responseMessage.react('🤬'));
+        if (response) {
+          messageQuoted
+            .reply(response)
+            .then((responseMessage) => responseMessage.react('🤬'));
+        }
       } catch (error) {
         console.log('Error on send Command Cancel ');
         console.log(error);
