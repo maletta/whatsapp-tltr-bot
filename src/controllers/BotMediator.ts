@@ -92,7 +92,7 @@ class BotMediator {
     const [command, ...rest] = args;
 
     if (args.length === 1 && (await this.isMe(command))) {
-      // args have only bot number mention
+      // if args have only bot number mention
       return [EnumValidCommands.RANDOM_MESSAGE, []];
     }
 
