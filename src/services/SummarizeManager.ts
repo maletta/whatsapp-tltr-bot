@@ -13,7 +13,7 @@ class SummariesManager {
   // Adds a new summary to the `summaries` map using the provided key and summary.
   public add(key: TimeLimitOption, text: string) {
     this.delete(key);
-    const summary = new Summary({ content: text, timeLimit: key });
+    const summary = new Summary({ content: text, key });
     this.summaries.set(key, summary);
   }
 

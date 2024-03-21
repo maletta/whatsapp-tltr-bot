@@ -1,5 +1,6 @@
 import { TimeLimitOption } from 'enums/TimeLimit';
 import { Summary } from 'models/Summary';
+import { StringUtils } from 'utils/String.utils';
 
 class FormmatSummaryLoggers {
   static formmat(
@@ -7,14 +8,14 @@ class FormmatSummaryLoggers {
     summary: Summary,
     chatMessages: string,
   ): string {
-    const { content, formatCreatedAt, timeLimit } = summary;
+    const { content, createdAt, key } = summary;
 
     const formmatedMessage = FormmatSummaryLoggers.formmatMessage(
       chatName,
-      formatCreatedAt(),
+      StringUtils.formatDateToString(createdAt),
       content,
       chatMessages,
-      timeLimit,
+      key,
     );
 
     return formmatedMessage;

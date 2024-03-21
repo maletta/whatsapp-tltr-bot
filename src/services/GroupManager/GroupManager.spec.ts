@@ -7,7 +7,7 @@ describe('Summary', () => {
   test('isValid() should return true if the summary is not expired', () => {
     const summaryData: ISummaryDTO = {
       content: 'Test summary',
-      timeLimit: '30_MINUTES',
+      key: '30_MINUTES',
     };
     const summary = new Summary(summaryData);
     expect(summary.isValid()).toBe(true);
@@ -16,7 +16,7 @@ describe('Summary', () => {
   test('isValid() should return false if the summary is expired', () => {
     const summaryData: ISummaryDTO = {
       content: 'Test summary',
-      timeLimit: '30_MINUTES',
+      key: '30_MINUTES',
       createdAt: new Date(Date.now() - 31 * 60 * 1000), // 31 minutes ago
     };
     const summary = new Summary(summaryData);
