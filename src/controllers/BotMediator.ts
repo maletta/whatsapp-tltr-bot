@@ -111,7 +111,7 @@ class BotMediator {
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
     const validation = (enumItem) =>
-      this.prefix + enumItem ===
+      StringUtils.removeAccents(this.prefix + enumItem).toLowerCase() ===
       StringUtils.removeAccents(command).toLowerCase();
     return (
       Object.values(EnumValidCommands).some(validation) ||
