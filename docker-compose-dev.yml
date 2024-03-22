@@ -11,6 +11,7 @@ services:
       # - .:/app
       - ./src:/app/src
       - ./logs:/app/logs
+      - ./external:/app/external
       - ./package.json:/app/package.json
       - ./.env:/app/.env
       - ./tsconfig.json:/app/tsconfig.json

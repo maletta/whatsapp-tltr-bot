@@ -21,13 +21,15 @@ class CommandStickerImage implements ICommand {
     const options: MessageSendOptions = { sendMediaAsSticker: true };
     const media = await this.selectMedia(message);
 
+    message.reply(`*${media.filename}*\n\nSending sticker...`);
+
     console.log('-----------', message);
     if (media !== null && media !== undefined) {
       console.log('response media to sticker');
       // console.log(media);
       message
         .reply(media, message.from, options)
-        .then((reponseMessage) => reponseMessage.react('😴')) // 😼
+        // .then((reponseMessage) => reponseMessage.react('😴')) // 😼
         .catch((error) => {
           console.log('Error on transforme image into sticker');
           console.log(error);
