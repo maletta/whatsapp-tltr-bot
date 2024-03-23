@@ -18,6 +18,12 @@ abstract class WhatsAppClient {
           args: ['--no-sandbox', '--disable-setuid-sandbox'],
         },
         ffmpegPath: '/usr/bin/ffmpeg',
+        webVersion: '2.2409.2',
+        webVersionCache: {
+          type: 'remote',
+          remotePath:
+            'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2409.2.html',
+        },
       });
     }
 
