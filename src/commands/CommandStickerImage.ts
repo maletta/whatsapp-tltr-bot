@@ -1,5 +1,5 @@
 import { IMessageRaw } from 'common/RawMessageType';
-import { decryptMedia } from 'utils/decryptMedia/02';
+import { decryptMedia } from 'utils/decryptMedia';
 import {
   Client,
   Message,

@@ -133,7 +133,7 @@ const magix = (
   return mediaDataBuffer;
 };
 
-export const decryptMedia = async (
+const decryptMedia = async (
   message: IMessageRaw,
   useragentOverride?: string,
 ): Promise<Buffer> => {
@@ -207,3 +207,5 @@ export const decryptMedia = async (
     message._data.mimetype,
   );
 };
+
+export { decryptMedia };
