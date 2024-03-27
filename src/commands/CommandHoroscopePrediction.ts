@@ -46,8 +46,9 @@ class CommandHoroscopePrediction implements ICommand {
       if (haveValidSummary) {
         horoscopeToReply = horoscope;
       } else {
-        const horoscopePredictionMessage =
-          await this.textGeneration.generate(horoscopeEnum);
+        const horoscopePredictionMessage = await this.textGeneration.generate(
+          `Faça uma breve previsão do horóscopo de hoje para o signo de ${horoscopeEnum}`,
+        );
 
         // if horoscope predictions message is not null; but we need throw error and not null
         if (horoscopePredictionMessage) {
