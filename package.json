@@ -7,7 +7,7 @@
     "start": "node -r tsconfig-paths/register dist/server.js",
     "start2": "ts-node -r tsconfig-paths/register dist/server.js",
     "devjs": "nodemon src/index.mjs",
-    "dev": "ts-node-dev --require tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --ignore-watch src/bot.ts --respawn  src/server.ts",
+    "dev": "ts-node-dev --require tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn  src/server.ts",
     "dev-debug": "ts-node-dev --inspect --require tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn  src/server.ts",
     "docker-dev": "docker compose -f docker-compose-dev.yml up",
     "docker-compose-dev": "docker-compose -f docker-compose-dev.yml up",
@@ -23,16 +23,19 @@
   "dependencies": {
     "@google-cloud/language": "^6.2.0",
     "@google-cloud/vertexai": "^0.5.0",
-    "axios": "^1.6.7",
+    "atob": "^2.1.2",
+    "axios": "^1.6.8",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
+    "futoin-hkdf": "^1.5.3",
     "google-auth-library": "^9.6.3",
     "jest": "^29.7.0",
     "qrcode-terminal": "^0.12.0",
     "ts-jest": "^29.1.2",
     "ts-morph": "^22.0.0",
-    "whatsapp-web.js": "^1.23.0",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "whatsapp-web.js": "^1.23.1-alpha.5"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

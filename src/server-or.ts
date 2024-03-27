@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import { BotMediator } from 'controllers/BotMediator';
 import { WhatsAppClient } from 'controllers/WhatsAppClient';
-import { QRCodeDisplay } from 'utils/QRCodeDisplay';
 import dotenv from 'dotenv';
+import { QRCodeDisplay } from 'utils/QRCodeDisplay';
 
 dotenv.config();
 
@@ -22,6 +22,14 @@ bot.on('authenticated', () => console.log('authenticated!'));
 
 bot.on('message', (message) => {
   botMediator.selectCommand(bot, message);
+});
+
+bot.on('media_uploaded', async (message) => {
+  console.log('media_uploaded');
+  console.dir(message, { depth: null }); // TODO: Implement media upload handler
+  const media = await message.downloadMedia();
+
+  message.reply(media, message.from, { sendMediaAsSticker: true });
 });
 
 bot.initialize();

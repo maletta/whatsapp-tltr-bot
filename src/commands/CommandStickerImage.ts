@@ -1,3 +1,5 @@
+import { IMessageRaw } from 'common/RawMessageType';
+import { decryptMedia } from 'utils/decryptMedia/02';
 import {
   Client,
   Message,
@@ -10,6 +12,45 @@ import { ICommand } from './ICommand';
 
 class CommandStickerImage implements ICommand {
   async execute(
+    args: string[],
+    client: Client,
+    message: Message,
+  ): Promise<void> {
+    console.log('Command Sticker Image - execute ');
+    console.log('args ', args);
+    console.log('message ', message.body);
+
+    console.log('----------quoted Message');
+
+    const quotedMessage =
+      (await message.getQuotedMessage()) as unknown as IMessageRaw;
+
+    console.dir(quotedMessage, { depth: null });
+
+    const test = await decryptMedia(quotedMessage);
+
+    console.log('test');
+
+    console.dir(test, { depth: null });
+
+    console.log('base64');
+
+    console.dir(test.toString('base64'), { depth: null });
+    const media = new MessageMedia(
+      'video/mp4',
+      test.toString('base64'),
+      undefined,
+      // eslint-disable-next-line no-underscore-dangle
+      quotedMessage._data.size,
+    );
+    // const media = await (quotedMessage as unknown as Message).downloadMedia();
+
+    message.reply(media, message.from, { sendMediaAsSticker: true });
+
+    console.dir(media, { depth: null });
+  }
+
+  async execute2(
     args: string[],
     client: Client,
     message: Message,
@@ -43,10 +84,13 @@ class CommandStickerImage implements ICommand {
     console.log('select media function');
     if (message.hasQuotedMsg) {
       const quotedMessage = await message.getQuotedMessage();
+      console.dir(`----------- quoted `);
+      console.dir(quotedMessage, { depth: null });
       console.log('downloaded quoted Media ');
       const media = await this.getMedia(quotedMessage)
         .then((response) => {
-          console.log('sucesso ao Get Media', response);
+          console.log('------------------------sucesso ao Get Media');
+          console.dir(response, { depth: null });
           return response;
         })
         .catch((error) => {
