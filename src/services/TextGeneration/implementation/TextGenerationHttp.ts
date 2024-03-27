@@ -13,7 +13,7 @@ class TextGenerationHttp implements ITextGeneration {
     const generativeVisionModel = vertexAI.getGenerativeModel({ model });
 
     const promptQuestion = {
-      text: `${prompt}${message}`,
+      text: `${prompt}`,
     };
 
     const request = {
