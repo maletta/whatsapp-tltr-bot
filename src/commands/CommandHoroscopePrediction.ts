@@ -2,7 +2,7 @@ import { EnumValidCommands } from 'enums/Commands';
 import { EnumHoroscope } from 'enums/Horoscope';
 import { Horoscope } from 'models/Horoscope';
 import { GroupManager } from 'services/GroupManager/GroupManager';
-import { IHoroscopePrediction } from 'services/HoroscopePrediction/IHoroscopePrediction';
+import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { StringUtils } from 'utils/String.utils';
 import { HoroscopeValidator } from 'validators/HoroscopeValidator';
 import { Client, Message } from 'whatsapp-web.js';
@@ -11,7 +11,7 @@ import { ICommand } from './ICommand';
 
 class CommandHoroscopePrediction implements ICommand {
   constructor(
-    private horoscopePrediction: IHoroscopePrediction,
+    private textGeneration: ITextGeneration,
     private groups: GroupManager,
   ) {}
 
@@ -47,7 +47,7 @@ class CommandHoroscopePrediction implements ICommand {
         horoscopeToReply = horoscope;
       } else {
         const horoscopePredictionMessage =
-          await this.horoscopePrediction.prediction(horoscopeEnum);
+          await this.textGeneration.generate(horoscopeEnum);
 
         // if horoscope predictions message is not null; but we need throw error and not null
         if (horoscopePredictionMessage) {

@@ -3,7 +3,7 @@ import { Summary } from 'models/Summary';
 import { GroupManager } from 'services/GroupManager/GroupManager';
 import { ILoggerFiles } from 'services/LoggerFiles/ILoggerFiles';
 import { LoggerFiles } from 'services/LoggerFiles/implementation/LoggerFiles';
-import { ITextSummarize } from 'services/TextSummarize/ITextSummarize';
+import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { TransformMessages } from 'utils/Formatters/TransformMessage';
 import { StringUtils } from 'utils/String.utils';
 import { TimeLimit } from 'utils/TimeLimit';
@@ -14,7 +14,7 @@ import { ICommand } from './ICommand';
 
 class CommandSummarize implements ICommand {
   constructor(
-    private textSummarize: ITextSummarize,
+    private textGeneration: ITextGeneration,
     private groups: GroupManager,
   ) {}
 
@@ -92,14 +92,13 @@ class CommandSummarize implements ICommand {
     let messagesToResponse: string | null | undefined = null;
 
     if (messagesByTokenLimit.length > 1) {
-      messagesToResponse = await this.textSummarize.summarizeBatch(
+      messagesToResponse = await this.textGeneration.generateBatch(
         promptMock,
         messagesByTokenLimit,
       );
     } else {
-      messagesToResponse = await this.textSummarize.summarize(
-        promptMock,
-        messagesByTokenLimit[0],
+      messagesToResponse = await this.textGeneration.generate(
+        `${promptMock} ${messagesByTokenLimit[0]}`,
       );
     }
 

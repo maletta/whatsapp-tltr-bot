@@ -1,14 +1,14 @@
 import { IMessage } from 'common/CustomTypes';
-import { ITextCanceling } from 'services/TextCanceling/ITextCanceling';
+import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
 
 class CommandCancel implements ICommand {
-  private textSummarize: ITextCanceling;
+  private textGeneration: ITextGeneration;
 
-  constructor(textSummarize: ITextCanceling) {
-    this.textSummarize = textSummarize;
+  constructor(textGeneration: ITextGeneration) {
+    this.textGeneration = textGeneration;
   }
 
   async execute(
@@ -32,7 +32,7 @@ class CommandCancel implements ICommand {
       try {
         const userMessage = messageQuoted.body;
         const prompt = `Problematize a seguinte fala "${userMessage}" em até 2 frases e nada mais: `;
-        const response = await this.textSummarize.canceling(prompt, '');
+        const response = await this.textGeneration.generate(prompt);
 
         if (response) {
           messageQuoted

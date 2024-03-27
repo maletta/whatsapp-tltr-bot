@@ -1,13 +1,13 @@
-import { ITextSummarize } from 'services/TextSummarize/ITextSummarize';
+import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
 
 class CommandRandomMessage implements ICommand {
-  private textSummarize: ITextSummarize;
+  private textGeneration: ITextGeneration;
 
-  constructor(textSummarize: ITextSummarize) {
-    this.textSummarize = textSummarize;
+  constructor(textGeneration: ITextGeneration) {
+    this.textGeneration = textGeneration;
   }
 
   async execute(
@@ -48,7 +48,7 @@ class CommandRandomMessage implements ICommand {
         prompt = promptBadResponse;
     }
 
-    const response = await this.textSummarize.summarize(prompt, '');
+    const response = await this.textGeneration.generate(prompt);
 
     message.reply(response);
   }

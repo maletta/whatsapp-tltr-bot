@@ -1,10 +1,9 @@
 import { VertexAI } from '@google-cloud/vertexai';
-import { EnumHoroscope } from 'enums/Horoscope';
 
-import { IHoroscopePrediction } from '../IHoroscopePrediction';
+import { ITextGeneration } from '../ITextGeneration';
 
-class HoroscopePredictioHttp implements IHoroscopePrediction {
-  async prediction(sign: EnumHoroscope): Promise<string | null> {
+class TextGenerationHttp implements ITextGeneration {
+  async generate(prompt: string): Promise<string | null> {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
     const model = 'gemini-1.0-pro-vision';
@@ -13,10 +12,8 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
 
     const generativeVisionModel = vertexAI.getGenerativeModel({ model });
 
-    const prompt = 'Breve resumo do dia para o signo: ';
-
     const promptQuestion = {
-      text: `${prompt}${sign}`,
+      text: `${prompt}${message}`,
     };
 
     const request = {
@@ -28,15 +25,13 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
     console.log(request.contents[0].parts[0].text);
     console.log('Non-Streaming Response Text:');
 
+    // Create the response stream
     try {
-      // Create the response stream
       const responseStream =
         await generativeVisionModel.generateContentStream(request);
 
       // Wait for the response stream to complete
       const aggregatedResponse = await responseStream.response;
-
-      console.dir(aggregatedResponse, { depth: null });
 
       // Select the text from the response
       const fullTextResponse =
@@ -58,6 +53,39 @@ class HoroscopePredictioHttp implements IHoroscopePrediction {
       return null;
     }
   }
+
+  async generateBatch(
+    prompt: string,
+    messages: string[],
+  ): Promise<string | null> {
+    const firstSummaryPromise: Promise<string>[] = [];
+
+    try {
+      messages.forEach(async (message) => {
+        const summary = this.generate(`${prompt} ${message}`);
+        firstSummaryPromise.push(summary);
+      });
+
+      const summaryResponses = await Promise.all(firstSummaryPromise);
+
+      return summaryResponses.join('\n\n');
+    } catch (err) {
+      console.error(`Error first summarizeBatch prompt "${prompt}"`);
+      console.error(err);
+      return null;
+    }
+
+    // try {
+    //   const summaryResponses = await Promise.all(firstSummaryPromise);
+    //   const summary = await this.summarize(prompt, summaryResponses.join());
+
+    //   return summary;
+    // } catch (err) {
+    //   console.error(`Error second summarizeBatch prompt "${prompt}"`);
+    //   console.error(err);
+    //   return null;
+    // }
+  }
 }
 
-export { HoroscopePredictioHttp };
+export { TextGenerationHttp };

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { IChat } from 'common/CustomTypes';
-import { Client, Contact, Message } from 'whatsapp-web.js';
+import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
 
@@ -34,7 +34,7 @@ class CommandEveryone implements ICommand {
         const quotedMessage = await this.getQuotedMessage(message);
 
         await client.sendMessage(message.from, 'Vejam todos', {
-          mentions: mentions as unknown as Contact[],
+          mentions,
           quotedMessageId: quotedMessage
             ? quotedMessage.id._serialized
             : message.id._serialized,

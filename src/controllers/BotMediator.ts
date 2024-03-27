@@ -9,9 +9,7 @@ import { CommandSummarize } from 'commands/CommandSummarize';
 import { BotConfiguration } from 'config/Configuration';
 import { EnumSystemCommands, EnumValidCommands } from 'enums/Commands';
 import { GroupManager } from 'services/GroupManager/GroupManager';
-import { HoroscopePredictioHttp } from 'services/HoroscopePrediction/implementation/HoroscopePredictionHttp';
-import { TextCancenlingHttp } from 'services/TextCanceling/implementation/TextCancelingHttp';
-import { TextSummarizeHttp } from 'services/TextSummarize/implementation/TextSummarizeHttp';
+import { TextGenerationHttp } from 'services/TextGeneration/implementation/TextGenerationHttp';
 import { StringUtils } from 'utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
@@ -39,7 +37,7 @@ class BotMediator {
   private registerCommands(): void {
     this.commandHandler.registerCommand(
       EnumValidCommands.SUMMARIZE,
-      new CommandSummarize(new TextSummarizeHttp(), this.groups),
+      new CommandSummarize(new TextGenerationHttp(), this.groups),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.EVERYONE,
@@ -47,7 +45,7 @@ class BotMediator {
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.RANDOM_MESSAGE,
-      new CommandRandomMessage(new TextSummarizeHttp()),
+      new CommandRandomMessage(new TextGenerationHttp()),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.STICKER,
@@ -55,15 +53,15 @@ class BotMediator {
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.HOROSCOPE,
-      new CommandHoroscopePrediction(new HoroscopePredictioHttp(), this.groups),
+      new CommandHoroscopePrediction(new TextGenerationHttp(), this.groups),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.CANCELF,
-      new CommandCancel(new TextCancenlingHttp()),
+      new CommandCancel(new TextGenerationHttp()),
     );
     this.commandHandler.registerCommand(
       EnumValidCommands.CANCELM,
-      new CommandCancel(new TextCancenlingHttp()),
+      new CommandCancel(new TextGenerationHttp()),
     );
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,
