@@ -87,11 +87,12 @@ class BotMediator {
   private async getArgs(
     message: string,
   ): Promise<[EnumValidCommands | EnumSystemCommands, string[]]> {
-    const args = message.split(' ');
+    const splitted = message.split(' ');
 
-    const [command, ...rest] = args;
+    const [commandRaw, ...rest] = splitted;
+    const command = StringUtils.removeAccents(commandRaw).toLocaleLowerCase();
 
-    if (args.length === 1 && (await this.isMe(command))) {
+    if (splitted.length === 1 && (await this.isMe(command))) {
       // if args have only bot number mention
       return [EnumValidCommands.RANDOM_MESSAGE, []];
     }
@@ -110,9 +111,7 @@ class BotMediator {
   private isValidCommand(
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
-    const validation = (enumItem) =>
-      StringUtils.removeAccents(this.prefix + enumItem).toLowerCase() ===
-      StringUtils.removeAccents(command).toLowerCase();
+    const validation = (enumItem) => this.prefix + enumItem === command;
     return (
       Object.values(EnumValidCommands).some(validation) ||
       Object.values(EnumSystemCommands).some(validation)
