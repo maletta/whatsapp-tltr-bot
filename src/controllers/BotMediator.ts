@@ -109,16 +109,6 @@ class BotMediator {
     }
 
     return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
-
-    // if (command.startsWith(this.prefix)) {
-    //   if (!this.isValidCommand(command)) {
-    //     return [EnumSystemCommands.INVALID, []];
-    //   }
-
-    //   return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
-    // }
-
-    // return [EnumSystemCommands.DO_NOTHING, []];
   }
 
   private willByPassCommand(command: string) {
@@ -126,12 +116,7 @@ class BotMediator {
       `${this.prefix}${this.prefix}`,
     );
     const IsCommandOnlyPrefix = command === this.prefix;
-    console.log(
-      'willByPassCommand ',
-      command,
-      haveMultiplePrefix,
-      IsCommandOnlyPrefix,
-    );
+
     if (haveMultiplePrefix || IsCommandOnlyPrefix) {
       return true;
     }
