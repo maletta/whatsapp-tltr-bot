@@ -6,6 +6,7 @@ export enum EnumValidCommands {
   CANCELM = 'cancelado',
   CANCELF = 'cancelada',
   HOROSCOPE = 'horoscopo',
+  PRESENTATION = 'ficha',
 }
 
 export enum EnumSystemCommands {

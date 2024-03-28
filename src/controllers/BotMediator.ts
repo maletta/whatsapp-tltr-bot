@@ -3,6 +3,7 @@ import { CommandEveryone } from 'commands/CommandEveryOne';
 import { CommandHandler } from 'commands/CommandHandle';
 import { CommandHoroscopePrediction } from 'commands/CommandHoroscopePrediction';
 import { CommandInvalid } from 'commands/CommandInvalid';
+import { CommandPresentation } from 'commands/CommandPresentation';
 import { CommandRandomMessage } from 'commands/CommandRandomMessage';
 import { CommandStickerImage } from 'commands/CommandStickerImage';
 import { CommandSummarize } from 'commands/CommandSummarize';
@@ -62,6 +63,10 @@ class BotMediator {
     this.commandHandler.registerCommand(
       EnumValidCommands.CANCELM,
       new CommandCancel(new TextGenerationHttp()),
+    );
+    this.commandHandler.registerCommand(
+      EnumValidCommands.PRESENTATION,
+      new CommandPresentation(),
     );
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,
