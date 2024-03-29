@@ -2,6 +2,10 @@ import { VertexAI } from '@google-cloud/vertexai';
 
 import { ITextGeneration } from '../ITextGeneration';
 
+// To do
+// verificar erro de mensagem nula, sem a propriedade aninnhada text, ou com text vazio
+// fazer tentativa de reenvio ao erro
+
 class TextGenerationHttp implements ITextGeneration {
   async generate(prompt: string): Promise<string | null> {
     const projectId = process.env.PROJECT_ID;
