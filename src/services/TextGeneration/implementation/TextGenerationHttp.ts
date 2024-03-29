@@ -10,7 +10,7 @@ class TextGenerationHttp implements ITextGeneration {
 
     const vertexAI = new VertexAI({ project: projectId, location });
 
-    const generativeVisionModel = vertexAI.getGenerativeModel({ model });
+    const generativeVisionModel = await vertexAI.getGenerativeModel({ model });
 
     const promptQuestion = {
       text: `${prompt}`,
@@ -28,10 +28,12 @@ class TextGenerationHttp implements ITextGeneration {
     // Create the response stream
     try {
       const responseStream =
-        await generativeVisionModel.generateContentStream(request);
+        await generativeVisionModel.generateContent(request);
 
       // Wait for the response stream to complete
       const aggregatedResponse = await responseStream.response;
+      console.dir('aggregatedResponse', { depth: null });
+      console.dir(aggregatedResponse, { depth: null });
 
       // Select the text from the response
       const fullTextResponse =

@@ -1,23 +1,23 @@
-import { TimeLimitOption } from 'enums/TimeLimit';
+import { EnumTimeLimit } from 'enums/TimeLimit';
 import { Summary } from 'models/Summary';
 
 class SummariesManager {
   // The `summaries` map holds TimeLimitKey as keys and Summary as values.
   // It is used to store summaries with their respective time limits.
-  private summaries: Map<TimeLimitOption, Summary>;
+  private summaries: Map<EnumTimeLimit, Summary>;
 
   constructor() {
     this.summaries = new Map();
   }
 
   // Adds a new summary to the `summaries` map using the provided key and summary.
-  public add(key: TimeLimitOption, text: string) {
+  public add(key: EnumTimeLimit, text: string) {
     this.delete(key);
     const summary = new Summary({ content: text, key });
     this.summaries.set(key, summary);
   }
 
-  public getSummaryById(key: TimeLimitOption): Summary | null {
+  public getSummaryById(key: EnumTimeLimit): Summary | null {
     if (this.summaries.has(key)) {
       return this.summaries.get(key);
     }
@@ -25,7 +25,7 @@ class SummariesManager {
   }
 
   // Deletes the summary associated with the given key from the `summaries` map.
-  public delete(key: TimeLimitOption) {
+  public delete(key: EnumTimeLimit) {
     if (this.summaries.has(key)) {
       this.summaries.delete(key);
     }
@@ -34,7 +34,7 @@ class SummariesManager {
   // Checks if there is a valid summary available for the given key.
   // Returns true if the key exists and the summary has not expired,
   // otherwise, it returns false.
-  public hasValidSummary(key: TimeLimitOption) {
+  public hasValidSummary(key: EnumTimeLimit) {
     if (this.summaries.has(key)) {
       const summary = this.summaries.get(key);
       if (new Date().getTime() < summary.expiresIn.getTime()) {

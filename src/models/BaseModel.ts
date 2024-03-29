@@ -14,10 +14,10 @@ abstract class BaseModel<T> {
     this.key = key;
     this.content = content;
     this.createdAt = createdAt;
-    this.expiresIn = this.calculateExpiration();
+    this.expiresIn = this.calculateExpiration(createdAt, key);
   }
 
-  protected abstract calculateExpiration(): Date;
+  protected abstract calculateExpiration(createAt: Date, key: T): Date;
 
   public isValid(): boolean {
     const now = Date.now();

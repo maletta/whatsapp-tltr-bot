@@ -1,5 +1,5 @@
 import { EnumHoroscope } from 'enums/Horoscope';
-import { TimeLimitOption } from 'enums/TimeLimit';
+import { EnumTimeLimit } from 'enums/TimeLimit';
 import { Horoscope } from 'models/Horoscope';
 import { Summary } from 'models/Summary';
 
@@ -20,7 +20,7 @@ class GroupManager {
 
   public addSummary(
     groupId: IGroupId,
-    timeLimitOption: TimeLimitOption,
+    timeLimitOption: EnumTimeLimit,
     text: string,
   ): SummariesManager {
     if (this.hasSummary(groupId)) {
@@ -47,7 +47,7 @@ class GroupManager {
 
   public getSummaryById(
     groupId: IGroupId,
-    timeLimitOption: TimeLimitOption,
+    timeLimitOption: EnumTimeLimit,
   ): Summary | null {
     const group = this.getSummaryGroupById(groupId);
     if (group !== null) {

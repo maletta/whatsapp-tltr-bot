@@ -20,7 +20,7 @@ class TimeLimit {
     return diffInMinutes < timeLimit;
   }
 
-  public static translateTimeLimit(timelimit: TimeLimitOption) {
+  public static translateTimeLimit(timelimit: EnumTimeLimit) {
     const translated: TimeLimitTranslation = {
       '30_MINUTES': '30 minuitos',
       '1_HOUR': '1 hora',
