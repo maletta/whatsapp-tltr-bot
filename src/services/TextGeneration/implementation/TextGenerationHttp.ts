@@ -3,11 +3,40 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { ITextGeneration } from '../ITextGeneration';
 
 // To do
-// verificar erro de mensagem nula, sem a propriedade aninnhada text, ou com text vazio
+// verificar erro de mensagem nula, sem a propriedade aninhada text, ou com text vazio
 // fazer tentativa de reenvio ao erro
 
 class TextGenerationHttp implements ITextGeneration {
   async generate(prompt: string): Promise<string | null> {
+    return this.generateRecursive(prompt, 1);
+  }
+
+  async generateBatch(
+    prompt: string,
+    messages: string[],
+  ): Promise<string | null> {
+    const firstSummaryPromise: Promise<string>[] = [];
+
+    try {
+      messages.forEach(async (message) => {
+        const summary = this.generate(`${prompt} ${message}`);
+        firstSummaryPromise.push(summary);
+      });
+
+      const summaryResponses = await Promise.all(firstSummaryPromise);
+
+      return summaryResponses.join('\n\n');
+    } catch (err) {
+      console.error(`Error first summarizeBatch prompt "${prompt}"`);
+      console.error(err);
+      return null;
+    }
+  }
+
+  private async generateRecursive(
+    prompt: string,
+    retry = 1,
+  ): Promise<string | null> {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
     const model = 'gemini-1.0-pro-vision';
@@ -56,41 +85,12 @@ class TextGenerationHttp implements ITextGeneration {
     } catch (error) {
       console.log('Error on  generate content stream from generative api');
       console.log(error);
+      if (retry > 0) {
+        return this.generateRecursive(prompt, retry - 1);
+      }
+
       return null;
     }
-  }
-
-  async generateBatch(
-    prompt: string,
-    messages: string[],
-  ): Promise<string | null> {
-    const firstSummaryPromise: Promise<string>[] = [];
-
-    try {
-      messages.forEach(async (message) => {
-        const summary = this.generate(`${prompt} ${message}`);
-        firstSummaryPromise.push(summary);
-      });
-
-      const summaryResponses = await Promise.all(firstSummaryPromise);
-
-      return summaryResponses.join('\n\n');
-    } catch (err) {
-      console.error(`Error first summarizeBatch prompt "${prompt}"`);
-      console.error(err);
-      return null;
-    }
-
-    // try {
-    //   const summaryResponses = await Promise.all(firstSummaryPromise);
-    //   const summary = await this.summarize(prompt, summaryResponses.join());
-
-    //   return summary;
-    // } catch (err) {
-    //   console.error(`Error second summarizeBatch prompt "${prompt}"`);
-    //   console.error(err);
-    //   return null;
-    // }
   }
 }
 
