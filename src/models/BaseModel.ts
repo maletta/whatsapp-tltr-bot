@@ -4,7 +4,7 @@ interface IBaseDTO<T> {
   createdAt?: Date;
 }
 
-abstract class BaseModel<T> {
+abstract class BaseModel<T = Enumerator> {
   public key: T;
   public content: string;
   public createdAt: Date;

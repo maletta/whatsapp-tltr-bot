@@ -1,5 +1,6 @@
 import { EnumHoroscope } from 'enums/Horoscope';
 import { EnumTimeLimit } from 'enums/TimeLimit';
+import { BaseModel } from 'models/BaseModel';
 import { Horoscope } from 'models/Horoscope';
 import { Summary } from 'models/Summary';
 
@@ -9,9 +10,13 @@ import { SummariesManager } from '../SummarizeManager';
 type IGroupId = string;
 type IGroupsSummarys = Map<IGroupId, SummariesManager>;
 type IGroupsHoroscopes = Map<IGroupId, HoroscopeManager>;
+
+type IListOfGeneratedTexts<T = BaseModel> = Map<IGroupId, T>;
+
 class GroupManager {
   private summarys: IGroupsSummarys;
   private horoscopes: IGroupsHoroscopes;
+  private test: IListOfGeneratedTexts<Summary>;
 
   constructor() {
     this.summarys = new Map();
