@@ -1,38 +1,26 @@
-import { EnumTimeLimit, TimeLimitOption } from 'enums/TimeLimit';
+import { EnumTimeLimit } from 'enums/TimeLimit';
+
+import { BaseModel } from './BaseModel';
 
 interface ISummaryDTO {
-  key: TimeLimitOption;
+  key: EnumTimeLimit;
   content: string;
   createdAt?: Date;
 }
 
-class Summary {
-  public key: TimeLimitOption;
+class Summary extends BaseModel<EnumTimeLimit> {
+  public key: EnumTimeLimit;
   public content: string;
   public createdAt: Date;
   public expiresIn: Date;
-
-  constructor({ content, createdAt = new Date(), key }: ISummaryDTO) {
-    this.key = key;
-    this.content = content;
-    this.createdAt = createdAt;
-    this.expiresIn = new Date(
-      createdAt.getTime() + this.minutesToMilliseconds(EnumTimeLimit[key]),
-    );
-  }
 
   private minutesToMilliseconds(minutes: number): number {
     return minutes * 60 * 1000;
   }
 
-  public isValid = (): boolean => {
-    const now = Date.now();
-    if (now < this.expiresIn.getTime()) {
-      return true;
-    }
-
-    return false;
-  };
+  protected calculateExpiration(createAt: Date, key: EnumTimeLimit): Date {
+    return new Date(createAt.getTime() + this.minutesToMilliseconds(key));
+  }
 }
 
 export { ISummaryDTO, Summary };

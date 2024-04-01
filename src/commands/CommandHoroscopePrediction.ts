@@ -98,7 +98,7 @@ class CommandHoroscopePrediction implements ICommand {
     return (
       `Criado em: *${createdAt}*` +
       `\nPróxima atualização: *${expiresIn}*` +
-      `\nTipo de resumo: *${type}*` +
+      `\nSigno: *${type}*` +
       `\n\n*Resumo:*\n> ${content}`
     );
   }

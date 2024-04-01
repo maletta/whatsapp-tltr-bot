@@ -100,21 +100,35 @@ class BotMediator {
       return [EnumValidCommands.RANDOM_MESSAGE, []];
     }
 
-    if (command.startsWith(this.prefix)) {
-      if (!this.isValidCommand(command)) {
-        return [EnumSystemCommands.INVALID, []];
-      }
-
-      return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
+    if (this.willByPassCommand(command)) {
+      return [EnumSystemCommands.DO_NOTHING, []];
     }
 
-    return [EnumSystemCommands.DO_NOTHING, []];
+    if (command.startsWith(this.prefix) && !this.isValidCommand(command)) {
+      return [EnumSystemCommands.INVALID, []];
+    }
+
+    return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
+  }
+
+  private willByPassCommand(command: string) {
+    const haveMultiplePrefix = command.startsWith(
+      `${this.prefix}${this.prefix}`,
+    );
+    const IsCommandOnlyPrefix = command === this.prefix;
+
+    if (haveMultiplePrefix || IsCommandOnlyPrefix) {
+      return true;
+    }
+
+    return false;
   }
 
   private isValidCommand(
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
     const validation = (enumItem) => this.prefix + enumItem === command;
+
     return (
       Object.values(EnumValidCommands).some(validation) ||
       Object.values(EnumSystemCommands).some(validation)

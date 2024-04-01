@@ -20,16 +20,19 @@ class TimeLimit {
     return diffInMinutes < timeLimit;
   }
 
-  public static translateTimeLimit(timelimit: TimeLimitOption) {
-    const translated: TimeLimitTranslation = {
-      '30_MINUTES': '30 minuitos',
-      '1_HOUR': '1 hora',
-      '2_HOURS': '2 horas',
-      '4_HOURS': '4 horas',
-      '6_HOURS': '6 horas',
-    };
-
-    return translated[timelimit];
+  public static translateTimeLimit(timelimit: EnumTimeLimit): string {
+    switch (timelimit) {
+      case EnumTimeLimit['1_HOUR']:
+        return '1 hora';
+      case EnumTimeLimit['2_HOUR']:
+        return '2 horas';
+      case EnumTimeLimit['4_HOURS']:
+        return '4 horas';
+      case EnumTimeLimit['6_HOUR']:
+        return '6 horas';
+      default:
+        return '30 minutos';
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import { TimeLimitOption } from 'enums/TimeLimit';
+import { EnumTimeLimit } from 'enums/TimeLimit';
 import { Summary } from 'models/Summary';
 import { StringUtils } from 'utils/String.utils';
 
@@ -26,7 +26,7 @@ class FormmatSummaryLoggers {
     createdAt: string,
     summarizeMessage: string,
     messages: string,
-    timeLimit: TimeLimitOption,
+    timeLimit: EnumTimeLimit,
   ): string {
     // eslint-disable-next-line no-useless-concat
     return (

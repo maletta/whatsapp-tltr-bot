@@ -1,33 +1,23 @@
 import { EnumHoroscope } from 'enums/Horoscope';
 import { DateUtils } from 'utils/Date.utils';
 
+import { BaseModel } from './BaseModel';
+
 interface IHoroscopeDTO {
   key: EnumHoroscope;
   content: string;
   createdAt?: Date;
 }
 
-class Horoscope {
+class Horoscope extends BaseModel<EnumHoroscope> {
   public key: EnumHoroscope;
   public content: string;
   public createdAt: Date;
   public expiresIn: Date;
 
-  constructor({ content, createdAt = new Date(), key }: IHoroscopeDTO) {
-    this.key = key;
-    this.content = content;
-    this.createdAt = createdAt;
-    this.expiresIn = DateUtils.getEndOfDay(this.createdAt);
+  protected calculateExpiration(createdAt: Date): Date {
+    return DateUtils.getEndOfDay(createdAt);
   }
-
-  public isValid = (): boolean => {
-    const now = Date.now();
-    if (now < this.expiresIn.getTime()) {
-      return true;
-    }
-
-    return false;
-  };
 }
 
 export { IHoroscopeDTO, Horoscope };

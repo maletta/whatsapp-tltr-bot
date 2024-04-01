@@ -1,4 +1,4 @@
-import { EnumTimeLimit, TimeLimitOption } from 'enums/TimeLimit';
+import { EnumTimeLimit } from 'enums/TimeLimit';
 import { Summary } from 'models/Summary';
 import { GroupManager } from 'services/GroupManager/GroupManager';
 import { ILoggerFiles } from 'services/LoggerFiles/ILoggerFiles';
@@ -67,12 +67,12 @@ class CommandSummarize implements ICommand {
 
   private async createSummary(
     message: Message,
-    timeLimit: TimeLimitOption,
+    timeLimit: EnumTimeLimit,
   ): Promise<Summary | null> {
     const chat = await message.getChat();
     const filteredMessages = await this.filterMessagesByHour(
       chat,
-      EnumTimeLimit[timeLimit],
+      timeLimit,
       3000,
     );
 
@@ -120,17 +120,17 @@ class CommandSummarize implements ICommand {
   }
 
   // get the number args for command summarize 30m, 1hr, 2hr, 4hr, 6hr
-  public getSummarizeTimeFromCommand = (args: string[]): TimeLimitOption => {
+  public getSummarizeTimeFromCommand = (args: string[]): EnumTimeLimit => {
     const firstArs = args.length > 0 ? args[0] : '';
-    if (firstArs.includes('1')) return '1_HOUR';
+    if (firstArs.includes('1')) return EnumTimeLimit['1_HOUR'];
 
-    if (firstArs.includes('2')) return '2_HOURS';
+    if (firstArs.includes('2')) return EnumTimeLimit['2_HOUR'];
 
-    if (firstArs.includes('4')) return '4_HOURS';
+    if (firstArs.includes('4')) return EnumTimeLimit['4_HOUR'];
 
-    if (firstArs.includes('6')) return '6_HOURS';
+    if (firstArs.includes('6')) return EnumTimeLimit['6_HOUR'];
 
-    return '30_MINUTES';
+    return EnumTimeLimit['30_MINUTES'];
   };
 
   public async filterMessagesByHour(
@@ -158,7 +158,7 @@ class CommandSummarize implements ICommand {
     summary: string,
     createdAt: string,
     expiresIn: string,
-    timeLimit: keyof typeof EnumTimeLimit,
+    timeLimit: EnumTimeLimit,
   ): string {
     return (
       `Criado em: *${createdAt}*` +

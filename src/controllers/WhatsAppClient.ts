@@ -50,3 +50,17 @@ abstract class WhatsAppClient {
 }
 
 export { WhatsAppClient };
+
+// const { Client, LinkingMethod, LocalAuth} = require('whatsapp-web.js');
+// const client = new Client(
+//     {
+//         linkingMethod:  new LinkingMethod({
+//             phone: {
+//                 number: "+<COUNTRY CODE><PHONE NUMBER>"
+//             }
+//         }),
+//         puppeteer: {
+//             args: ['--no-sandbox'],
+//         },
+//     }
+// );

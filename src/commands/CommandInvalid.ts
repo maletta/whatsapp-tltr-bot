@@ -33,7 +33,9 @@ class CommandInvalid implements ICommand {
     ].join('\n');
     const summarizeValidOptionMessage = `\nComando válido para resumo:\n${summarizeValidOptions}`;
 
-    message.reply(`${responseMessage}${summarizeValidOptionMessage}`);
+    message
+      .reply(`${responseMessage}${summarizeValidOptionMessage}`)
+      .then((response) => response.react('😴'));
   }
 }
 
