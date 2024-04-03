@@ -1,0 +1,25 @@
+import { BaseModel } from 'models/BaseModel';
+
+type State<T = Enumerator, U = BaseModel<T>> = Map<T, U>;
+
+class GeneratedTextsGroup<T = Enumerator, U = BaseModel<T>> {
+  private state: State<T, U>;
+
+  constructor() {
+    this.state = new Map();
+  }
+
+  addItem(key: T, item: U) {
+    this.state.set(key, item);
+  }
+
+  getItem(key: T): U | undefined {
+    return this.state.get(key);
+  }
+
+  removeItem(key: T) {
+    this.state.delete(key);
+  }
+}
+
+export { GeneratedTextsGroup };
