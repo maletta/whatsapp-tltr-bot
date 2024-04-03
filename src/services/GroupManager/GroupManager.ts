@@ -9,21 +9,18 @@ import { Summary } from 'models/Summary';
 // type IGroupsSummarys = Map<IGroupId, SummariesManager>;
 // type IGroupsHoroscopes = Map<IGroupId, HoroscopeManager>;
 
-type IListOfGeneratedTexts<
-  TextEnum = Enumerator,
-  TextModel = BaseModel<TextEnum>,
-> = Map<TextEnum, TextModel>;
+type IListOfGeneratedTexts<T = Enumerator, U = BaseModel<T>> = Map<T, U>;
 
 type SummaryList = IListOfGeneratedTexts<EnumTimeLimit, Summary>;
 type HoroscopeList = IListOfGeneratedTexts<EnumHoroscope, Horoscope>;
 
 class GroupState {
   public groupId: string;
-  public summarys: SummaryList;
+  public summaries: SummaryList;
   public horoscopes: HoroscopeList;
 
   constructor(groupId: string) {
-    this.summarys = new Map();
+    this.summaries = new Map();
     this.horoscopes = new Map();
     this.groupId = groupId;
   }
