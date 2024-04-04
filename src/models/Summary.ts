@@ -9,10 +9,9 @@ interface ISummaryDTO {
 }
 
 class Summary extends BaseModel<EnumTimeLimit> {
-  public key: EnumTimeLimit;
-  public content: string;
-  public createdAt: Date;
-  public expiresIn: Date;
+  constructor({ content, key, createdAt }: ISummaryDTO) {
+    super({ content, key, createdAt });
+  }
 
   private minutesToMilliseconds(minutes: number): number {
     return minutes * 60 * 1000;

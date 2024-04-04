@@ -46,6 +46,8 @@ class CommandSummarize implements ICommand {
             timeLimit,
           ),
         );
+
+        return;
       }
 
       const useGenerateSummary = new UseGenerateSummary(this.textGeneration);

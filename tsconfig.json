@@ -23,6 +23,7 @@
       "mocks/*": ["./src/mocks/*"],
       "models/*": ["./src/models/*"],
       "services/*": ["./src/services/*"],
+      "useCases/*": ["./src/useCases/*"],
       "utils/*": ["./src/utils/*"],
       "validators/*": ["./src/validators/*"]
     }

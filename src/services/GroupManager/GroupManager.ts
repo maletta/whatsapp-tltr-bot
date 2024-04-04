@@ -18,7 +18,7 @@ type IListOfGeneratedTexts<
 type SummaryList = IListOfGeneratedTexts<EnumTimeLimit, Summary>;
 type HoroscopeList = IListOfGeneratedTexts<EnumHoroscope, Horoscope>;
 
-class GroupState {
+class GroupManager {
   public groupId: string;
   public summarys: SummaryList;
   public horoscopes: HoroscopeList;
@@ -30,4 +30,4 @@ class GroupState {
   }
 }
 
-export { GroupState };
+export { GroupManager };

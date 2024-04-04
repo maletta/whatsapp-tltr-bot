@@ -10,11 +10,9 @@ interface IHoroscopeDTO {
 }
 
 class Horoscope extends BaseModel<EnumHoroscope> {
-  public key: EnumHoroscope;
-  public content: string;
-  public createdAt: Date;
-  public expiresIn: Date;
-
+  constructor({ content, key, createdAt }: IHoroscopeDTO) {
+    super({ content, key, createdAt });
+  }
   protected calculateExpiration(createdAt: Date): Date {
     return DateUtils.getEndOfDay(createdAt);
   }

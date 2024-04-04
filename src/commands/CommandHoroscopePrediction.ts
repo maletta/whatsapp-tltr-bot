@@ -38,33 +38,43 @@ class CommandHoroscopePrediction implements ICommand {
     }
 
     try {
-      const group = this.groups?.findById(groupId);
-      const horoscopes = group?.getHoroscopes();
-      const horoscope = horoscopes?.getItem(horoscopeEnum);
+      const group = this.groups.findByIdOrCreate(groupId);
+      const horoscopes = group.getHoroscopes();
+      const horoscope = horoscopes.getItem(horoscopeEnum);
       const haveValidHoroscope = horoscope?.isValid();
 
-      let horoscopeToReply: Horoscope | null | undefined = null;
+      if (horoscope && haveValidHoroscope) {
+        const { content, createdAt, expiresIn } = horoscope;
 
-      if (haveValidHoroscope) {
-        horoscopeToReply = horoscope;
-      } else {
-        const horoscopePredictionMessage = await this.textGeneration.generate(
-          `Faça uma breve previsão do horóscopo de hoje para o signo de ${horoscopeEnum}`,
+        message.reply(
+          this.formatResponse({
+            content,
+            createdAt: StringUtils.formatDateToString(createdAt),
+            type: String(horoscopeEnum),
+            expiresIn: StringUtils.formatDateToString(expiresIn),
+          }),
         );
 
-        // if horoscope predictions message is not null; but we need throw error and not null
-        if (horoscopePredictionMessage) {
-          horoscopeToReply = new Horoscope({
-            content: horoscopePredictionMessage,
-            key: horoscopeEnum,
-          });
-        }
+        return;
       }
 
-      if (horoscopeToReply !== null && horoscopeToReply !== undefined) {
+      const horoscopePredictionMessage = await this.textGeneration.generate(
+        `Faça uma breve previsão do horóscopo de hoje para o signo de ${horoscopeEnum}`,
+      );
+
+      if (
+        horoscopePredictionMessage !== null &&
+        horoscopePredictionMessage !== undefined
+      ) {
+        const horoscopeToReply = new Horoscope({
+          content: horoscopePredictionMessage,
+          key: horoscopeEnum,
+        });
+
         horoscopes.addItem(horoscopeEnum, horoscopeToReply);
 
         const { content, createdAt, expiresIn, key: sign } = horoscopeToReply;
+
         message.reply(
           this.formatResponse({
             content,

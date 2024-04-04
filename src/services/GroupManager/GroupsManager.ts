@@ -12,24 +12,20 @@ class GroupsManager {
     return this.groups.get(groupId);
   };
 
-  public findByIdOrCreate = (groupId: string) :GroupState => {
+  public findByIdOrCreate = (groupId: string): GroupState => {
     const groupFound = this.findById(groupId);
     if (groupFound !== undefined && groupFound !== null) {
       return groupFound;
     } else {
-      return  new GroupState(groupId);
+      return this.create(groupId);
     }
-  }
+  };
 
   public create = (groupId: string): GroupState => {
-    if (!this.groups.has(groupId)) {
-      const group = new GroupState(groupId);
-      this.groups.set(groupId, group);
+    const group = new GroupState(groupId);
+    this.groups.set(groupId, group);
 
-      return group;
-    }
-
-    return this.groups.get(groupId)!;
+    return group;
   };
 
   public has = (groupId: string): boolean => {
@@ -37,4 +33,5 @@ class GroupsManager {
   };
 }
 
+// console.log("testando log de funções")
 export { GroupsManager };
