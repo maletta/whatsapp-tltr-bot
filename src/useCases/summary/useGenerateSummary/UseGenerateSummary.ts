@@ -9,7 +9,7 @@ import { TimeLimit } from 'utils/TimeLimit';
 import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
 
 class UseGenerateSummary {
-  constructor(private textGeneration: ITextGeneration) {}
+  constructor(private textGeneration: ITextGeneration) { }
 
   public async execute(
     message: Message,

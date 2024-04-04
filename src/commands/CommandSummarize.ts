@@ -30,10 +30,10 @@ class CommandSummarize implements ICommand {
     const groupId = message.from;
 
     try {
-      const group: GroupState = this.groups.findById(groupId);
-      const summaries = group.getSummaries();
-      const summary = summaries.getItem(timeLimit);
-      const haveValidSummary = summary && summary.isValid();
+      const group = this.groups.findById(groupId);
+      const summaries = group?.getSummaries();
+      const summary = summaries?.getItem(timeLimit);
+      const haveValidSummary = summary?.isValid();
 
       let summaryToReplyWith: Summary | null | undefined;
 
@@ -79,11 +79,11 @@ class CommandSummarize implements ICommand {
     const firstArs = args.length > 0 ? args[0] : '';
     if (firstArs.includes('1')) return EnumTimeLimit['1_HOUR'];
 
-    if (firstArs.includes('2')) return EnumTimeLimit['2_HOUR'];
+    if (firstArs.includes('2')) return EnumTimeLimit['2_HOURS'];
 
-    if (firstArs.includes('4')) return EnumTimeLimit['4_HOUR'];
+    if (firstArs.includes('4')) return EnumTimeLimit['4_HOURS'];
 
-    if (firstArs.includes('6')) return EnumTimeLimit['6_HOUR'];
+    if (firstArs.includes('6')) return EnumTimeLimit['6_HOURS'];
 
     return EnumTimeLimit['30_MINUTES'];
   };

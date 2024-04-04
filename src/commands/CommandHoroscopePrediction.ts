@@ -14,7 +14,7 @@ class CommandHoroscopePrediction implements ICommand {
   constructor(
     private textGeneration: ITextGeneration,
     private groups: GroupsManager,
-  ) {}
+  ) { }
 
   async execute(
     args: string[],
@@ -38,10 +38,10 @@ class CommandHoroscopePrediction implements ICommand {
     }
 
     try {
-      const group: GroupState | null = this.groups.findById(groupId);
-      const horoscopes = group?.getHoroscopes();
-      const horoscope = horoscopes?.getItem(horoscopeEnum);
-      const haveValidHoroscope = horoscope?.isValid();
+      const group = this.groups.findById(groupId);
+      const horoscopes = group.getHoroscopes();
+      const horoscope = horoscopes.getItem(horoscopeEnum);
+      const haveValidHoroscope = horoscope.isValid();
 
       let horoscopeToReply: Horoscope | null | undefined = null;
 

@@ -3,7 +3,7 @@ import { BaseModel } from 'models/BaseModel';
 type State<T = Enumerator, U = BaseModel<T>> = Map<T, U>;
 
 class GeneratedTextsGroup<T = Enumerator, U = BaseModel<T>> {
-  private state: State<T, U | undefined | null>;
+  private state: State<T, U>;
 
   constructor() {
     this.state = new Map();

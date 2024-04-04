@@ -20,7 +20,7 @@ class GroupsManager {
       return group;
     }
 
-    return this.findById(groupId);
+    return this.groups.get(groupId)!;
   };
 
   public has = (groupId: string): boolean => {
