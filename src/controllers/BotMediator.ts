@@ -94,13 +94,13 @@ class BotMediator {
 
     const [commandRaw, ...rest] = splitted;
 
-    if(commandRaw === null || commandRaw == undefined){
-      return [EnumSystemCommands.DO_NOTHING, []]; 
+    if (commandRaw === null || commandRaw == undefined) {
+      return [EnumSystemCommands.DO_NOTHING, []];
     }
 
     const command = StringUtils.removeAccents(commandRaw)?.toLocaleLowerCase();
 
-    if(command === null || command === undefined ) {
+    if (command === null || command === undefined) {
       return [EnumSystemCommands.DO_NOTHING, []];
     }
 
@@ -109,16 +109,17 @@ class BotMediator {
       return [EnumValidCommands.RANDOM_MESSAGE, []];
     }
 
-    // if have prefix
-
+    // if have prefix but have by pass content
     if (this.willByPassCommand(command)) {
       return [EnumSystemCommands.DO_NOTHING, []];
     }
 
+    // if have prefix but is invalid
     if (command.startsWith(this.prefix) && !this.isValidCommand(command)) {
       return [EnumSystemCommands.INVALID, []];
     }
 
+    // if have a valid prefix
     return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
   }
 
@@ -138,7 +139,6 @@ class BotMediator {
   private isValidCommand(
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
-    
     const validation = (enumItem: string) => this.prefix + enumItem === command;
 
     return (

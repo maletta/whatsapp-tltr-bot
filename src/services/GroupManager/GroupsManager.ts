@@ -12,6 +12,15 @@ class GroupsManager {
     return this.groups.get(groupId);
   };
 
+  public findByIdOrCreate = (groupId: string) :GroupState => {
+    const groupFound = this.findById(groupId);
+    if (groupFound !== undefined && groupFound !== null) {
+      return groupFound;
+    } else {
+      return  new GroupState(groupId);
+    }
+  }
+
   public create = (groupId: string): GroupState => {
     if (!this.groups.has(groupId)) {
       const group = new GroupState(groupId);

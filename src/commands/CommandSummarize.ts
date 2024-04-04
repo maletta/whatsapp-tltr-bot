@@ -30,25 +30,30 @@ class CommandSummarize implements ICommand {
     const groupId = message.from;
 
     try {
-      const group = this.groups.findById(groupId);
-      const summaries = group?.getSummaries();
-      const summary = summaries?.getItem(timeLimit);
+      const group = this.groups.findByIdOrCreate(groupId);
+      const summaries = group.getSummaries();
+      const summary = summaries.getItem(timeLimit);
       const haveValidSummary = summary?.isValid();
 
-      let summaryToReplyWith: Summary | null | undefined;
+      if (summary && haveValidSummary) {
+        const { content, createdAt, expiresIn } = summary;
 
-      if (haveValidSummary) {
-        summaryToReplyWith = summary;
-      } else {
-        const useGenerateSummary = new UseGenerateSummary(this.textGeneration);
-
-        summaryToReplyWith = await useGenerateSummary.execute(
-          message,
-          timeLimit,
+        message.reply(
+          this.formatSummaryResponse(
+            content,
+            StringUtils.formatDateToString(createdAt),
+            StringUtils.formatDateToString(expiresIn),
+            timeLimit,
+          ),
         );
-
-        summaries.addItem(timeLimit, summaryToReplyWith);
       }
+
+      const useGenerateSummary = new UseGenerateSummary(this.textGeneration);
+
+      const summaryToReplyWith = await useGenerateSummary.execute(
+        message,
+        timeLimit,
+      );
 
       if (summaryToReplyWith) {
         const {
@@ -57,6 +62,8 @@ class CommandSummarize implements ICommand {
           key: timeLimit,
           expiresIn,
         } = summaryToReplyWith;
+
+        summaries.addItem(timeLimit, summaryToReplyWith);
 
         message.reply(
           this.formatSummaryResponse(
