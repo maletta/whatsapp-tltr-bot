@@ -62,8 +62,10 @@ describe('GroupsManager', () => {
   it('should return the same Horoscope content', () => {
     const groupId = 'test';
     const horoscopeGroupManager = new GroupsManager();
-    const group = horoscopeGroupManager.create('');
+    const group = horoscopeGroupManager.create(groupId);
+
     const horoscopesList = group.getHoroscopes();
+
     const horoscopeContent =
       'This is a test horoscope for a test user in a test group.';
     const sign: EnumHoroscope = EnumHoroscope.Aquario;
@@ -74,8 +76,20 @@ describe('GroupsManager', () => {
 
     horoscopesList.addItem(sign, horoscope);
 
+    // console.dir('log horoscopesList ');
+    // // console.dir(group, { depth: null });
+
+    // console.dir(
+    //   horoscopeGroupManager.findById(groupId)?.getHoroscopes().getItem(sign),
+    //   {
+    //     depth: null,
+    //   },
+    // );
+
+    expect(true);
     expect(
-      horoscopeGroupManager.findById('test')?.getHoroscopes().getItem(sign),
+      horoscopeGroupManager.findById(groupId)?.getHoroscopes().getItem(sign)
+        ?.content,
     ).toEqual(horoscopeContent);
   });
 });
