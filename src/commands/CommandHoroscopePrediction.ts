@@ -43,7 +43,7 @@ class CommandHoroscopePrediction implements ICommand {
       const horoscope = horoscopes.getItem(horoscopeEnum);
       const haveValidHoroscope = horoscope?.isValid();
 
-      if (horoscope && haveValidHoroscope) {
+      if (horoscope !== null && horoscope?.isValid()) {
         const { content, createdAt, expiresIn } = horoscope;
 
         message.reply(
