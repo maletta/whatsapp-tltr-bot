@@ -9,7 +9,7 @@ import { CommandStickerImage } from 'commands/CommandStickerImage';
 import { CommandSummarize } from 'commands/CommandSummarize';
 import { BotConfiguration } from 'config/Configuration';
 import { EnumSystemCommands, EnumValidCommands } from 'enums/Commands';
-import { GroupManager } from 'services/GroupManager/GroupManager';
+import { GroupsManager } from 'services/GroupManager/GroupsManager';
 import { TextGenerationHttp } from 'services/TextGeneration/implementation/TextGenerationHttp';
 import { StringUtils } from 'utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
@@ -20,7 +20,7 @@ type IBotMediatorDTO = {
   prefix: string;
 };
 class BotMediator {
-  public groups: GroupManager;
+  public groups: GroupsManager;
   private commandHandler: CommandHandler;
   private prefix: string;
   private client: Client;
@@ -28,7 +28,7 @@ class BotMediator {
 
   constructor(client: Client, args: Partial<IBotMediatorDTO> = {}) {
     this.prefix = args.prefix || '.';
-    this.groups = new GroupManager();
+    this.groups = new GroupsManager();
     this.commandHandler = new CommandHandler();
     this.client = client;
 

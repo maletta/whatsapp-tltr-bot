@@ -1,21 +1,19 @@
 import { EnumTimeLimit } from 'enums/TimeLimit';
 import { Summary } from 'models/Summary';
-import { GroupManager } from 'services/GroupManager/GroupManager';
-import { ILoggerFiles } from 'services/LoggerFiles/ILoggerFiles';
-import { LoggerFiles } from 'services/LoggerFiles/implementation/LoggerFiles';
+import { GroupsManager } from 'services/GroupManager/GroupsManager';
+import { GroupState } from 'services/GroupManager/GroupState';
 import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
-import { TransformMessages } from 'utils/Formatters/TransformMessage';
+import { UseGenerateSummary } from 'src/useCases/summary/useGenerateSummary/UseGenerateSummary';
 import { StringUtils } from 'utils/String.utils';
 import { TimeLimit } from 'utils/TimeLimit';
-import { Chat, Client, Message, MessageTypes } from 'whatsapp-web.js';
+import { Client, Message } from 'whatsapp-web.js';
 
-import { FormmatSummaryLoggers } from './FormmatLoggers/FormmatSummaryLoggers';
 import { ICommand } from './ICommand';
 
 class CommandSummarize implements ICommand {
   constructor(
     private textGeneration: ITextGeneration,
-    private groups: GroupManager,
+    private groups: GroupsManager,
   ) {}
 
   async execute(
@@ -29,8 +27,12 @@ class CommandSummarize implements ICommand {
     console.log('args ', args);
     console.log('message ', message.body);
 
+    const groupId = message.from;
+
     try {
-      const summary = this.groups.getSummaryById(message.from, timeLimit);
+      const group: GroupState = this.groups.findById(groupId);
+      const summaries = group.getSummaries();
+      const summary = summaries.getItem(timeLimit);
       const haveValidSummary = summary && summary.isValid();
 
       let summaryToReplyWith: Summary | null | undefined;
@@ -38,7 +40,14 @@ class CommandSummarize implements ICommand {
       if (haveValidSummary) {
         summaryToReplyWith = summary;
       } else {
-        summaryToReplyWith = await this.createSummary(message, timeLimit);
+        const useGenerateSummary = new UseGenerateSummary(this.textGeneration);
+
+        summaryToReplyWith = await useGenerateSummary.execute(
+          message,
+          timeLimit,
+        );
+
+        summaries.addItem(timeLimit, summaryToReplyWith);
       }
 
       if (summaryToReplyWith) {
@@ -65,60 +74,6 @@ class CommandSummarize implements ICommand {
     }
   }
 
-  private async createSummary(
-    message: Message,
-    timeLimit: EnumTimeLimit,
-  ): Promise<Summary | null> {
-    const chat = await message.getChat();
-    const filteredMessages = await this.filterMessagesByHour(
-      chat,
-      timeLimit,
-      3000,
-    );
-
-    const messagesByTokenLimit = TransformMessages.createBatchOfMessages(
-      filteredMessages,
-      {
-        maxTokens: 14000,
-      },
-    );
-
-    console.log('Time limit ', timeLimit);
-
-    console.log('messagesByTokenLimit', messagesByTokenLimit.length);
-
-    const promptMock = `Leia esse conjunto json de mensagens enviadas em grupo do whatsapp. Cada conjunto é composto pelo atributo userId que disintgue o usuário, pelo atributo timestamp que representa o horário de envio da mensagem e pelo atributo body que representa a mensagem enviada. Me diga o que foi conversado em tópicos, mas mantenha sigilo sobre a identidade do usuário : `;
-
-    let messagesToResponse: string | null | undefined = null;
-
-    if (messagesByTokenLimit.length > 1) {
-      messagesToResponse = await this.textGeneration.generateBatch(
-        promptMock,
-        messagesByTokenLimit,
-      );
-    } else {
-      messagesToResponse = await this.textGeneration.generate(
-        `${promptMock} ${messagesByTokenLimit[0]}`,
-      );
-    }
-
-    if (messagesToResponse !== null || messagesToResponse !== undefined) {
-      const summaryManager = this.groups.addSummary(
-        message.from,
-        timeLimit,
-        messagesToResponse,
-      );
-
-      const newSummary = summaryManager.getSummaryById(timeLimit);
-
-      this.logSummary(chat, newSummary, messagesByTokenLimit);
-
-      return newSummary;
-    }
-
-    return null;
-  }
-
   // get the number args for command summarize 30m, 1hr, 2hr, 4hr, 6hr
   public getSummarizeTimeFromCommand = (args: string[]): EnumTimeLimit => {
     const firstArs = args.length > 0 ? args[0] : '';
@@ -133,27 +88,6 @@ class CommandSummarize implements ICommand {
     return EnumTimeLimit['30_MINUTES'];
   };
 
-  public async filterMessagesByHour(
-    chat: Chat,
-    timeLimit: EnumTimeLimit,
-    limit: number = 1000,
-  ): Promise<Message[]> {
-    const allMessages: Message[] = await chat
-      .fetchMessages({
-        limit,
-        fromMe: false,
-      })
-      .then((foundMessages) => {
-        return foundMessages.filter(
-          (msg) =>
-            msg.type === MessageTypes.TEXT &&
-            TimeLimit.isBetweenTimeLimit(msg.timestamp, timeLimit),
-        );
-      });
-
-    return allMessages;
-  }
-
   private formatSummaryResponse(
     summary: string,
     createdAt: string,
@@ -167,30 +101,6 @@ class CommandSummarize implements ICommand {
       `\n\n*Resumo:*\n> ${summary}`
     );
   }
-
-  private logSummary = (
-    chat: Chat,
-    summary: Summary,
-    messages: string[],
-  ): void => {
-    const groupId = `${chat.id.user}${chat.id.server}`;
-    try {
-      const logger: ILoggerFiles = LoggerFiles.getInstance();
-      const formmatSummaryLoggers = FormmatSummaryLoggers.formmat(
-        chat.name,
-        summary,
-        messages.join('\n\n------TokenLimit----\n\n'),
-      );
-      const fileName = FormmatSummaryLoggers.formatDateForFileName(
-        summary.createdAt,
-      );
-
-      logger.log(groupId, fileName, formmatSummaryLoggers);
-    } catch (error) {
-      console.log(`Error on save summary log file. Group id ${groupId}`);
-      console.log(error);
-    }
-  };
 }
 
 export { CommandSummarize };

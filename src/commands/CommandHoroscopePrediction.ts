@@ -1,7 +1,8 @@
 import { EnumValidCommands } from 'enums/Commands';
 import { EnumHoroscope } from 'enums/Horoscope';
 import { Horoscope } from 'models/Horoscope';
-import { GroupManager } from 'services/GroupManager/GroupManager';
+import { GroupsManager } from 'services/GroupManager/GroupsManager';
+import { GroupState } from 'services/GroupManager/GroupState';
 import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { StringUtils } from 'utils/String.utils';
 import { HoroscopeValidator } from 'validators/HoroscopeValidator';
@@ -12,7 +13,7 @@ import { ICommand } from './ICommand';
 class CommandHoroscopePrediction implements ICommand {
   constructor(
     private textGeneration: ITextGeneration,
-    private groups: GroupManager,
+    private groups: GroupsManager,
   ) {}
 
   async execute(
@@ -27,6 +28,8 @@ class CommandHoroscopePrediction implements ICommand {
     const horoscopeEnum: EnumHoroscope | null =
       this.getHoroscopeFromCommand(args);
 
+    const groupId = message.from;
+
     if (horoscopeEnum === null) {
       message.reply(
         `*Comando inválido*\n\n*.${EnumValidCommands.HOROSCOPE}* _seu-signo_`,
@@ -35,15 +38,14 @@ class CommandHoroscopePrediction implements ICommand {
     }
 
     try {
-      const horoscope = this.groups.getHoroscopeById(
-        message.from,
-        horoscopeEnum,
-      );
-      const haveValidSummary = horoscope && horoscope.isValid();
+      const group: GroupState | null = this.groups.findById(groupId);
+      const horoscopes = group?.getHoroscopes();
+      const horoscope = horoscopes?.getItem(horoscopeEnum);
+      const haveValidHoroscope = horoscope?.isValid();
 
-      let horoscopeToReply: Horoscope | null | undefined;
+      let horoscopeToReply: Horoscope | null | undefined = null;
 
-      if (haveValidSummary) {
+      if (haveValidHoroscope) {
         horoscopeToReply = horoscope;
       } else {
         const horoscopePredictionMessage = await this.textGeneration.generate(
@@ -52,17 +54,16 @@ class CommandHoroscopePrediction implements ICommand {
 
         // if horoscope predictions message is not null; but we need throw error and not null
         if (horoscopePredictionMessage) {
-          const horoscopeManager = this.groups.addHoroscope(
-            message.from,
-            horoscopeEnum,
-            horoscopePredictionMessage,
-          );
-
-          horoscopeToReply = horoscopeManager.getHoroscopeById(horoscopeEnum);
+          horoscopeToReply = new Horoscope({
+            content: horoscopePredictionMessage,
+            key: horoscopeEnum,
+          });
         }
       }
 
       if (horoscopeToReply !== null && horoscopeToReply !== undefined) {
+        horoscopes.addItem(horoscopeEnum, horoscopeToReply);
+
         const { content, createdAt, expiresIn, key: sign } = horoscopeToReply;
         message.reply(
           this.formatResponse({
