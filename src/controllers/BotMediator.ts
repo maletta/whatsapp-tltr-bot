@@ -93,12 +93,23 @@ class BotMediator {
     const splitted = message.split(' ');
 
     const [commandRaw, ...rest] = splitted;
-    const command = StringUtils.removeAccents(commandRaw).toLocaleLowerCase();
+
+    if(commandRaw === null || commandRaw == undefined){
+      return [EnumSystemCommands.DO_NOTHING, []]; 
+    }
+
+    const command = StringUtils.removeAccents(commandRaw)?.toLocaleLowerCase();
+
+    if(command === null || command === undefined ) {
+      return [EnumSystemCommands.DO_NOTHING, []];
+    }
 
     if (splitted.length === 1 && (await this.isMe(command))) {
       // if args have only bot number mention
       return [EnumValidCommands.RANDOM_MESSAGE, []];
     }
+
+    // if have prefix
 
     if (this.willByPassCommand(command)) {
       return [EnumSystemCommands.DO_NOTHING, []];
@@ -127,7 +138,8 @@ class BotMediator {
   private isValidCommand(
     command: string,
   ): command is EnumValidCommands | EnumSystemCommands {
-    const validation = (enumItem) => this.prefix + enumItem === command;
+    
+    const validation = (enumItem: string) => this.prefix + enumItem === command;
 
     return (
       Object.values(EnumValidCommands).some(validation) ||

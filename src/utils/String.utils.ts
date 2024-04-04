@@ -1,5 +1,5 @@
 class StringUtils {
-  static removeAccents = (str: string) => {
+  static removeAccents = (str: string) : string | null => {
     console.log('sting to replace ', str);
     try {
       return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
