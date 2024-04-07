@@ -2,7 +2,6 @@ import { EnumValidCommands } from 'enums/Commands';
 import { EnumHoroscope } from 'enums/Horoscope';
 import { Horoscope } from 'models/Horoscope';
 import { GroupsManager } from 'services/GroupManager/GroupsManager';
-import { GroupState } from 'services/GroupManager/GroupState';
 import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { StringUtils } from 'utils/String.utils';
 import { HoroscopeValidator } from 'validators/HoroscopeValidator';
@@ -41,7 +40,6 @@ class CommandHoroscopePrediction implements ICommand {
       const group = this.groups.findByIdOrCreate(groupId);
       const horoscopes = group.getHoroscopes();
       const horoscope = horoscopes.getItem(horoscopeEnum);
-      const haveValidHoroscope = horoscope?.isValid();
 
       if (horoscope?.isValid()) {
         const { content, createdAt, expiresIn } = horoscope;
