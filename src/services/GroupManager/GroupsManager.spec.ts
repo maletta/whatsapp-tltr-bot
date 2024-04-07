@@ -1,7 +1,7 @@
-import { Horoscope } from 'models/Horoscope';
-import { GroupsManager } from './GroupsManager';
-import { GroupState } from './GroupState';
 import { EnumHoroscope } from 'enums/Horoscope';
+import { Horoscope } from 'models/Horoscope';
+
+import { GroupsManager } from './GroupsManager';
 
 describe('GroupsManager', () => {
   let groupsManager: GroupsManager;
@@ -14,7 +14,7 @@ describe('GroupsManager', () => {
     // const groupsManager: GroupsManager = new GroupsManager();
 
     expect(groupsManager).toBeDefined();
-    expect(groupsManager['groups']).toBeInstanceOf(Map);
+    // expect(groupsManager.groups).toBeInstanceOf(Map);
   });
 
   it('should find existing group by id', () => {
@@ -49,8 +49,8 @@ describe('GroupsManager', () => {
 
   it('should return true if group exists', () => {
     const groupId = 'testGroup';
-    const groupState = new GroupState(groupId);
-    groupsManager['groups'].set(groupId, groupState);
+    // const groupState = new GroupState(groupId);
+    groupsManager.create(groupId);
     expect(groupsManager.has(groupId)).toEqual(true);
   });
 

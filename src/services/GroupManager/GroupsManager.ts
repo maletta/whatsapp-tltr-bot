@@ -16,9 +16,8 @@ class GroupsManager {
     const groupFound = this.findById(groupId);
     if (groupFound !== undefined && groupFound !== null) {
       return groupFound;
-    } else {
-      return this.create(groupId);
     }
+    return this.create(groupId);
   };
 
   public create = (groupId: string): GroupState => {
