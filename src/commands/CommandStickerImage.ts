@@ -52,20 +52,25 @@ class CommandStickerImage implements ICommand {
   private async getMedia(message: Message): Promise<MessageMedia | null> {
     console.log('Get Media function');
     try {
-      if (this.isValidType(message)) {
-        const mimetype = this.getMimeType(message);
-        const mediaBuffered = await decryptMedia(
-          message as unknown as IMessageRaw,
-        );
-
-        const messageMedia = new MessageMedia(
-          mimetype,
-          mediaBuffered.toString('base64'),
-        );
-
-        return messageMedia;
+      if (!this.isValidType(message)) {
+        return null;
       }
-      return null;
+
+      const mimetype = this.getMimeType(message);
+      const mediaBuffered = await decryptMedia(
+        message as unknown as IMessageRaw,
+      );
+
+      if (!mediaBuffered) {
+        return null;
+      }
+
+      const messageMedia = new MessageMedia(
+        mimetype,
+        mediaBuffered.toString('base64'),
+      );
+
+      return messageMedia;
     } catch (error) {
       console.log('Error on decrypt and create media');
       console.log(error);

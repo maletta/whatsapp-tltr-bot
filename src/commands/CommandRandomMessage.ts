@@ -50,6 +50,11 @@ class CommandRandomMessage implements ICommand {
 
     const response = await this.textGeneration.generate(prompt);
 
+    if (response === null) {
+      message.reply('Agora não quero responder, miau');
+      return;
+    }
+
     message.reply(response);
   }
 }

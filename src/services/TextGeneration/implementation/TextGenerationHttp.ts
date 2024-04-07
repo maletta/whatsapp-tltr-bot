@@ -15,7 +15,7 @@ class TextGenerationHttp implements ITextGeneration {
     prompt: string,
     messages: string[],
   ): Promise<string | null> {
-    const firstSummaryPromise: Promise<string>[] = [];
+    const firstSummaryPromise: Promise<string | null>[] = [];
 
     try {
       messages.forEach(async (message) => {
@@ -25,7 +25,7 @@ class TextGenerationHttp implements ITextGeneration {
 
       const summaryResponses = await Promise.all(firstSummaryPromise);
 
-      return summaryResponses.join('\n\n');
+      return summaryResponses.filter((item) => item !== null).join('\n\n');
     } catch (err) {
       console.error(`Error first summarizeBatch prompt "${prompt}"`);
       console.error(err);
@@ -40,6 +40,11 @@ class TextGenerationHttp implements ITextGeneration {
     const projectId = process.env.PROJECT_ID;
     const location = 'us-central1';
     const model = 'gemini-1.0-pro-vision';
+
+    if (!projectId) {
+      console.log('Environment variable PROJECT_ID is not defined');
+      return null;
+    }
 
     const vertexAI = new VertexAI({ project: projectId, location });
 
@@ -75,11 +80,12 @@ class TextGenerationHttp implements ITextGeneration {
       // console.dir(fullTextResponse);
       console.dir(fullTextResponse, { depth: null });
 
-      const responseWithoutAsteristc = fullTextResponse.text.replace(
+      const responseWithoutAsteristc = fullTextResponse.text?.replace(
         /\*\*/g,
         '*',
       );
-      return responseWithoutAsteristc.length > 0
+
+      return responseWithoutAsteristc && responseWithoutAsteristc.length > 0
         ? responseWithoutAsteristc
         : null;
     } catch (error) {

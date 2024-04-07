@@ -6,7 +6,7 @@ interface IMessageMapped {
   timestamp: number;
 }
 
-type FunctionTransformer = (string) => string;
+type FunctionTransformer = (args: string) => string;
 class TransformMessages {
   public static createBatchOfMessages(
     messages: Message[],

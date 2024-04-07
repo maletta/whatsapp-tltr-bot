@@ -24,11 +24,11 @@ class TimeLimit {
     switch (timelimit) {
       case EnumTimeLimit['1_HOUR']:
         return '1 hora';
-      case EnumTimeLimit['2_HOUR']:
+      case EnumTimeLimit['2_HOURS']:
         return '2 horas';
       case EnumTimeLimit['4_HOURS']:
         return '4 horas';
-      case EnumTimeLimit['6_HOUR']:
+      case EnumTimeLimit['6_HOURS']:
         return '6 horas';
       default:
         return '30 minutos';
