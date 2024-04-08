@@ -1,7 +1,5 @@
 import { EnumTimeLimit } from 'enums/TimeLimit';
-import { Summary } from 'models/Summary';
 import { GroupsManager } from 'services/GroupManager/GroupsManager';
-import { GroupState } from 'services/GroupManager/GroupState';
 import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
 import { UseGenerateSummary } from 'src/useCases/summary/useGenerateSummary/UseGenerateSummary';
 import { StringUtils } from 'utils/String.utils';
