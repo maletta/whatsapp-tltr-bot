@@ -1,6 +1,7 @@
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { UseCaseRegisterUser } from 'useCases/users/useCaseRegisterUser/UseCaseRegisterUser';
 
 class CommandRegisterUser implements ICommand {
   async execute(
@@ -13,7 +14,7 @@ class CommandRegisterUser implements ICommand {
     console.log('message ', message.body);
 
     const presentation2 =
-      `.cadastrar` +
+      `.cadastro` +
       `\n\n> Se apresente - *NÃO* apague as perguntas!  🥺🤤` +
       '\nSomente Nome:' +
       '\nSomente Idade:' +
@@ -27,44 +28,41 @@ class CommandRegisterUser implements ICommand {
       '\nApenas seu Insta:' +
       '\nUnidade de foto sua:';
 
+    const questions: string[] = [
+      `✍🏼 *Nome*(Apenas o nome): `,
+      `🔠 *Pronomes* (Quais pronomes devemos usar para você?): `,
+      `🎂 *Idade* (Quantos anos você tem?): `,
+      `🏙️ *Localização em SP* (De qual parte você é?): `,
+      `♈ *Signo* (Qual é o seu signo do zodíaco?): `,
+      `💞 *Orientação Sexual* (Como você se identifica?): `,
+      `💔 *Relacionamento* (Está namorando? Já superou o/a ex?): `,
+      `🎬 *Recomendação* (Uma série, filme ou livro que você ama): `,
+      `💖 *Loucura por Amor* (Já fez alguma? Conte-nos!): `,
+      `📸 *Instagram* (Qual é o seu @, se quiser compartilhar): `,
+      `🤳 *Foto* (Envie uma unidade de foto sua): `,
+    ];
+
     const presentation =
-      `.cadastrar` +
+      `.cadastro` +
       `\n\n🌟 Vamos nos conhecer melhor!🌟` +
       `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n` +
-      `\n\n✍🏼 *Nome*: (Apenas o nome)` +
-      `\n🔠 *Pronomes*: (Quais pronomes devemos usar para você?)` +
-      `\n🎂 *Idade*: (Quantos anos você tem?)` +
-      `\n🏙️ *Localização em SP*: (De qual parte você é?)` +
-      `\n♈ *Signo*: (Qual é o seu signo do zodíaco?)` +
-      `\n💞 *Orientação Sexual*: (Como você se identifica?)` +
-      `\n💔 *Relacionamento*: (Está namorando? Já superou o/a ex?)` +
-      `\n🎬 *Recomendação*: (Uma série, filme ou livro que você ama)` +
-      `\n💖 *Loucura por Amor*: (Já fez alguma? Conte-nos!)` +
-      `\n📸 *Instagram*: (Qual é o seu @, se quiser compartilhar)` +
-      `\n🤳 *Foto*: (Envie uma unidade de foto sua)`;
+      questions.join('\n');
 
     const messageToReply = message.hasQuotedMsg
       ? await message.getQuotedMessage()
       : message;
 
-    console.dir(message, { depth: null });
-
-    const info = await message.getInfo();
-
-    console.log('----- get info ------');
-
-    console.dir(info, { depth: null });
-
     const contact = await message.getContact();
-
     const { name } = contact;
 
-    console.log('----- get Contact ------');
+    const answers = await new UseCaseRegisterUser().handle(message, questions);
+    messageToReply.reply(
+      answers.map((item) => item.answer).join('\n'),
+      message.from,
+    );
 
-    console.dir(contact, { depth: null });
-
-    messageToReply.reply(presentation2, message.from);
-    messageToReply.reply(presentation, message.from);
+    // messageToReply.reply(presentation2, message.from);
+    // messageToReply.reply(presentation, message.from);
   }
 }
 

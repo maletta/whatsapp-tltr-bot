@@ -27,11 +27,31 @@ class CommandPresentation implements ICommand {
       '\nUma unidade de foto:' +
       '\n\nMarque os adms: Donnie maple e Paule (obrigatório)';
 
+    const questions: string[] = [
+      `✍🏼 *Nome*(Apenas o nome): `,
+      `🔠 *Pronomes* (Quais pronomes devemos usar para você?): `,
+      `🎂 *Idade* (Quantos anos você tem?): `,
+      `🏙️ *Localização em SP* (De qual parte você é?): `,
+      `♈ *Signo* (Qual é o seu signo do zodíaco?): `,
+      `💞 *Orientação Sexual* (Como você se identifica?): `,
+      `💔 *Relacionamento* (Está namorando? Já superou o/a ex?): `,
+      `🎬 *Recomendação* (Uma série, filme ou livro que você ama): `,
+      `💖 *Loucura por Amor* (Já fez alguma? Conte-nos!): `,
+      `📸 *Instagram* (Qual é o seu @, se quiser compartilhar): `,
+      `🤳 *Foto* (Envie uma unidade de foto sua): `,
+    ];
+
+    const presentation2 =
+      `.cadastro` +
+      `\n\n🌟 Vamos nos conhecer melhor!🌟` +
+      `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n` +
+      questions.join('\n');
+
     const messageToReply = message.hasQuotedMsg
       ? await message.getQuotedMessage()
       : message;
 
-    messageToReply.reply(presentation, message.from);
+    messageToReply.reply(presentation2, message.from);
   }
 }
 

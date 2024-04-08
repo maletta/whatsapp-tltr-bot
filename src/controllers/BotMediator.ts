@@ -100,7 +100,7 @@ class BotMediator {
   }
 
   private async getArgs(message: string): Promise<[EnumAllCommands, string[]]> {
-    const splitted = message.split(' ');
+    const splitted = message.trim().split(/\s+/);
 
     const [commandRaw, ...rest] = splitted;
 
@@ -126,6 +126,13 @@ class BotMediator {
 
     // if have prefix but is invalid
     if (command.startsWith(this.prefix) && !this.isValidCommand(command)) {
+      console.log(
+        'invalid',
+        command.startsWith(this.prefix),
+        !this.isValidCommand(command),
+      );
+      console.log('commando', command, command.length);
+      console.log('rest', rest);
       return [EnumSystemCommands.INVALID, []];
     }
 
