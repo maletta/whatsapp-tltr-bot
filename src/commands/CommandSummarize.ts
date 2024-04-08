@@ -1,7 +1,7 @@
 import { EnumTimeLimit } from 'enums/TimeLimit';
 import { GroupsManager } from 'services/GroupManager/GroupsManager';
 import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
-import { UseGenerateSummary } from 'src/useCases/summary/useGenerateSummary/UseGenerateSummary';
+import { UseCaseGenerateSummary } from 'useCases/summaries/useCaseGenerateSummary/UseCaseGenerateSummary';
 import { StringUtils } from 'utils/String.utils';
 import { TimeLimit } from 'utils/TimeLimit';
 import { Client, Message } from 'whatsapp-web.js';
@@ -48,7 +48,9 @@ class CommandSummarize implements ICommand {
         return;
       }
 
-      const useGenerateSummary = new UseGenerateSummary(this.textGeneration);
+      const useGenerateSummary = new UseCaseGenerateSummary(
+        this.textGeneration,
+      );
 
       const summaryToReplyWith = await useGenerateSummary.execute(
         message,

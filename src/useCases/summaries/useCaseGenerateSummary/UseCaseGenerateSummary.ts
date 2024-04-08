@@ -8,7 +8,7 @@ import { TransformMessages } from 'utils/Formatters/TransformMessage';
 import { TimeLimit } from 'utils/TimeLimit';
 import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
 
-class UseGenerateSummary {
+class UseCaseGenerateSummary {
   constructor(private textGeneration: ITextGeneration) {}
 
   public async execute(
@@ -133,4 +133,4 @@ class UseGenerateSummary {
   };
 }
 
-export { UseGenerateSummary };
+export { UseCaseGenerateSummary };

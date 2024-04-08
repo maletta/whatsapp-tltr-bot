@@ -5,10 +5,16 @@ import { CommandHoroscopePrediction } from 'commands/CommandHoroscopePrediction'
 import { CommandInvalid } from 'commands/CommandInvalid';
 import { CommandPresentation } from 'commands/CommandPresentation';
 import { CommandRandomMessage } from 'commands/CommandRandomMessage';
+import { CommandRegisterUser } from 'commands/CommandRegisterUser';
 import { CommandStickerImage } from 'commands/CommandStickerImage';
 import { CommandSummarize } from 'commands/CommandSummarize';
 import { BotConfiguration } from 'config/Configuration';
-import { EnumSystemCommands, EnumValidCommands } from 'enums/Commands';
+import {
+  EnumPrivateCommands,
+  EnumSystemCommands,
+  EnumPublicCommands,
+  EnumAllCommands,
+} from 'enums/Commands';
 import { GroupsManager } from 'services/GroupManager/GroupsManager';
 import { TextGenerationHttp } from 'services/TextGeneration/implementation/TextGenerationHttp';
 import { StringUtils } from 'utils/String.utils';
@@ -37,37 +43,43 @@ class BotMediator {
 
   private registerCommands(): void {
     this.commandHandler.registerCommand(
-      EnumValidCommands.SUMMARIZE,
+      EnumPublicCommands.SUMMARIZE,
       new CommandSummarize(new TextGenerationHttp(), this.groups),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.EVERYONE,
+      EnumPublicCommands.EVERYONE,
       new CommandEveryone(),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.RANDOM_MESSAGE,
+      EnumPublicCommands.RANDOM_MESSAGE,
       new CommandRandomMessage(new TextGenerationHttp()),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.STICKER,
+      EnumPublicCommands.STICKER,
       new CommandStickerImage(),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.HOROSCOPE,
+      EnumPublicCommands.HOROSCOPE,
       new CommandHoroscopePrediction(new TextGenerationHttp(), this.groups),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.CANCELF,
+      EnumPublicCommands.CANCELF,
       new CommandCancel(new TextGenerationHttp()),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.CANCELM,
+      EnumPublicCommands.CANCELM,
       new CommandCancel(new TextGenerationHttp()),
     );
     this.commandHandler.registerCommand(
-      EnumValidCommands.PRESENTATION,
+      EnumPublicCommands.PRESENTATION,
       new CommandPresentation(),
     );
+
+    this.commandHandler.registerCommand(
+      EnumPrivateCommands.REGISTER,
+      new CommandRegisterUser(),
+    );
+
     this.commandHandler.registerCommand(
       EnumSystemCommands.INVALID,
       new CommandInvalid(this.prefix),
@@ -87,14 +99,12 @@ class BotMediator {
     }
   }
 
-  private async getArgs(
-    message: string,
-  ): Promise<[EnumValidCommands | EnumSystemCommands, string[]]> {
+  private async getArgs(message: string): Promise<[EnumAllCommands, string[]]> {
     const splitted = message.split(' ');
 
     const [commandRaw, ...rest] = splitted;
 
-    if (commandRaw === null || commandRaw == undefined) {
+    if (commandRaw === null || commandRaw === undefined) {
       return [EnumSystemCommands.DO_NOTHING, []];
     }
 
@@ -106,7 +116,7 @@ class BotMediator {
 
     if (splitted.length === 1 && (await this.isMe(command))) {
       // if args have only bot number mention
-      return [EnumValidCommands.RANDOM_MESSAGE, []];
+      return [EnumPublicCommands.RANDOM_MESSAGE, []];
     }
 
     // if have prefix but have by pass content
@@ -120,7 +130,7 @@ class BotMediator {
     }
 
     // if have a valid prefix
-    return [command.slice(1).toLowerCase() as EnumValidCommands, rest];
+    return [command.slice(1).toLowerCase() as EnumAllCommands, rest];
   }
 
   private willByPassCommand(command: string) {
@@ -138,12 +148,13 @@ class BotMediator {
 
   private isValidCommand(
     command: string,
-  ): command is EnumValidCommands | EnumSystemCommands {
+  ): command is EnumPublicCommands | EnumSystemCommands | EnumPrivateCommands {
     const validation = (enumItem: string) => this.prefix + enumItem === command;
 
     return (
-      Object.values(EnumValidCommands).some(validation) ||
-      Object.values(EnumSystemCommands).some(validation)
+      Object.values(EnumPublicCommands).some(validation) ||
+      Object.values(EnumSystemCommands).some(validation) ||
+      Object.values(EnumPrivateCommands).some(validation)
     );
   }
 

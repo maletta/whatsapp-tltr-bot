@@ -1,4 +1,13 @@
-export enum EnumValidCommands {
+export enum EnumSystemCommands {
+  INVALID = 'invalido',
+  DO_NOTHING = 'nao_enviar_mensagem',
+}
+
+export enum EnumPrivateCommands {
+  REGISTER = 'cadastro',
+}
+
+export enum EnumPublicCommands {
   EVERYONE = 'todos',
   RANDOM_MESSAGE = 'aleatorio',
   SUMMARIZE = 'resuma',
@@ -9,9 +18,7 @@ export enum EnumValidCommands {
   PRESENTATION = 'ficha',
 }
 
-export enum EnumSystemCommands {
-  INVALID = 'invalido',
-  DO_NOTHING = 'nao_enviar_mensagem',
-}
-
-export type EnumAllCommands = EnumValidCommands | EnumSystemCommands;
+export type EnumAllCommands =
+  | EnumPublicCommands
+  | EnumSystemCommands
+  | EnumPrivateCommands;
