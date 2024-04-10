@@ -1,7 +1,7 @@
+import { UseCaseRegisterUser } from 'useCases/users/useCaseRegisterUser/UseCaseRegisterUser';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
-import { UseCaseRegisterUser } from 'useCases/users/useCaseRegisterUser/UseCaseRegisterUser';
 
 class CommandRegisterUser implements ICommand {
   async execute(
@@ -45,8 +45,9 @@ class CommandRegisterUser implements ICommand {
     const presentation =
       `.cadastro` +
       `\n\n🌟 Vamos nos conhecer melhor!🌟` +
-      `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n` +
-      questions.join('\n');
+      `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n${questions.join(
+        '\n',
+      )}`;
 
     const messageToReply = message.hasQuotedMsg
       ? await message.getQuotedMessage()
@@ -56,10 +57,9 @@ class CommandRegisterUser implements ICommand {
     const { name } = contact;
 
     const answers = await new UseCaseRegisterUser().handle(message, questions);
-    messageToReply.reply(
-      answers.map((item) => item.answer).join('\n'),
-      message.from,
-    );
+    messageToReply
+      .reply(answers.map((item) => item.answer).join('\n'), message.from)
+      .then((response) => response.react('👌🏼'));
 
     // messageToReply.reply(presentation2, message.from);
     // messageToReply.reply(presentation, message.from);

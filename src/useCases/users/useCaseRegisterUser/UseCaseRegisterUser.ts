@@ -26,26 +26,42 @@ class UseCaseRegisterUser {
 
     const lines = message.split('\n');
 
-    for (const line of lines) {
+    lines.forEach((line) => {
       // Se a linha atual contém a pergunta
-      if (line.includes(questions[currentQuestionIndex])) {
+
+      const lineNormalized = this.normalizeString(line);
+      const questionNormalized = this.normalizeString(
+        questions[currentQuestionIndex],
+      );
+
+      console.log('current line ', lineNormalized);
+      console.log('current question  ', questionNormalized);
+      if (lineNormalized.includes(questionNormalized)) {
+        console.log('includes line ', line);
         // Extrai resposta reomvendo a pergunta
-        const answer = line.replace(questions[currentQuestionIndex], '').trim();
+        const answer = lineNormalized.replace(questionNormalized, '').trim();
 
         answers.push({
           question: questions[currentQuestionIndex],
-          answer: answer,
+          answer,
         });
 
         // Passa para próxima pergunta
-        currentQuestionIndex++;
+        currentQuestionIndex += 1;
       }
 
       // Se todas as perguntas foram respondidas, sai do loop
-      if (currentQuestionIndex >= questions.length) break;
-    }
+      // if (currentQuestionIndex >= questions.length) break;
+    });
 
     return answers;
+  }
+
+  private normalizeString(str: string): string {
+    return str
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .toLowerCase()
+      .trim();
   }
 }
 
