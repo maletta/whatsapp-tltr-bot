@@ -1,5 +1,4 @@
 import { IMessageRaw } from 'common/RawMessageType';
-import { MimeTypesEnum } from 'enums/MimeTypes';
 import { decryptMedia } from 'utils/decryptMedia';
 import {
   Client,
@@ -10,6 +9,7 @@ import {
 } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { MimeTypesEnum } from 'domain/enums/MimeTypes';
 
 class CommandStickerImage implements ICommand {
   async execute(

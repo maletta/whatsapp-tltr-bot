@@ -23,9 +23,12 @@
       "mocks/*": ["./src/mocks/*"],
       "models/*": ["./src/models/*"],
       "services/*": ["./src/services/*"],
-      "useCases/*": ["./src/useCases/*"],
+      "use-cases/*": ["./src/use-cases/*"],
       "utils/*": ["./src/utils/*"],
-      "validators/*": ["./src/validators/*"]
+      "validators/*": ["./src/validators/*"],
+      "domain/*": ["./src/domain/*"],
+      "application/*": ["./src/application/*"],
+      "infrastructure/*": ["./src/infrastructure/*"]
     }
   },
   "include": [

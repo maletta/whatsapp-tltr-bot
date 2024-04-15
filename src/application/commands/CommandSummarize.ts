@@ -1,12 +1,12 @@
-import { EnumTimeLimit } from 'enums/TimeLimit';
-import { GroupsManager } from 'services/GroupManager/GroupsManager';
-import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
-import { UseCaseGenerateSummary } from 'useCases/summaries/useCaseGenerateSummary/UseCaseGenerateSummary';
+import { UseCaseGenerateSummary } from 'use-cases/summaries/useCaseGenerateSummary/UseCaseGenerateSummary';
 import { StringUtils } from 'utils/String.utils';
 import { TimeLimit } from 'utils/TimeLimit';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
+import { GroupsManager } from 'domain/entities/GroupManager/GroupsManager';
+import { EnumTimeLimit } from 'domain/enums/TimeLimit';
 
 class CommandSummarize implements ICommand {
   constructor(

@@ -1,4 +1,4 @@
-import { UseCaseRegisterUser } from 'useCases/users/useCaseRegisterUser/UseCaseRegisterUser';
+import { UseCaseRegisterUser } from 'use-cases/users/useCaseRegisterUser/UseCaseRegisterUser';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';

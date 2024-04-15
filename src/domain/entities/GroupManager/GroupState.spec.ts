@@ -1,11 +1,11 @@
 // GroupState.test.ts
 
-import { EnumHoroscope } from 'enums/Horoscope';
-import { EnumTimeLimit } from 'enums/TimeLimit';
-import { Horoscope } from 'models/Horoscope';
-import { Summary } from 'models/Summary';
+import { EnumHoroscope } from 'domain/enums/Horoscope';
 
 import { GroupState } from './GroupState';
+import { Summary } from '../Summary';
+import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { Horoscope } from '../Horoscope';
 
 describe('GroupState', () => {
   let groupState: GroupState;

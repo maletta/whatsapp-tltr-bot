@@ -1,9 +1,9 @@
-import { FormmatSummaryLoggers } from 'commands/FormmatLoggers/FormmatSummaryLoggers';
-import { EnumTimeLimit } from 'enums/TimeLimit';
-import { Summary } from 'models/Summary';
-import { ILoggerFiles } from 'services/LoggerFiles/ILoggerFiles';
-import { LoggerFiles } from 'services/LoggerFiles/implementation/LoggerFiles';
-import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
+import { FormmatSummaryLoggers } from 'application/services/FormmatLoggers/FormmatSummaryLoggers';
+import { ILoggerFiles } from 'application/services/LoggerFiles/ILoggerFiles';
+import { LoggerFiles } from 'application/services/LoggerFiles/implementation/LoggerFiles';
+import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
+import { Summary } from 'domain/entities/Summary';
+import { EnumTimeLimit } from 'domain/enums/TimeLimit';
 import { TransformMessages } from 'utils/Formatters/TransformMessage';
 import { TimeLimit } from 'utils/TimeLimit';
 import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
