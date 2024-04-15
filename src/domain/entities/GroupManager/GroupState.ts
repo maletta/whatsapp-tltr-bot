@@ -1,9 +1,9 @@
-import { EnumHoroscope } from 'enums/Horoscope';
-import { EnumTimeLimit } from 'enums/TimeLimit';
-import { Horoscope } from 'models/Horoscope';
-import { Summary } from 'models/Summary';
+import { EnumHoroscope } from 'domain/enums/Horoscope';
 
 import { GeneratedTextsGroup } from './GeneratedTextsGroup';
+import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { Summary } from '../Summary';
+import { Horoscope } from '../Horoscope';
 
 class GroupState {
   private groupId: string;

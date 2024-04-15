@@ -1,7 +1,7 @@
-import { EnumPublicCommands } from 'enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { EnumPublicCommands } from 'domain/enums/Commands';
 
 class CommandInvalid implements ICommand {
   private prefix;

@@ -1,7 +1,7 @@
-import { EnumAllCommands } from 'enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { EnumAllCommands } from 'domain/enums/Commands';
 
 type ICommands = Map<EnumAllCommands, ICommand>;
 class CommandHandler {

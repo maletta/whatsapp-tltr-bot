@@ -1,4 +1,4 @@
-import { EnumHoroscope } from 'enums/Horoscope';
+import { EnumHoroscope } from 'domain/enums/Horoscope';
 import { StringUtils } from 'utils/String.utils';
 
 class HoroscopeValidator {

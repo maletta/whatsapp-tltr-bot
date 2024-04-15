@@ -1,22 +1,23 @@
-import { CommandCancel } from 'commands/CommandCancel';
-import { CommandEveryone } from 'commands/CommandEveryOne';
-import { CommandHandler } from 'commands/CommandHandle';
-import { CommandHoroscopePrediction } from 'commands/CommandHoroscopePrediction';
-import { CommandInvalid } from 'commands/CommandInvalid';
-import { CommandPresentation } from 'commands/CommandPresentation';
-import { CommandRandomMessage } from 'commands/CommandRandomMessage';
-import { CommandRegisterUser } from 'commands/CommandRegisterUser';
-import { CommandStickerImage } from 'commands/CommandStickerImage';
-import { CommandSummarize } from 'commands/CommandSummarize';
+import { CommandCancel } from 'application/commands/CommandCancel';
+import { CommandEveryone } from 'application/commands/CommandEveryOne';
+import { CommandHandler } from 'application/commands/CommandHandle';
+import { CommandHoroscopePrediction } from 'application/commands/CommandHoroscopePrediction';
+import { CommandInvalid } from 'application/commands/CommandInvalid';
+import { CommandPresentation } from 'application/commands/CommandPresentation';
+import { CommandRandomMessage } from 'application/commands/CommandRandomMessage';
+import { CommandRegisterUser } from 'application/commands/CommandRegisterUser';
+import { CommandStickerImage } from 'application/commands/CommandStickerImage';
+import { CommandSummarize } from 'application/commands/CommandSummarize';
+import { TextGenerationHttp } from 'application/services/TextGeneration/implementation/TextGenerationHttp';
 import { BotConfiguration } from 'config/Configuration';
+import { GroupsManager } from 'domain/entities/GroupManager/GroupsManager';
 import {
-  EnumPrivateCommands,
-  EnumSystemCommands,
-  EnumPublicCommands,
   EnumAllCommands,
-} from 'enums/Commands';
-import { GroupsManager } from 'services/GroupManager/GroupsManager';
-import { TextGenerationHttp } from 'services/TextGeneration/implementation/TextGenerationHttp';
+  EnumPrivateCommands,
+  EnumPublicCommands,
+  EnumSystemCommands,
+} from 'domain/enums/Commands';
+
 import { StringUtils } from 'utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
@@ -95,7 +96,7 @@ class BotMediator {
       console.log('select command ', command, args);
       this.commandHandler.selectCommand(command, args, client, message);
     } else {
-      console.log('Not is valid chat in development mode ', message.from);
+      console.log('Not is valid chat in development mode', message.from);
     }
   }
 

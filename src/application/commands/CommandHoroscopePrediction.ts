@@ -1,13 +1,13 @@
-import { EnumPublicCommands } from 'enums/Commands';
-import { EnumHoroscope } from 'enums/Horoscope';
-import { Horoscope } from 'models/Horoscope';
-import { GroupsManager } from 'services/GroupManager/GroupsManager';
-import { ITextGeneration } from 'services/TextGeneration/ITextGeneration';
+import { EnumHoroscope } from 'domain/enums/Horoscope';
 import { StringUtils } from 'utils/String.utils';
 import { HoroscopeValidator } from 'validators/HoroscopeValidator';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { Horoscope } from 'domain/entities/Horoscope';
+import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
+import { GroupsManager } from 'domain/entities/GroupManager/GroupsManager';
+import { EnumPublicCommands } from 'domain/enums/Commands';
 
 class CommandHoroscopePrediction implements ICommand {
   constructor(
