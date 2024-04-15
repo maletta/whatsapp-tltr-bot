@@ -1,7 +1,7 @@
 import { EnumHoroscope } from 'domain/enums/Horoscope';
 
 import { GroupsManager } from './GroupsManager';
-import { Horoscope } from '../Horoscope';
+import { Horoscope } from '../TextGenerator/Horoscope';
 
 describe('GroupsManager', () => {
   let groupsManager: GroupsManager;

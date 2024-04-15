@@ -1,7 +1,7 @@
 import { EnumHoroscope } from 'domain/enums/Horoscope';
 import { DateUtils } from 'utils/Date.utils';
 
-import { BaseModel } from '../interfaces/BaseModel';
+import { BaseModel } from '../../interfaces/BaseModel';
 
 interface IHoroscopeDTO {
   key: EnumHoroscope;

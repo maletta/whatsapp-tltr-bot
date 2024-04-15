@@ -1,5 +1,5 @@
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
-import { BaseModel } from '../interfaces/BaseModel';
+import { BaseModel } from '../../interfaces/BaseModel';
 
 interface ISummaryDTO {
   key: EnumTimeLimit;

@@ -2,8 +2,8 @@ import { EnumHoroscope } from 'domain/enums/Horoscope';
 
 import { GeneratedTextsGroup } from './GeneratedTextsGroup';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
-import { Summary } from '../Summary';
-import { Horoscope } from '../Horoscope';
+import { Summary } from '../TextGenerator/Summary';
+import { Horoscope } from '../TextGenerator/Horoscope';
 
 class GroupState {
   private groupId: string;

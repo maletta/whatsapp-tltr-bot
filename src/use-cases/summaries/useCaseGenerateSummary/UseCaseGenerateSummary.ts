@@ -2,7 +2,7 @@ import { FormmatSummaryLoggers } from 'application/services/FormmatLoggers/Formm
 import { ILoggerFiles } from 'application/services/LoggerFiles/ILoggerFiles';
 import { LoggerFiles } from 'application/services/LoggerFiles/implementation/LoggerFiles';
 import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
-import { Summary } from 'domain/entities/Summary';
+import { Summary } from 'domain/entities/TextGenerator/Summary';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
 import { TransformMessages } from 'utils/Formatters/TransformMessage';
 import { TimeLimit } from 'utils/TimeLimit';
