@@ -4,7 +4,7 @@ export type TimeLimitTranslation = {
   [key in TimeLimitOption]: string;
 };
 
-class TimeLimit {
+class TimeLimitRules {
   // valid if  timestamp is between start and end of given time limit
 
   public static isBetweenTimeLimit(
@@ -36,4 +36,4 @@ class TimeLimit {
   }
 }
 
-export { TimeLimit };
+export { TimeLimitRules };

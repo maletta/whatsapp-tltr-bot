@@ -4,7 +4,8 @@ import { LoggerFiles } from 'application/services/logger-files/implementation/Lo
 import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 import { Summary } from 'domain/entities/text-generation/Summary';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
-import { TimeLimit } from 'utils/TimeLimit';
+import { TimeLimitRules } from 'domain/value_objects/TimeLimit';
+
 import { TransformMessages } from 'utils/formatters/TransformMessage';
 import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
 
@@ -101,7 +102,7 @@ class UseCaseGenerateSummary {
         return foundMessages.filter(
           (msg) =>
             msg.type === MessageTypes.TEXT &&
-            TimeLimit.isBetweenTimeLimit(msg.timestamp, timeLimit),
+            TimeLimitRules.isBetweenTimeLimit(msg.timestamp, timeLimit),
         );
       });
 

@@ -1,5 +1,5 @@
 import { StringUtils } from 'utils/String.utils';
-import { TimeLimit } from 'utils/TimeLimit';
+
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
@@ -7,6 +7,7 @@ import { ITextGeneration } from 'application/services/text-generation/ITextGener
 import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
 import { UseCaseGenerateSummary } from 'application/use-cases/text-generation/useCaseGenerateSummary/UseCaseGenerateSummary';
+import { TimeLimitRules } from 'domain/value_objects/TimeLimit';
 
 class CommandSummarize implements ICommand {
   constructor(
@@ -106,7 +107,7 @@ class CommandSummarize implements ICommand {
     return (
       `Criado em: *${createdAt}*` +
       `\nPróxima atualização: *${expiresIn}*` +
-      `\nTipo de resumo: *${TimeLimit.translateTimeLimit(timeLimit)}*` +
+      `\nTipo de resumo: *${TimeLimitRules.translateTimeLimit(timeLimit)}*` +
       `\n\n*Resumo:*\n> ${summary}`
     );
   }
