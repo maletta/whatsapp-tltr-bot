@@ -6,7 +6,7 @@ import { ICommand } from './ICommand';
 import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
-import { TimeLimitRules } from 'domain/value_objects/TimeLimit';
+import { TimeLimitRules } from 'domain/value_objects/TimeLimitRules';
 import { UseCaseGenerateSummary } from 'application/use-cases/text-generation/generate-summary/UseCaseGenerateSummary';
 
 class CommandSummarize implements ICommand {
