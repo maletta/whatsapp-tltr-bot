@@ -4,7 +4,7 @@
 
 type RawMessages = Record<string, any>;
 
-type CreateBatchOptions = { maxTokens: number };
+export type CreateBatchOptions = { maxTokens: number };
 
 abstract class ITransformMessage<T extends RawMessages> {
   abstract createBatchOfMessages(

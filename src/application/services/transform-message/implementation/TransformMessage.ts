@@ -1,5 +1,5 @@
 import { Message } from 'whatsapp-web.js';
-import { ITransformMessage } from '../ITransformMessage';
+import { CreateBatchOptions, ITransformMessage } from '../ITransformMessage';
 
 interface IMessageMapped {
   userId: string;
@@ -8,11 +8,15 @@ interface IMessageMapped {
 }
 
 type FunctionTransformer = (args: string) => string;
-class TransformMessages {
+class TransformMessages extends ITransformMessage<Message> {
+  createBatchOfMessages(messages: Message[]): string[] {
+    throw new Error('Method not implemented.');
+  }
   public static createBatchOfMessages(
     messages: Message[],
-    { maxTokens = 10000 } = {},
+    options: Partial<CreateBatchOptions>,
   ): string[] {
+    const maxTokens = options.maxTokens || 1000;
     const messagesBatches = [];
     let currentString = '';
 
