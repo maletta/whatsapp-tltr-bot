@@ -1,12 +1,12 @@
-import { UseCaseGenerateSummary } from 'use-cases/summaries/useCaseGenerateSummary/UseCaseGenerateSummary';
 import { StringUtils } from 'utils/String.utils';
 import { TimeLimit } from 'utils/TimeLimit';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
-import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
-import { GroupsManager } from 'domain/entities/GroupManager/GroupsManager';
+import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
+import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { UseCaseGenerateSummary } from 'application/use-cases/text-generation/useCaseGenerateSummary/UseCaseGenerateSummary';
 
 class CommandSummarize implements ICommand {
   constructor(

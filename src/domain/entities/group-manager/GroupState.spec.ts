@@ -3,9 +3,9 @@
 import { EnumHoroscope } from 'domain/enums/Horoscope';
 
 import { GroupState } from './GroupState';
-import { Summary } from '../TextGenerator/Summary';
+import { Summary } from '../text-generation/Summary';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
-import { Horoscope } from '../TextGenerator/Horoscope';
+import { Horoscope } from '../text-generation/Horoscope';
 
 describe('GroupState', () => {
   let groupState: GroupState;

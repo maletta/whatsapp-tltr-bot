@@ -3,11 +3,11 @@ import { StringUtils } from 'utils/String.utils';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
-import { Horoscope } from 'domain/entities/TextGenerator/Horoscope';
-import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
-import { GroupsManager } from 'domain/entities/GroupManager/GroupsManager';
+import { Horoscope } from 'domain/entities/text-generation/Horoscope';
+import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
+import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import { EnumPublicCommands } from 'domain/enums/Commands';
-import { HoroscopeValidator } from 'domain/entities/TextGenerator/validators/HoroscopeValidator';
+import { HoroscopeValidator } from 'domain/entities/text-generation/validators/HoroscopeValidator';
 
 class CommandHoroscopePrediction implements ICommand {
   constructor(

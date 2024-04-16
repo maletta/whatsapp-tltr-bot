@@ -1,7 +1,7 @@
-import { UseCaseRegisterUser } from 'use-cases/users/useCaseRegisterUser/UseCaseRegisterUser';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './ICommand';
+import { UseCaseRegisterUser } from 'application/use-cases/users/useCaseRegisterUser/UseCaseRegisterUser';
 
 class CommandRegisterUser implements ICommand {
   async execute(

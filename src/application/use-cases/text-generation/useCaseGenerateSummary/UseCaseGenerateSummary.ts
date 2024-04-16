@@ -1,11 +1,11 @@
-import { FormmatSummaryLoggers } from 'application/services/FormmatLoggers/FormmatSummaryLoggers';
-import { ILoggerFiles } from 'application/services/LoggerFiles/ILoggerFiles';
-import { LoggerFiles } from 'application/services/LoggerFiles/implementation/LoggerFiles';
-import { ITextGeneration } from 'application/services/TextGeneration/ITextGeneration';
-import { Summary } from 'domain/entities/TextGenerator/Summary';
+import { FormmatSummaryLoggers } from 'application/services/formmat-loggers/FormmatSummaryLoggers';
+import { ILoggerFiles } from 'application/services/logger-files/ILoggerFiles';
+import { LoggerFiles } from 'application/services/logger-files/implementation/LoggerFiles';
+import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
+import { Summary } from 'domain/entities/text-generation/Summary';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
-import { TransformMessages } from 'utils/Formatters/TransformMessage';
 import { TimeLimit } from 'utils/TimeLimit';
+import { TransformMessages } from 'utils/formatters/TransformMessage';
 import { Chat, Message, MessageTypes } from 'whatsapp-web.js';
 
 class UseCaseGenerateSummary {

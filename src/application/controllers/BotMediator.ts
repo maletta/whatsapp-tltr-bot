@@ -8,9 +8,9 @@ import { CommandRandomMessage } from 'application/commands/CommandRandomMessage'
 import { CommandRegisterUser } from 'application/commands/CommandRegisterUser';
 import { CommandStickerImage } from 'application/commands/CommandStickerImage';
 import { CommandSummarize } from 'application/commands/CommandSummarize';
-import { TextGenerationHttp } from 'application/services/TextGeneration/implementation/TextGenerationHttp';
+import { TextGenerationHttp } from 'application/services/text-generation/implementation/TextGenerationHttp';
 import { BotConfiguration } from 'config/Configuration';
-import { GroupsManager } from 'domain/entities/GroupManager/GroupsManager';
+import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import {
   EnumAllCommands,
   EnumPrivateCommands,

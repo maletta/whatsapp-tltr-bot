@@ -1,4 +1,4 @@
-import { Summary } from 'domain/entities/Summary';
+import { Summary } from 'domain/entities/text-generation/Summary';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
 import { StringUtils } from 'utils/String.utils';
 
