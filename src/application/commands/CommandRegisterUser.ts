@@ -42,6 +42,19 @@ class CommandRegisterUser implements ICommand {
       `🤳 *Foto* (Envie uma unidade de foto sua): `,
     ];
 
+    //     .cadastro
+
+    // Vamos nos conhecer melhor!
+    //   •｡ꪆৎ ˚⋅Responda às perguntas abaixo sem deletar as perguntas ౨ৎ ⋆｡˚
+
+    // ୨୧ Nome:
+    // ୨୧ Pronomes (Quais pronomes devemos usar para você?):
+    // ୨୧ Idade:
+    // ୨୧ Localização:
+    // ୨୧: Orientação sexual (Como você se identifica?):
+    // ୨୧ Relacionamento (Está namorando? Já superou o/a ex?):
+    // ୨୧ *
+
     const presentation =
       `.cadastro` +
       `\n\n🌟 Vamos nos conhecer melhor!🌟` +
@@ -58,7 +71,8 @@ class CommandRegisterUser implements ICommand {
 
     const answers = await new UseCaseRegisterUser().handle(message, questions);
     messageToReply
-      .reply(answers.map((item) => item.answer).join('\n'), message.from)
+      // .reply(answers.map((item) => item.answer).join('\n'), message.from)
+      .reply(JSON.stringify(answers), message.from)
       .then((response) => response.react('👌🏼'));
 
     // messageToReply.reply(presentation2, message.from);
