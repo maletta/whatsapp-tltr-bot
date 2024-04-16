@@ -1,4 +1,5 @@
 node_modules
+.wwebjs_auth
 .wwebjs*
 .env
 dist

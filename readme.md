@@ -35,7 +35,8 @@ npm install
   - 4 for 4 hours
   - 6 for 6 hours
   - 30 for 30 minutes
-- .aleatorio: send fun facts and jokes.
+- .aleatorio: sends fun facts and jokes.
+- .cancelado | .cancelada: sends a critical message as if it were a virtual cancellation
 - .todos: Mentions all participants of the group in the message.
-- .sticker: Transforms a tagged or mentioned image into a sticker.
+- .sticker: Transforms a tagged or mentioned image or video into a sticker.
 

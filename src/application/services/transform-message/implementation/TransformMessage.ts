@@ -1,4 +1,5 @@
 import { Message } from 'whatsapp-web.js';
+import { ITransformMessage } from '../ITransformMessage';
 
 interface IMessageMapped {
   userId: string;
@@ -18,7 +19,7 @@ class TransformMessages {
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < messages.length; i++) {
       const messageMapped = TransformMessages.mapFields(messages[i], [
-        TransformMessages.removeMentionsAndCommands,
+        ITransformMessage.removeMentionsAndCommands,
       ]);
 
       const messageStringfy = JSON.stringify(messageMapped);
@@ -51,10 +52,6 @@ class TransformMessages {
     userId: message.id.id,
     timestamp: message.timestamp,
   });
-
-  public static removeMentionsAndCommands(message: string): string {
-    return message.replace(/[@!]\w+/g, '');
-  }
 }
 
 export { TransformMessages };
