@@ -44,9 +44,8 @@ class CommandCancel implements ICommand {
       const response = await this.textGeneration.generate(prompt);
 
       if (response) {
-        messageQuoted
-          .reply(response)
-          .then((responseMessage) => responseMessage.react('🤬'));
+        messageQuoted.reply(response);
+        messageQuoted.react('🤬');
       }
     } catch (error) {
       console.log('Error on send Command Cancel ');
