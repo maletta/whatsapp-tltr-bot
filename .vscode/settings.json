@@ -17,5 +17,6 @@
       "domain": "resource",
       "use-cases": "controller",
       "infrastructure": "pipe",
-    }
+    },
+   
   }
