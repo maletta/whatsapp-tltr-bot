@@ -1,5 +1,5 @@
 import { Summary } from 'domain/entities/text-generation/Summary';
-import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';
 import { StringUtils } from 'utils/String.utils';
 
 class FormmatSummaryLoggers {

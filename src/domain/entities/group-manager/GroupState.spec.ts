@@ -4,7 +4,7 @@ import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 
 import { GroupState } from './GroupState';
 import { Summary } from '../text-generation/Summary';
-import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';
 import { Horoscope } from '../text-generation/Horoscope';
 
 describe('GroupState', () => {

@@ -1,7 +1,7 @@
 import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 
 import { GeneratedTextsGroup } from './GeneratedTextsGroup';
-import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';
 import { Summary } from '../text-generation/Summary';
 import { Horoscope } from '../text-generation/Horoscope';
 

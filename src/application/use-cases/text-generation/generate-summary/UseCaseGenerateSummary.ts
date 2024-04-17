@@ -4,7 +4,7 @@ import { LoggerFiles } from 'application/services/logger-files/implementation/Lo
 import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 import { TransformMessages } from 'application/services/transform-message/implementation/TransformMessage';
 import { Summary } from 'domain/entities/text-generation/Summary';
-import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';
 import { TimeLimitRules } from 'domain/value_objects/TimeLimitRules';
 
 import { Chat, Message, MessageTypes } from 'whatsapp-web.js';

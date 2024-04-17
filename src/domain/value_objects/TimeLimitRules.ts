@@ -1,4 +1,7 @@
-import { EnumTimeLimit, TimeLimitOption } from 'domain/enums/TimeLimit';
+import {
+  EnumTimeLimit,
+  TimeLimitOption,
+} from 'domain/enums/text-generation/TimeLimit';
 
 export type TimeLimitTranslation = {
   [key in TimeLimitOption]: string;

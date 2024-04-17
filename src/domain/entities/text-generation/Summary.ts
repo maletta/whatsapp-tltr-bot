@@ -1,4 +1,4 @@
-import { EnumTimeLimit } from 'domain/enums/TimeLimit';
+import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';
 import { BaseModel } from '../../interfaces/BaseModel';
 
 interface ISummaryDTO {
