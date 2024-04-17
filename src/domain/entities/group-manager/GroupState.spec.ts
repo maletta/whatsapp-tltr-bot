@@ -1,6 +1,6 @@
 // GroupState.test.ts
 
-import { EnumHoroscope } from 'domain/enums/Horoscope';
+import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 
 import { GroupState } from './GroupState';
 import { Summary } from '../text-generation/Summary';

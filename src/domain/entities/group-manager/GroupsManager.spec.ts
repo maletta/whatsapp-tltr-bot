@@ -1,4 +1,4 @@
-import { EnumHoroscope } from 'domain/enums/Horoscope';
+import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 
 import { GroupsManager } from './GroupsManager';
 import { Horoscope } from '../text-generation/Horoscope';

@@ -1,4 +1,4 @@
-import { EnumHoroscope } from 'domain/enums/Horoscope';
+import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 import { DateUtils } from 'utils/Date.utils';
 
 import { BaseModel } from '../../interfaces/BaseModel';

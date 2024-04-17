@@ -23,6 +23,7 @@ export const presentation =
   `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n${questions.join(
     '\n',
   )}`;
+
 class CommandRegisterUser implements ICommand {
   async execute(
     args: string[],

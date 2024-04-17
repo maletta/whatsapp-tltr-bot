@@ -1,4 +1,4 @@
-import { EnumHoroscope } from 'domain/enums/Horoscope';
+import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 
 import { GeneratedTextsGroup } from './GeneratedTextsGroup';
 import { EnumTimeLimit } from 'domain/enums/TimeLimit';
