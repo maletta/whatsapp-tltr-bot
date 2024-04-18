@@ -1,8 +1,8 @@
+import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 import { IMessage } from 'common/CustomTypes';
 import { Client, Message, MessageTypes } from 'whatsapp-web.js';
 
-import { ICommand } from './ICommand';
-import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
+import { ICommand } from './interfaces/ICommand';
 
 class CommandCancel implements ICommand {
   private textGeneration: ITextGeneration;

@@ -1,7 +1,7 @@
 import { Client, Message } from 'whatsapp-web.js';
 
 import { presentation } from './CommandRegisterUser';
-import { ICommand } from './ICommand';
+import { ICommand } from './interfaces/ICommand';
 
 class CommandPresentation implements ICommand {
   async execute(

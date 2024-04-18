@@ -2,7 +2,7 @@ import { StringUtils } from 'utils/String.utils';
 
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './ICommand';
+import { ICommand } from './interfaces/ICommand';
 import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';

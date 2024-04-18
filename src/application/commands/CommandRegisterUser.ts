@@ -2,7 +2,7 @@
 import { UseCaseRegisterUser } from 'application/use-cases/users/register-user/UseCaseRegisterUser';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './ICommand';
+import { ICommand } from './interfaces/ICommand';
 
 const questions: string[] = [
   `୨୧ *Nome*(Apenas o nome): `,

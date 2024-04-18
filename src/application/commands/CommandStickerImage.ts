@@ -8,7 +8,7 @@ import {
   MessageTypes,
 } from 'whatsapp-web.js';
 
-import { ICommand } from './ICommand';
+import { ICommand } from './interfaces/ICommand';
 import { MimeTypesEnum } from 'domain/enums/MimeTypes';
 
 class CommandStickerImage implements ICommand {

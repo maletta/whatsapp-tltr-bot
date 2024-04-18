@@ -2,7 +2,7 @@
 import { IChat } from 'common/CustomTypes';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './ICommand';
+import { ICommand } from './interfaces/ICommand';
 
 class CommandEveryone implements ICommand {
   async execute(

@@ -1,6 +1,5 @@
 import { CommandCancel } from 'application/commands/CommandCancel';
 import { CommandEveryone } from 'application/commands/CommandEveryOne';
-import { CommandHandler } from 'application/commands/CommandHandle';
 import { CommandHoroscopePrediction } from 'application/commands/CommandHoroscopePrediction';
 import { CommandInvalid } from 'application/commands/CommandInvalid';
 import { CommandPresentation } from 'application/commands/CommandPresentation';
@@ -17,9 +16,10 @@ import {
   EnumPublicCommands,
   EnumSystemCommands,
 } from 'domain/enums/Commands';
-
 import { StringUtils } from 'utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
+
+import { CommandHandler } from './CommandHandle';
 
 // type ValidCommandOptions = keyof typeof EnumValidCommands;
 
