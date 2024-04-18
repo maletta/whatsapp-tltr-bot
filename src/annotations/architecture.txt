@@ -1,0 +1,27 @@
+Clean Arch
+
+Use Case
+    - representam uma ação específica que o usuário pode realizar
+    - devem possuir apenas um motivo para mudança
+    - faz parte da camada de aplicação e podem possuir regras de negócio
+    - inclui validações de entrad e coordenação entre diferentes componentes da aplicação para
+    executar a ação desejada (invocar services)
+    - devem ser independentes de tecnologia (não precisam conhecer o tipo de banco de dados,
+    nem como a resposta será apresentada para o usuário final)
+    - podem ser acessados por camadas externas
+
+    Exemplos:
+        - Caso de Uso Cadastrar Usuário: 
+            >   valida se possue um nome, email e senha
+            >   valida se a senha é forte ou fraca
+            >   valida se já possui email na base
+
+Services
+    - geralmente não são as ações que o usuário final utilizada, mas sim as ações que o sistema realiza
+    - podem possuir regras de negócio
+    - devem possuir apenas um motivo para mudança
+    - geralmente NÃO devem ser acessados por camadas externas, diferente de use cases
+
+
+S.O.L.I.D.
+

@@ -20,9 +20,7 @@ const questions: string[] = [
 export const presentation =
   `.cadastro` +
   `\n\n•｡ꪆৎ ˚⋅ Vamos nos conhecer melhor! ౨ৎ ⋆｡˚` +
-  `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n${questions.join(
-    '\n',
-  )}`;
+  `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n${questions.join('\n')}`;
 
 class CommandRegisterUser implements ICommand {
   async execute(
@@ -30,7 +28,7 @@ class CommandRegisterUser implements ICommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Presentation Message - execute ');
+    console.log('Command Presentation Message - execute');
     console.log('args ', args);
     console.log('message ', message.body);
 
@@ -50,7 +48,7 @@ class CommandRegisterUser implements ICommand {
 }
 
 export { CommandRegisterUser };
-//     .cadastro
+//  .cadastro
 
-// Vamos nos conhecer melhor!
-//   •｡ꪆৎ ˚⋅Responda às perguntas abaixo sem deletar as perguntas ౨ৎ ⋆｡˚
+//  Vamos nos conhecer melhor!
+//  •｡ꪆৎ ˚⋅Responda às perguntas abaixo sem deletar as perguntas ౨ৎ ⋆｡˚

@@ -1,7 +1,7 @@
 import { UserEntity } from 'domain/entities/users/UserEntity';
-import { IDatabase } from '../IDataBase';
+import { IDatabase } from '../../IDataBase';
 import { Pool, PoolClient } from 'pg';
-import { IUserRepository } from 'domain/interfaces/repositories/UserRepository';
+import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
 
 class PostgresUserRepository implements IUserRepository {
   constructor(private readonly db: IDatabase<Pool, PoolClient>) {}
