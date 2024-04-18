@@ -8,6 +8,13 @@ class PostgresDatabase implements IDatabase<Pool, PoolClient> {
     this.pool = new Pool(poolConfig);
   }
 
+  async init(): Promise<PoolClient | void> {
+    return this.pool.connect().then((connection) => {
+      console.log('Connected on postgres database');
+      connection.release();
+    });
+  }
+
   async connect(): Promise<void> {
     await this.pool.connect();
   }
