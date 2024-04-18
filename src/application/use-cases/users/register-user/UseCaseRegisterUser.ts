@@ -1,3 +1,5 @@
+import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
+import { inject } from 'tsyringe';
 import { Message } from 'whatsapp-web.js';
 
 type QuestionAnswer = {
@@ -5,11 +7,17 @@ type QuestionAnswer = {
   answer: string;
 };
 class UseCaseRegisterUser {
-  public async handle(
+  constructor(
+    @inject('UserRepository') private userRepository: IUserRepository,
+  ) {}
+
+  public async execute(
     message: Message,
     questions: string[],
   ): Promise<QuestionAnswer[]> {
     const presentation = message.body;
+
+    this.userRepository.findByName('a');
 
     const answers = this.extractAnswers(presentation, questions);
 

@@ -39,7 +39,7 @@ class CommandRegisterUser implements ICommand {
     const contact = await message.getContact();
     const { name } = contact;
 
-    const answers = await new UseCaseRegisterUser().handle(message, questions);
+    const answers = await new UseCaseRegisterUser().execute(message, questions);
     messageToReply
       // .reply(answers.map((item) => item.answer).join('\n'), message.from)
       .reply(presentation + JSON.stringify(answers), message.from)

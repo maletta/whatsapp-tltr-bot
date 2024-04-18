@@ -23,7 +23,7 @@ class PostgresDatabase implements IDatabase<Pool, PoolClient> {
     await this.pool.end();
   }
 
-  async query(text: string, params: any[]): Promise<any> {
+  async query(text: string, params: any[]) {
     const client = await this.pool.connect();
     try {
       return await client.query(text, params);

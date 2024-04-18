@@ -5,6 +5,11 @@ import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository'
 import { injectable, inject } from 'tsyringe';
 import { PostgresDatabase } from '../../postgres/PostgresDatabase';
 
+type UserQuery = {
+  id: number;
+  name: string;
+  email: string;
+};
 @injectable()
 class PostgresUserRepository implements IUserRepository {
   constructor(@inject('IDataBase') private readonly db: PostgresDatabase) {}
@@ -27,6 +32,20 @@ class PostgresUserRepository implements IUserRepository {
     }
     const { id: contactId, name, email } = result.rows[0];
     return new UserEntity(contactId, name, email);
+  }
+
+  async findByName(nameParam: string): Promise<UserEntity[]> {
+    const query = 'SELECT * FROM users WHERE name LIKE $1';
+    const result = await this.db.query<UserQuery>(query, [`%${nameParam}%`]);
+    if (result.rows.length === 0) {
+      return [];
+    }
+
+    const mappedNewUsers: UserEntity[] = result.rows[0].map(
+      ({ id, name, email }) => new UserEntity(id, name, email),
+    );
+
+    return mappedNewUsers;
   }
 
   async delete(id: string): Promise<void> {
