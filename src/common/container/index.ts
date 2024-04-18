@@ -1,6 +1,8 @@
+import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
 import { Pool, PoolClient } from 'pg';
 import { IDatabase } from 'src/database/data-source/IDataBase';
 import { PostgresDatabase } from 'src/database/data-source/postgres/PostgresDatabase';
+import { PostgresUserRepository } from 'src/database/data-source/repository/users/PostgresUserRepository';
 import { container } from 'tsyringe';
 
 const connectDatabase = async () => {
@@ -22,6 +24,11 @@ const connectDatabase = async () => {
     container.register<IDatabase<Pool, PoolClient>>('IDataBase', {
       useValue: dbWrapper,
     });
+
+    container.registerSingleton<IUserRepository>(
+      'UserRepository',
+      PostgresUserRepository,
+    );
   } catch (error) {
     console.log('Erro ao se conectar ao banco de dados ', error);
   }

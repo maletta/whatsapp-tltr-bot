@@ -2,9 +2,12 @@ import { UserEntity } from 'domain/entities/users/UserEntity';
 import { IDatabase } from '../../IDataBase';
 import { Pool, PoolClient } from 'pg';
 import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
+import { injectable, inject } from 'tsyringe';
+import { PostgresDatabase } from '../../postgres/PostgresDatabase';
 
+@injectable()
 class PostgresUserRepository implements IUserRepository {
-  constructor(private readonly db: IDatabase<Pool, PoolClient>) {}
+  constructor(@inject('IDataBase') private readonly db: PostgresDatabase) {}
 
   async create(contact: UserEntity): Promise<void> {
     const query = 'INSERT INTO users (id, name, email) VALUES ($1, $2, $3)';
