@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "target": "es2017",
     "module": "commonjs",
     "sourceMap": true,
@@ -14,16 +15,15 @@
     "resolveJsonModule": true,
     "paths": {
       "annotations/*": ["./src/annotations/*"],
-      "commands/*": ["./src/commands/*"],
       "common/*": ["./src/common/*"],
       "config/*": ["./src/config/*"],
       "controllers/*": ["./src/controllers/*"],
-      "enums/*": ["./src/enums/*"],
       "mocks/*": ["./src/mocks/*"],
       "models/*": ["./src/models/*"],
-      "services/*": ["./src/services/*"],
       "utils/*": ["./src/utils/*"],
-      "validators/*": ["./src/validators/*"]
+      "domain/*": ["./src/domain/*"],
+      "application/*": ["./src/application/*"],
+      "infrastructure/*": ["./src/infrastructure/*"]
     }
   },
   "include": [

@@ -119,9 +119,9 @@ async function makeRequest() {
     console.log(joined);
     return joined;
   } catch (error) {
-    console.error('Erro:', error.message);
+    console.error('Erro:', error);
 
-    throw new Error(`Erro make request ${error.message}`);
+    throw new Error(`Erro make request ${error}`);
   }
 }
 

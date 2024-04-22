@@ -2,8 +2,22 @@
     "files.eol": "\n",
     "[javascript]": {
       "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+      // "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescript]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    }
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "material-icon-theme.folders.associations": {
+      "application": "app", // Mapeando o ícone de 'app' para 'application'
+      "entities": "resource",
+      // "repositories": "resource",
+      // "usecases": "resource",
+      // "infra": "resource",
+      // "data": "resource",
+      "domain": "resource",
+      "use-cases": "controller",
+      "infrastructure": "pipe",
+    },
+
+   
   }

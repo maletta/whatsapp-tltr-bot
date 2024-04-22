@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
-import atob from 'atob';
+// import atob from 'atob';
 import axios, { AxiosResponse } from 'axios';
 import { IMessageRaw } from 'common/RawMessageType';
 import crypto from 'crypto';
@@ -62,6 +62,24 @@ const mediaTypes = {
   STICKER: 'Image',
 };
 
+const selectMediaType = (mediaString: string): string => {
+  const upperCase = mediaString.toUpperCase();
+
+  if (upperCase.includes('IMAGE') || upperCase.includes('STICKER')) {
+    return mediaTypes.IMAGE;
+  }
+  if (upperCase.includes('VIDEO')) {
+    return mediaTypes.VIDEO;
+  }
+  if (upperCase.includes('AUDIO') || upperCase.includes('PTT')) {
+    return mediaTypes.AUDIO;
+  }
+
+  if (upperCase.includes('DOCUMENT')) {
+    return mediaTypes.DOCUMENT;
+  }
+  return mediaTypes.IMAGE;
+};
 class MissingCriticalDataError extends Error {
   constructor(message: string) {
     super(message);
@@ -69,7 +87,7 @@ class MissingCriticalDataError extends Error {
   }
 }
 
-const base64ToBytes = (base64Str) => {
+const base64ToBytes = (base64Str: string) => {
   const binaryStr = atob(base64Str);
   const byteArray = new Uint8Array(binaryStr.length);
   for (let i = 0; i < binaryStr.length; i += 1) {
@@ -78,7 +96,7 @@ const base64ToBytes = (base64Str) => {
   return byteArray;
 };
 
-const hexToBytes = (hexStr) => {
+const hexToBytes = (hexStr: string) => {
   const intArray = [];
   for (let i = 0; i < hexStr.length; i += 2) {
     intArray.push(parseInt(hexStr.substr(i, 2), 16));
@@ -96,14 +114,12 @@ const magix = (
   const encodedHex = fileData.toString('hex');
   const encodedBytes = hexToBytes(encodedHex);
   const mediaKeyBytes = base64ToBytes(mediaKeyBase64);
+
   const info = `WhatsApp ${
-    mediaTypes[mediaType.toUpperCase()] ||
-    mediaTypes[
-      Object.keys(mediaTypes).filter((type) =>
-        mimetype.includes(type.toLowerCase()),
-      )[0]
-    ]
+    // mediaTypes[mediaType.toUpperCase()] ||
+    selectMediaType(mimetype)
   } Keys`;
+
   const hash = 'sha256';
   const salt = new Uint8Array(32);
   const expandedSize = 112;
@@ -136,7 +152,7 @@ const magix = (
 const decryptMedia = async (
   message: IMessageRaw,
   useragentOverride?: string,
-): Promise<Buffer> => {
+): Promise<Buffer | null> => {
   const options = makeOptions(useragentOverride);
 
   if (!message || typeof message === 'boolean') {
@@ -174,7 +190,7 @@ const decryptMedia = async (
 
   let haventGottenImageYet = true;
 
-  let res: AxiosResponse<ArrayBuffer>;
+  let res: AxiosResponse<ArrayBuffer> | null = null;
   while (haventGottenImageYet) {
     try {
       res = await axios.get(message._data.deprecatedMms3Url.trim(), {
@@ -182,9 +198,9 @@ const decryptMedia = async (
         responseType: 'arraybuffer',
       });
 
-      if (res.status === 200) {
+      if (res && res.status === 200) {
         haventGottenImageYet = false;
-      } else if (res.status === 404) {
+      } else if (res && res.status === 404) {
         console.error(
           'This media does not exist, or is no longer available on the server. Please see: https://docs.openwa.dev/pages/How%20to/decrypt-media.html#40439d',
         );
@@ -198,6 +214,10 @@ const decryptMedia = async (
   }
 
   // const buff: Buffer = Buffer.from(res.data, 'binary');
+  if (!res) {
+    return null;
+  }
+
   const buff: Buffer = Buffer.from(res.data);
   return magix(
     buff,

@@ -1,27 +1,38 @@
 /* eslint-disable no-restricted-syntax */
-import { BotMediator } from 'controllers/BotMediator';
-import { WhatsAppClient } from 'controllers/WhatsAppClient';
+import 'reflect-metadata';
 import dotenv from 'dotenv';
-import { QRCodeDisplay } from 'utils/QRCodeDisplay';
-
 dotenv.config();
+
+import { BotMediator } from 'application/controllers/BotMediator';
+import { QRCodeDisplay } from 'infrastructure/qr-code/QRCodeDisplay';
+import { WhatsAppClient } from 'infrastructure/whatsapp/WhatsAppClient';
+
+import { connectDatabase } from 'common/container';
 
 console.log('initialize bot');
 
-const bot = WhatsAppClient.getClient();
-const botMediator = new BotMediator(bot);
+(async () => {
+  try {
+    connectDatabase();
 
-bot.on('ready', () => console.log('client is ready!'));
+    const bot = WhatsAppClient.getClient();
+    const botMediator = new BotMediator(bot);
 
-bot.on('qr', (qr) => {
-  console.log('QR RECEIVED');
-  QRCodeDisplay.display(qr);
-});
+    bot.on('ready', () => console.log('client is ready!'));
 
-bot.on('authenticated', () => console.log('authenticated!'));
+    bot.on('qr', (qr) => {
+      console.log('QR RECEIVED');
+      QRCodeDisplay.display(qr);
+    });
 
-bot.on('message', (message) => {
-  botMediator.selectCommand(bot, message);
-});
+    bot.on('authenticated', () => console.log('authenticated!'));
 
-bot.initialize();
+    bot.on('message', (message) => {
+      botMediator.selectCommand(bot, message);
+    });
+
+    bot.initialize();
+  } catch (error) {
+    console.log('Error initializing bot and database: ', error);
+  }
+})();
