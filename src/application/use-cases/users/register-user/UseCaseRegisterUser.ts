@@ -1,4 +1,6 @@
-import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
+import { IUserRepository } from 'domain/interfaces/repositories/users/IUserRepository';
+import { PoolClient } from 'pg';
+import { IDataBase } from 'src/database/data-source/postgres/PostgresDatabase';
 import { inject } from 'tsyringe';
 import { Message } from 'whatsapp-web.js';
 
@@ -9,6 +11,7 @@ type QuestionAnswer = {
 class UseCaseRegisterUser {
   constructor(
     @inject('UserRepository') private userRepository: IUserRepository,
+    @inject('IDataBase') private database: IDataBase<PoolClient>,
   ) {}
 
   public async execute(
@@ -17,8 +20,10 @@ class UseCaseRegisterUser {
   ): Promise<QuestionAnswer[]> {
     const presentation = message.body;
 
-    this.userRepository.findByName('a');
+    const connection = await this.database.connect();
+    this.userRepository.setConnection(connection);
 
+    this.userRepository.find();
     const answers = this.extractAnswers(presentation, questions);
 
     return answers;

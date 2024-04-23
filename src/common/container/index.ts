@@ -1,7 +1,9 @@
-import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
+import { IUserRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { Pool, PoolClient } from 'pg';
-import { IDatabase } from 'src/database/data-source/IDataBase';
-import { PostgresDatabase } from 'src/database/data-source/postgres/PostgresDatabase';
+import {
+  IDataBase,
+  PostgresDatabase,
+} from 'src/database/data-source/postgres/PostgresDatabase';
 import { PostgresUserRepository } from 'src/database/data-source/repository/users/PostgresUserRepository';
 import { container } from 'tsyringe';
 
@@ -21,7 +23,7 @@ const connectDatabase = async () => {
     await dbWrapper.init();
 
     // container.registerSingleton<IDatabaseWrapper>('DatabaseWrapper', dbWrapper);
-    container.register<IDatabase<Pool, PoolClient>>('IDataBase', {
+    container.register<IDataBase<PoolClient>>('IDataBase', {
       useValue: dbWrapper,
     });
 

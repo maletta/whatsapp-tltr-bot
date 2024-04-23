@@ -1,56 +1,67 @@
 import { UserEntity } from 'domain/entities/users/UserEntity';
-import { IDatabase } from '../../IDataBase';
-import { Pool, PoolClient } from 'pg';
-import { IUserRepository } from 'domain/interfaces/repositories/IUserRepository';
-import { injectable, inject } from 'tsyringe';
-import { PostgresDatabase } from '../../postgres/PostgresDatabase';
+import { IBasePostgresRepository } from '../../postgres/interfaces/IBasePostgresRepository';
 
-type UserQuery = {
-  id: number;
-  name: string;
-  email: string;
-};
-@injectable()
-class PostgresUserRepository implements IUserRepository {
-  constructor(@inject('IDataBase') private readonly db: PostgresDatabase) {}
-
-  async create(contact: UserEntity): Promise<void> {
-    const query = 'INSERT INTO users (id, name, email) VALUES ($1, $2, $3)';
-    await this.db.query(query, [contact.id, contact.name, contact.email]);
+class PostgresUserRepository extends IBasePostgresRepository<UserEntity> {
+  constructor() {
+    super('users', ['id']);
   }
 
-  async update(contact: UserEntity): Promise<void> {
-    const query = 'UPDATE users SET name = $2, email = $3 WHERE id = $1';
-    await this.db.query(query, [contact.id, contact.name, contact.email]);
+  async create(user: UserEntity): Promise<boolean> {
+    const { tableName } = this.metadata;
+    const connection = this.getConnection();
+    const query = `INSERT INTO ${tableName} ( id_whatsapp, cellphone, info_name) VALUES ($1, $2, $3)`;
+    const result = await connection.query(query, [
+      user.idWhatsapp,
+      user.cellphone,
+      user.infoName,
+    ]);
+
+    return result.rowCount !== null && result.rowCount > 0;
   }
 
-  async findById(id: string): Promise<UserEntity | null> {
-    const query = 'SELECT * FROM users WHERE id = $1';
-    const result = await this.db.query(query, [id]);
+  async update(id: string, item: UserEntity): Promise<boolean> {
+    const { cellphone, idWhatsapp, infoName } = item;
+    const connection = this.getConnection();
+    const query =
+      'UPDATE users SET id_whatsapp = $2, cellphone = $3, info_name = $4 WHERE id = $1';
+
+    const result = await connection.query(query, [
+      id,
+      idWhatsapp,
+      cellphone,
+      infoName,
+    ]);
+
+    return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const connection = this.getConnection();
+    const query = 'DELETE FROM users WHERE id = $1';
+    const result = await connection.query(query, [id]);
+
+    return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  async findByName(name: string): Promise<UserEntity[]> {
+    const connection = this.getConnection();
+    const query = 'SELECT * FROM users WHERE name LIKE $1';
+    const result = await connection.query(query, [name]);
+
+    return result.rows;
+  }
+
+  async findOne(id: number): Promise<UserEntity | null> {
+    const { tableName } = this.metadata;
+    const connection = this.getConnection();
+    const query = `SELECT * FROM ${tableName} WHERE id = $1`;
+    const result = await connection.query(query, [id]);
+
     if (result.rows.length === 0) {
       return null;
     }
-    const { id: contactId, name, email } = result.rows[0];
-    return new UserEntity(contactId, name, email);
-  }
 
-  async findByName(nameParam: string): Promise<UserEntity[]> {
-    const query = 'SELECT * FROM users WHERE name LIKE $1';
-    const result = await this.db.query<UserQuery>(query, [`%${nameParam}%`]);
-    if (result.rows.length === 0) {
-      return [];
-    }
-
-    const mappedNewUsers: UserEntity[] = result.rows[0].map(
-      ({ id, name, email }) => new UserEntity(id, name, email),
-    );
-
-    return mappedNewUsers;
-  }
-
-  async delete(id: string): Promise<void> {
-    const query = 'DELETE FROM users WHERE id = $1';
-    await this.db.query(query, [id]);
+    return result.rows[0];
   }
 }
 

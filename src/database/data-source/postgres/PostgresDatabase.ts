@@ -1,7 +1,11 @@
 import { Pool, PoolClient, PoolConfig } from 'pg';
-import { IDatabase } from '../IDataBase';
 
-class PostgresDatabase implements IDatabase<Pool, PoolClient> {
+abstract class IDataBase<U> {
+  abstract init(): Promise<U | void>;
+  abstract transaction(callback: (client: U) => Promise<void>): Promise<void>;
+  abstract connect(): Promise<U>;
+}
+class PostgresDatabase implements IDataBase<PoolClient> {
   private pool: Pool;
 
   constructor(poolConfig: PoolConfig) {
@@ -15,21 +19,8 @@ class PostgresDatabase implements IDatabase<Pool, PoolClient> {
     });
   }
 
-  async connect(): Promise<void> {
-    await this.pool.connect();
-  }
-
-  async disconnect(): Promise<void> {
-    await this.pool.end();
-  }
-
-  async query(text: string, params: any[]) {
-    const client = await this.pool.connect();
-    try {
-      return await client.query(text, params);
-    } finally {
-      client.release();
-    }
+  async connect(): Promise<PoolClient> {
+    return this.pool.connect();
   }
 
   async transaction(
@@ -50,4 +41,4 @@ class PostgresDatabase implements IDatabase<Pool, PoolClient> {
   }
 }
 
-export { PostgresDatabase };
+export { PostgresDatabase, IDataBase };
