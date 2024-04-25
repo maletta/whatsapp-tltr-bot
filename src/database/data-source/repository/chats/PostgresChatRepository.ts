@@ -1,5 +1,4 @@
 import { ChatEntity, ChatEntityDTO } from 'domain/entities/chats/ChatEntity';
-import { IRepositoryConnection } from 'domain/interfaces/repositories/IRepositoryConnection';
 import { IChatRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { PoolClient } from 'pg';
 
