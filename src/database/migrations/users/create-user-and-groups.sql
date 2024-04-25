@@ -4,8 +4,7 @@ CREATE TABLE users (
 	cellphone VARCHAR(20) NOT NULL,
 	info_name VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-)
+);
 
 
 CREATE TABLE chats (
@@ -25,7 +24,7 @@ CREATE TABLE users_in_chats(
     PRIMARY KEY (id_user, id_chat),
     FOREIGN KEY (id_user) REFERENCES users(id),
     FOREIGN KEY (id_chat) REFERENCES chats(id)
-)
+);
 
 CREATE TABLE users_details(
     id_user INTEGER,
@@ -41,9 +40,9 @@ CREATE TABLE users_details(
     instagram VARCHAR(50),
     photo_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
     PRIMARY KEY (id_user, id_chat),
     FOREIGN KEY (id_user) REFERENCES users(id),
     FOREIGN KEY (id_chat) REFERENCES chats(id)
-)
+);

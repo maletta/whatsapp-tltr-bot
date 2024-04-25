@@ -34,8 +34,12 @@ class PostgresChatRepository extends IChatRepository<PoolClient> {
     return result.rowCount !== null && result.rowCount > 0;
   }
 
-  findByWhatsAppId(id: string): Promise<ChatEntity | null> {
-    throw new Error('Method not implemented.');
+  async findByWhatsAppId(id: string): Promise<ChatEntity | null> {
+    const connection = this.getConnection();
+    const query = 'SELECT * FROM chats where whatsapp_registry = $1';
+    const result = await connection.query(query, [id]);
+    if (result.rowCount === 0) return null;
+    return new ChatEntity(result.rows[0]);
   }
 }
 

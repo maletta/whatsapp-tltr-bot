@@ -24,7 +24,7 @@ class UseCaseRegisterUser {
     const connection = await this.database.connect();
     this.userRepository.setConnection(connection);
 
-    const userFound = await this.userRepository.findByName('nome');
+    const userFound = await this.userRepository.findByName('alistar');
     const answers = this.extractAnswers(presentation, questions);
 
     return answers;
