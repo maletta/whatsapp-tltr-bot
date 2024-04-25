@@ -1,15 +1,23 @@
 import { UserEntity } from 'domain/entities/users/UserEntity';
-import { IBasePostgresRepository } from '../../postgres/interfaces/IBasePostgresRepository';
+import { IUserRepository } from 'domain/interfaces/repositories/users/IUserRepository';
+import { PoolClient } from 'pg';
 
-class PostgresUserRepository extends IBasePostgresRepository<UserEntity> {
-  constructor() {
-    super('users', ['id']);
+class PostgresUserRepository extends IUserRepository<PoolClient> {
+  public async setConnection(
+    connection: PoolClient | Promise<PoolClient>,
+  ): Promise<void> {
+    this.connection = await connection;
+  }
+  public getConnection(): PoolClient {
+    if (this.connection === null) {
+      throw new Error(`Connection not set in ${this.constructor.name}`);
+    }
+    return this.connection;
   }
 
   async create(user: UserEntity): Promise<boolean> {
-    const { tableName } = this.metadata;
     const connection = this.getConnection();
-    const query = `INSERT INTO ${tableName} ( id_whatsapp, cellphone, info_name) VALUES ($1, $2, $3)`;
+    const query = `INSERT INTO users ( id_whatsapp, cellphone, info_name) VALUES ($1, $2, $3)`;
     const result = await connection.query(query, [
       user.idWhatsapp,
       user.cellphone,
@@ -19,8 +27,8 @@ class PostgresUserRepository extends IBasePostgresRepository<UserEntity> {
     return result.rowCount !== null && result.rowCount > 0;
   }
 
-  async update(id: string, item: UserEntity): Promise<boolean> {
-    const { cellphone, idWhatsapp, infoName } = item;
+  async update(user: UserEntity): Promise<boolean> {
+    const { cellphone, idWhatsapp, infoName, id } = user;
     const connection = this.getConnection();
     const query =
       'UPDATE users SET id_whatsapp = $2, cellphone = $3, info_name = $4 WHERE id = $1';
@@ -35,12 +43,16 @@ class PostgresUserRepository extends IBasePostgresRepository<UserEntity> {
     return result.rowCount !== null && result.rowCount > 0;
   }
 
-  async delete(id: string): Promise<boolean> {
+  async findById(id: string): Promise<UserEntity | null> {
     const connection = this.getConnection();
-    const query = 'DELETE FROM users WHERE id = $1';
+    const query = `SELECT * FROM users WHERE id = $1`;
     const result = await connection.query(query, [id]);
 
-    return result.rowCount !== null && result.rowCount > 0;
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    return result.rows[0];
   }
 
   async findByName(name: string): Promise<UserEntity[]> {
@@ -51,17 +63,12 @@ class PostgresUserRepository extends IBasePostgresRepository<UserEntity> {
     return result.rows;
   }
 
-  async findOne(id: number): Promise<UserEntity | null> {
-    const { tableName } = this.metadata;
+  async delete(id: string): Promise<boolean> {
     const connection = this.getConnection();
-    const query = `SELECT * FROM ${tableName} WHERE id = $1`;
+    const query = 'DELETE FROM users WHERE id = $1';
     const result = await connection.query(query, [id]);
 
-    if (result.rows.length === 0) {
-      return null;
-    }
-
-    return result.rows[0];
+    return result.rowCount !== null && result.rowCount > 0;
   }
 }
 

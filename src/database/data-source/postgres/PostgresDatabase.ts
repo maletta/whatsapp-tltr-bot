@@ -1,10 +1,6 @@
 import { Pool, PoolClient, PoolConfig } from 'pg';
+import { IDataBase } from '../interfaces/IDataBase';
 
-abstract class IDataBase<U> {
-  abstract init(): Promise<U | void>;
-  abstract transaction(callback: (client: U) => Promise<void>): Promise<void>;
-  abstract connect(): Promise<U>;
-}
 class PostgresDatabase implements IDataBase<PoolClient> {
   private pool: Pool;
 

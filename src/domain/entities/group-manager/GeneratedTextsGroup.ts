@@ -1,4 +1,4 @@
-import { BaseModel } from 'domain/interfaces/BaseModel';
+import { BaseModel } from 'domain/interfaces/entities/BaseModel';
 
 type State<T = Enumerator, U = BaseModel<T>> = Map<T, U>;
 

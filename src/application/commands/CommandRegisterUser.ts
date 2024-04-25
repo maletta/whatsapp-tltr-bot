@@ -3,6 +3,7 @@ import { UseCaseRegisterUser } from 'application/use-cases/users/register-user/U
 import { Client, Message } from 'whatsapp-web.js';
 
 import { ICommand } from './interfaces/ICommand';
+import { container } from 'tsyringe';
 
 const questions: string[] = [
   `୨୧ *Nome*(Apenas o nome): `,
@@ -39,7 +40,10 @@ class CommandRegisterUser implements ICommand {
     const contact = await message.getContact();
     const { name } = contact;
 
-    const answers = await new UseCaseRegisterUser().execute(message, questions);
+    const useCaseRegisterUse = container.resolve(UseCaseRegisterUser);
+    const answers = await useCaseRegisterUse.execute(message, questions);
+
+    // const answers = await new UseCaseRegisterUser().execute(message, questions);
     messageToReply
       // .reply(answers.map((item) => item.answer).join('\n'), message.from)
       .reply(presentation + JSON.stringify(answers), message.from)

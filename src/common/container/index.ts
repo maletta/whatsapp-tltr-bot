@@ -27,7 +27,7 @@ const connectDatabase = async () => {
       useValue: dbWrapper,
     });
 
-    container.registerSingleton<IUserRepository>(
+    container.registerSingleton<IUserRepository<PoolClient>>(
       'UserRepository',
       PostgresUserRepository,
     );

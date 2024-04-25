@@ -18,6 +18,9 @@
       "use-cases": "controller",
       "infrastructure": "pipe",
     },
+    "cSpell.words": [
+      "tsyringe"
+    ],
 
    
   }
