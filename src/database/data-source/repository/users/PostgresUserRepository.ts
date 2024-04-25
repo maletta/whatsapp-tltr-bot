@@ -19,7 +19,7 @@ class PostgresUserRepository extends IUserRepository<PoolClient> {
     const connection = this.getConnection();
     const query = `INSERT INTO users ( id_whatsapp, cellphone, info_name) VALUES ($1, $2, $3)`;
     const result = await connection.query(query, [
-      user.idWhatsapp,
+      user.whatsappRegistry,
       user.cellphone,
       user.infoName,
     ]);
@@ -28,14 +28,14 @@ class PostgresUserRepository extends IUserRepository<PoolClient> {
   }
 
   async update(user: UserEntity): Promise<boolean> {
-    const { cellphone, idWhatsapp, infoName, id } = user;
+    const { cellphone, whatsappRegistry, infoName, id } = user;
     const connection = this.getConnection();
     const query =
       'UPDATE users SET id_whatsapp = $2, cellphone = $3, info_name = $4 WHERE id = $1';
 
     const result = await connection.query(query, [
       id,
-      idWhatsapp,
+      whatsappRegistry,
       cellphone,
       infoName,
     ]);
