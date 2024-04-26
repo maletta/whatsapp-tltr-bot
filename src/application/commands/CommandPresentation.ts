@@ -23,9 +23,13 @@ class CommandPresentation implements ICommand {
       UseCaseSendRegistrationForm,
     );
 
-    await useCaseSendRegistrationForm.execute(messageToReply);
+    const questions = await useCaseSendRegistrationForm.execute(messageToReply);
+    const messageWithNoQuestionsAvailable =
+      'Não existe ficha de cadastro para o grupo';
+    const response =
+      questions === null ? messageWithNoQuestionsAvailable : questions;
 
-    messageToReply.reply(presentation, message.from);
+    messageToReply.reply(response, message.from);
   }
 }
 
