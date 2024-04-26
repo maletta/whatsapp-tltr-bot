@@ -23,9 +23,19 @@ class CommandPresentation implements ICommand {
       UseCaseSendRegistrationForm,
     );
 
-    const response = await useCaseSendRegistrationForm.execute(messageToReply);
+    try {
+      const response =
+        await useCaseSendRegistrationForm.execute(messageToReply);
 
-    messageToReply.reply(response, message.from);
+      messageToReply.reply(response, message.from);
+    } catch (error) {
+      messageToReply.reply(
+        'Não estou conseguindo buscar fichas para este grupo.',
+        message.from,
+      );
+
+      console.log(error);
+    }
   }
 }
 
