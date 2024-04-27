@@ -4,10 +4,19 @@ interface IUserEntity {
   readonly cellphone: string;
   infoName: string;
   readonly createdAt: Date;
-  updatedAt: Date;
+  readonly updatedAt: Date;
 }
 
 type UserEntityDTO = Omit<IUserEntity, 'id' | 'createdAt' | 'updatedAt'>;
+
+interface IUserEntityDatabaseModel {
+  id: number;
+  whatsapp_registry: string;
+  cellphone: string;
+  info_name: string;
+  created_at: string;
+  updated_at: string;
+}
 
 class UserEntity {
   public readonly id: number;
@@ -15,7 +24,7 @@ class UserEntity {
   public readonly cellphone: string;
   public infoName: string;
   public readonly createdAt: Date;
-  public updatedAt: Date;
+  public readonly updatedAt: Date;
 
   constructor(user: IUserEntity) {
     this.id = user.id;
@@ -25,51 +34,18 @@ class UserEntity {
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
   }
-}
 
-interface IUsersDetailsEntity {
-  id_user: number;
-  id_chat: number;
-  name: string | null;
-  pronoun: string | null;
-  age: number | null;
-  location: string | null;
-  sign: string | null;
-  sexualOrientation: string | null;
-  relationship: string | null;
-  madnessForLove: string | null;
-  instagram: string | null;
-  photoUrl: string | null;
-}
-
-class UsersDetailsEntity {
-  public id_user: number;
-  public id_chat: number;
-  public name: string | null;
-  public pronoun: string | null;
-  public age: number | null;
-  public location: string | null;
-  public sign: string | null;
-  public sexual_orientation: string | null;
-  public relationship: string | null;
-  public madnessForLove: string | null;
-  public instagram: string | null;
-  public photoUrl: string | null;
-  constructor(user: IUsersDetailsEntity) {
-    this.id_user = user.id_user;
-    this.id_chat = user.id_chat;
-    this.name = user.name;
-    this.pronoun = user.pronoun;
-    this.age = user.age;
-    this.location = user.location;
-    this.sign = user.sign;
-    this.sexual_orientation = user.sexualOrientation;
-    this.relationship = user.relationship;
-    this.madnessForLove = user.madnessForLove;
-    this.instagram = user.instagram;
-    this.photoUrl = user.photoUrl;
+  public static createFromDatabase(data: IUserEntityDatabaseModel): UserEntity {
+    return new UserEntity({
+      id: data.id,
+      whatsappRegistry: data.whatsapp_registry,
+      cellphone: data.cellphone,
+      infoName: data.info_name,
+      createdAt: new Date(data.created_at),
+      updatedAt: new Date(data.updated_at),
+    });
   }
 }
 
-export { UserEntity, UsersDetailsEntity };
-export type { UserEntityDTO };
+export { UserEntity };
+export type { UserEntityDTO, IUserEntityDatabaseModel };

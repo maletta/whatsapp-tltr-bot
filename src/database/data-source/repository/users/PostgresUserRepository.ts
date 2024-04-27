@@ -1,4 +1,7 @@
-import { UserEntity } from 'domain/entities/users/UserEntity';
+import {
+  IUserEntityDatabaseModel,
+  UserEntity,
+} from 'domain/entities/users/UserEntity';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
 
@@ -61,6 +64,20 @@ class PostgresUserRepository extends IUsersRepository<PoolClient> {
     const result = await connection.query(query, [name]);
 
     return result.rows;
+  }
+
+  async findByWhatsAppRegistry(registry: string): Promise<UserEntity | null> {
+    const connection = this.getConnection();
+    const query = 'SELECT * FROM users WHERE whatsapp_registry = $1';
+    const result = await connection.query<IUserEntityDatabaseModel>(query, [
+      registry,
+    ]);
+
+    if (result.rowCount !== null && result.rowCount > 0) {
+      return UserEntity.createFromDatabase(result.rows[0]);
+    }
+
+    return null;
   }
 
   async delete(id: string): Promise<boolean> {

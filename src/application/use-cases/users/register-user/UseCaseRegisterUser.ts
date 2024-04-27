@@ -1,3 +1,5 @@
+import { QuestionEntity } from 'domain/entities/chats/QuestionsAndAnswersEntity';
+import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
 import { IDataBase } from 'src/database/data-source/postgres/PostgresDatabase';
@@ -11,20 +13,31 @@ type QuestionAnswer = {
 class UseCaseRegisterUser {
   constructor(
     @inject('UsersRepository')
-    private userRepository: IUsersRepository<PoolClient>,
+    private usersRepository: IUsersRepository<PoolClient>,
+    @inject('QuestionsRepository')
+    private questionsRepository: IQuestionsRepository<PoolClient>,
     @inject('IDataBase') private database: IDataBase<PoolClient>,
   ) {}
 
-  public async execute(
-    message: Message,
-    questions: string[],
-  ): Promise<QuestionAnswer[]> {
+  public async execute(message: Message): Promise<QuestionAnswer[] | null> {
     const completedRegistrationForm = message.body;
 
     const connection = await this.database.connect();
-    this.userRepository.setConnection(connection);
+    this.usersRepository.setConnection(connection);
+    this.questionsRepository.setConnection(connection);
 
-    const userFound = await this.userRepository.findByName('alistar');
+    if (message.author === null || message.author === undefined) {
+      return null;
+    }
+
+    const userFound = await this.usersRepository.findByWhatsAppRegistry(
+      message.author,
+    );
+    if (userFound) {
+      return null;
+    }
+
+    const questions = await this.questionsRepository.findByUserAndChat();
     const answers = this.extractAnswers(completedRegistrationForm, questions);
 
     return answers;
@@ -34,7 +47,7 @@ class UseCaseRegisterUser {
   // retorna um array de objetos com as perguntas e as respostas
   private extractAnswers(
     message: string,
-    questions: string[],
+    questions: QuestionEntity[],
   ): QuestionAnswer[] {
     const answers: QuestionAnswer[] = [];
 
