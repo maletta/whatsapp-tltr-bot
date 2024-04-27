@@ -9,6 +9,14 @@ interface IQuestionEntity {
 
 type QuestionDTO = Omit<IQuestionEntity, 'id'>;
 
+interface IQuestionDatabaseModel {
+  id: number;
+  id_chat: number;
+  question: string;
+  question_column_type: string;
+  created_at: string;
+}
+
 class QuestionEntity {
   public readonly id: number;
   public readonly idChat: number;
@@ -19,6 +27,18 @@ class QuestionEntity {
     this.idChat = question.idChat;
     this.question = question.question;
     this.questionColumnType = question.questionColumnType;
+  }
+
+  public static createFromDatabase(
+    data: IQuestionDatabaseModel,
+  ): QuestionEntity {
+    return new QuestionEntity({
+      id: data.id,
+      idChat: data.id_chat,
+      question: data.question,
+      questionColumnType:
+        data.question_column_type as RegistrationQuestionsColumns,
+    });
   }
 }
 
@@ -46,4 +66,10 @@ class AnswerEntity {
 }
 
 export { QuestionEntity, AnswerEntity };
-export type { QuestionDTO, AnswerDTO, IQuestionEntity, IAnswerEntity };
+export type {
+  QuestionDTO,
+  AnswerDTO,
+  IQuestionEntity,
+  IAnswerEntity,
+  IQuestionDatabaseModel,
+};

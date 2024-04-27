@@ -3,10 +3,10 @@ import {
   ChatEntityDTO,
   IChatDatabaseModel,
 } from 'domain/entities/chats/ChatEntity';
-import { IChatRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
+import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { PoolClient } from 'pg';
 
-class PostgresChatRepository extends IChatRepository<PoolClient> {
+class PostgresChatsRepository extends IChatsRepository<PoolClient> {
   public async setConnection(
     connection: PoolClient | Promise<PoolClient>,
   ): Promise<void> {
@@ -48,10 +48,10 @@ class PostgresChatRepository extends IChatRepository<PoolClient> {
   async findByWhatsAppId(id: string): Promise<ChatEntity | null> {
     const connection = this.getConnection();
     const query = 'SELECT * FROM chats where whatsapp_registry = $1';
-    const result = await connection.query(query, [id]);
+    const result = await connection.query<IChatDatabaseModel>(query, [id]);
     if (result.rowCount === 0) return null;
-    return new ChatEntity(result.rows[0]);
+    return ChatEntity.createFromDatabase(result.rows[0]);
   }
 }
 
-export { PostgresChatRepository };
+export { PostgresChatsRepository };

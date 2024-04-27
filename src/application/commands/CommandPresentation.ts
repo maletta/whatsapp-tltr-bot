@@ -4,6 +4,7 @@ import { presentation } from './CommandRegisterUser';
 import { ICommand } from './interfaces/ICommand';
 import { container } from 'tsyringe';
 import { UseCaseSendRegistrationForm } from 'application/use-cases/users/send-registration-form/UseCaseSendRegistrationForm';
+import { EnumPrivateCommands } from 'domain/enums/Commands';
 
 class CommandPresentation implements ICommand {
   async execute(
@@ -24,8 +25,9 @@ class CommandPresentation implements ICommand {
     );
 
     try {
-      const response =
+      const questionsFormatted =
         await useCaseSendRegistrationForm.execute(messageToReply);
+      const response = `.${EnumPrivateCommands.REGISTER}${questionsFormatted}`;
 
       messageToReply.reply(response, message.from);
     } catch (error) {

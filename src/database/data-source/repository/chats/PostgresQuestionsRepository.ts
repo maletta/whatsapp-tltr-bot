@@ -1,5 +1,6 @@
 import { ChatEntity } from 'domain/entities/chats/ChatEntity';
 import {
+  IQuestionDatabaseModel,
   QuestionDTO,
   QuestionEntity,
 } from 'domain/entities/chats/QuestionsAndAnswersEntity';
@@ -7,7 +8,7 @@ import { UserEntity } from 'domain/entities/users/UserEntity';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { PoolClient } from 'pg';
 
-class PostgresQuestionRepository extends IQuestionsRepository<PoolClient> {
+class PostgresQuestionsRepository extends IQuestionsRepository<PoolClient> {
   public async setConnection(
     connection: PoolClient | Promise<PoolClient>,
   ): Promise<void> {
@@ -60,8 +61,12 @@ class PostgresQuestionRepository extends IQuestionsRepository<PoolClient> {
   async findByChatId(id: number): Promise<QuestionEntity[] | null> {
     const connection = this.getConnection();
     const query = 'SELECT * FROM questions where id_chat = $1';
-    const result = await connection.query<QuestionEntity>(query, [id]);
-    return result.rows || null;
+    const result = await connection.query<IQuestionDatabaseModel>(query, [id]);
+
+    if (result.rowCount !== null && result.rowCount > 0)
+      return result.rows.map(QuestionEntity.createFromDatabase);
+
+    return null;
   }
 
   async findByUserAndChat(
@@ -81,4 +86,4 @@ class PostgresQuestionRepository extends IQuestionsRepository<PoolClient> {
   }
 }
 
-export { PostgresQuestionRepository };
+export { PostgresQuestionsRepository };

@@ -1,15 +1,15 @@
-import { IAnswerRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
-import { IChatRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
+import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
+import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
-import { IUserRepository } from 'domain/interfaces/repositories/users/IUserRepository';
-import { Pool, PoolClient } from 'pg';
+import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
+import { PoolClient } from 'pg';
 import {
   IDataBase,
   PostgresDatabase,
 } from 'src/database/data-source/postgres/PostgresDatabase';
-import { PostgresAnswerRepository } from 'src/database/data-source/repository/chats/PostgresAnswerRepository';
-import { PostgresChatRepository } from 'src/database/data-source/repository/chats/PostgresChatRepository';
-import { PostgresQuestionRepository } from 'src/database/data-source/repository/chats/PostgresQuestionRepository';
+import { PostgresAnswerRepository } from 'src/database/data-source/repository/chats/PostgresAnswersRepository';
+import { PostgresChatsRepository } from 'src/database/data-source/repository/chats/PostgresChatsRepository';
+import { PostgresQuestionsRepository } from 'src/database/data-source/repository/chats/PostgresQuestionsRepository';
 import { PostgresUserRepository } from 'src/database/data-source/repository/users/PostgresUserRepository';
 import { container } from 'tsyringe';
 
@@ -33,23 +33,23 @@ const connectDatabase = async () => {
       useValue: dbWrapper,
     });
 
-    container.registerSingleton<IUserRepository<PoolClient>>(
-      'UserRepository',
+    container.registerSingleton<IUsersRepository<PoolClient>>(
+      'UsersRepository',
       PostgresUserRepository,
     );
 
-    container.registerSingleton<IChatRepository<PoolClient>>(
-      'ChatRepository',
-      PostgresChatRepository,
+    container.registerSingleton<IChatsRepository<PoolClient>>(
+      'ChatsRepository',
+      PostgresChatsRepository,
     );
 
     container.registerSingleton<IQuestionsRepository<PoolClient>>(
-      'QuestionRepository',
-      PostgresQuestionRepository,
+      'QuestionsRepository',
+      PostgresQuestionsRepository,
     );
 
-    container.registerSingleton<IAnswerRepository<PoolClient>>(
-      'QuestionRepository',
+    container.registerSingleton<IAnswersRepository<PoolClient>>(
+      'AnswersRepository',
       PostgresAnswerRepository,
     );
   } catch (error) {

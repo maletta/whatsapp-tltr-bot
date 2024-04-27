@@ -1,10 +1,13 @@
 import { IChat, IGroupChat } from 'common/CustomTypes';
 import { ChatEntity, ChatEntityDTO } from 'domain/entities/chats/ChatEntity';
-import { IChatRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
+import { QuestionEntity } from 'domain/entities/chats/QuestionsAndAnswersEntity';
+import { RegistrationQuestionsColumns } from 'domain/enums/chats/Question';
+import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { PoolClient } from 'pg';
 import { IDataBase } from 'src/database/data-source/interfaces/IDataBase';
 import { inject, injectable } from 'tsyringe';
+import { StringUtils } from 'utils/String.utils';
 import { Message } from 'whatsapp-web.js';
 
 enum ErrorsEnum {
@@ -15,9 +18,9 @@ enum ErrorsEnum {
 @injectable()
 class UseCaseSendRegistrationForm {
   constructor(
-    @inject('ChatRepository')
-    private chatRepository: IChatRepository<PoolClient>,
-    @inject('QuestionRepository')
+    @inject('ChatsRepository')
+    private chatRepository: IChatsRepository<PoolClient>,
+    @inject('QuestionsRepository')
     private questionRepository: IQuestionsRepository<PoolClient>,
     @inject('IDataBase') private database: IDataBase<PoolClient>,
   ) {}
@@ -44,6 +47,7 @@ class UseCaseSendRegistrationForm {
       }
 
       await this.chatRepository.setConnection(connection);
+      await this.questionRepository.setConnection(connection);
 
       const chatFromDatabase = await this.findOrCreateChat(chat);
 
@@ -51,6 +55,8 @@ class UseCaseSendRegistrationForm {
       if (chatFromDatabase === null || chatFromDatabase === undefined) {
         return errorsMessages.NoFormsAvailable;
       }
+
+      console.log('chat id ', chatFromDatabase);
 
       const questions = await this.questionRepository.findByChatId(
         chatFromDatabase.id,
@@ -63,8 +69,10 @@ class UseCaseSendRegistrationForm {
         return errorsMessages.NoQuestionsAvailable;
       }
 
-      const questionsResponse = questions
-        .map((item) => item.question)
+      const orderedQuestions = this.orderQuestionByEnum(questions);
+
+      const questionsResponse = orderedQuestions
+        .map((item) => StringUtils.replaceBreakingLines(item.question))
         .join('\n');
 
       return questionsResponse;
@@ -94,6 +102,35 @@ class UseCaseSendRegistrationForm {
     const createdChat = await this.chatRepository.create(chatDto);
 
     return createdChat;
+  }
+
+  private orderQuestionByEnum(questions: QuestionEntity[]): QuestionEntity[] {
+    const questionsOrdered: QuestionEntity[] = [];
+    const orderSequence = [
+      RegistrationQuestionsColumns.QUESTIONS_HEADER,
+      RegistrationQuestionsColumns.NAME,
+      RegistrationQuestionsColumns.PRONOUN,
+      RegistrationQuestionsColumns.AGE,
+      RegistrationQuestionsColumns.LOCATION,
+      RegistrationQuestionsColumns.SIGN,
+      RegistrationQuestionsColumns.SEXUAL_ORIENTATION,
+      RegistrationQuestionsColumns.RELATIONSHIP,
+      RegistrationQuestionsColumns.MADNESS_FOR_LOVE,
+      RegistrationQuestionsColumns.INSTAGRAM,
+      RegistrationQuestionsColumns.PHOTO,
+    ];
+
+    orderSequence.forEach((currentEnum) => {
+      const questionFound = questions.find(
+        (q) => q.questionColumnType === currentEnum,
+      );
+
+      if (questionFound !== undefined && questionFound !== null) {
+        questionsOrdered.push(questionFound);
+      }
+    });
+
+    return questionsOrdered;
   }
 }
 

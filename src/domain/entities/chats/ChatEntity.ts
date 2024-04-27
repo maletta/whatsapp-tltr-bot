@@ -12,7 +12,7 @@ interface IChatDatabaseModel {
   id: number;
   whatsapp_registry: string;
   name: string;
-  create_at: string;
+  created_at: string;
   updated_at: string;
 }
 class ChatEntity {
@@ -36,7 +36,7 @@ class ChatEntity {
       whatsappRegistry: data.whatsapp_registry,
       name: data.name,
       updatedAt: new Date(data.updated_at),
-      createdAt: new Date(data.create_at),
+      createdAt: new Date(data.created_at),
     });
   }
 }
