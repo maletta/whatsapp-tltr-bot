@@ -19,17 +19,19 @@ class UseCaseRegisterUser {
     message: Message,
     questions: string[],
   ): Promise<QuestionAnswer[]> {
-    const presentation = message.body;
+    const completedRegistrationForm = message.body;
 
     const connection = await this.database.connect();
     this.userRepository.setConnection(connection);
 
     const userFound = await this.userRepository.findByName('alistar');
-    const answers = this.extractAnswers(presentation, questions);
+    const answers = this.extractAnswers(completedRegistrationForm, questions);
 
     return answers;
   }
 
+  // lê o formulário de respostas do usuário e as questões cadastradas no BD para o chat
+  // retorna um array de objetos com as perguntas e as respostas
   private extractAnswers(
     message: string,
     questions: string[],
