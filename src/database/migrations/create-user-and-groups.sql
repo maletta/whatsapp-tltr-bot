@@ -9,7 +9,8 @@ CREATE TABLE users (
 
 CREATE TABLE chats (
     id SERIAL PRIMARY KEY,
-    whatsapp_registry VARCHAR(50) NOT NULL,
+    whatsapp_registry VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

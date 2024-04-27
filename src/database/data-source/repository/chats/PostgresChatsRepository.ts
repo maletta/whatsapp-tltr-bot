@@ -1,8 +1,12 @@
-import { ChatEntity, ChatEntityDTO } from 'domain/entities/chats/ChatEntity';
-import { IChatRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
+import {
+  ChatEntity,
+  ChatEntityDTO,
+  IChatDatabaseModel,
+} from 'domain/entities/chats/ChatEntity';
+import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { PoolClient } from 'pg';
 
-class PostgresChatRepository extends IChatRepository<PoolClient> {
+class PostgresChatsRepository extends IChatsRepository<PoolClient> {
   public async setConnection(
     connection: PoolClient | Promise<PoolClient>,
   ): Promise<void> {
@@ -15,12 +19,20 @@ class PostgresChatRepository extends IChatRepository<PoolClient> {
     return this.connection;
   }
 
-  async create(chat: ChatEntityDTO): Promise<boolean> {
+  async create(chat: ChatEntityDTO): Promise<ChatEntity | null> {
+    const { name, whatsappRegistry } = chat;
     const connection = this.getConnection();
-    const query = `INSERT INTO chats ( id_whatsapp) VALUES ($1)`;
-    const result = await connection.query(query, [chat.whatsappRegistry]);
+    const query = `INSERT INTO chats ( whatsapp_registry, name) VALUES ($1, $2) RETURNING *`;
+    const result = await connection.query<IChatDatabaseModel>(query, [
+      whatsappRegistry,
+      name,
+    ]);
 
-    return result.rowCount !== null && result.rowCount > 0;
+    if (result.rowCount !== null && result.rowCount > 0) {
+      return ChatEntity.createFromDatabase(result.rows[0]);
+    }
+
+    return null;
   }
 
   async update(chat: ChatEntityDTO): Promise<boolean> {
@@ -36,10 +48,10 @@ class PostgresChatRepository extends IChatRepository<PoolClient> {
   async findByWhatsAppId(id: string): Promise<ChatEntity | null> {
     const connection = this.getConnection();
     const query = 'SELECT * FROM chats where whatsapp_registry = $1';
-    const result = await connection.query(query, [id]);
+    const result = await connection.query<IChatDatabaseModel>(query, [id]);
     if (result.rowCount === 0) return null;
-    return new ChatEntity(result.rows[0]);
+    return ChatEntity.createFromDatabase(result.rows[0]);
   }
 }
 
-export { PostgresChatRepository };
+export { PostgresChatsRepository };

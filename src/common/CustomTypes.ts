@@ -44,7 +44,7 @@ export interface IGroupMetadata {
   subgroupSuggestions: Array<any>;
 }
 
-interface IGroupChat extends Chat {
+export interface IGroupChat extends Chat {
   isGroup: true;
   pinned: boolean;
   groupMetadata: IGroupMetadata;

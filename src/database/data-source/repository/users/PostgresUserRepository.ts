@@ -1,8 +1,8 @@
 import { UserEntity } from 'domain/entities/users/UserEntity';
-import { IUserRepository } from 'domain/interfaces/repositories/users/IUserRepository';
+import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
 
-class PostgresUserRepository extends IUserRepository<PoolClient> {
+class PostgresUserRepository extends IUsersRepository<PoolClient> {
   public async setConnection(
     connection: PoolClient | Promise<PoolClient>,
   ): Promise<void> {

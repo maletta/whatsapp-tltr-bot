@@ -4,6 +4,7 @@ import { presentation } from './CommandRegisterUser';
 import { ICommand } from './interfaces/ICommand';
 import { container } from 'tsyringe';
 import { UseCaseSendRegistrationForm } from 'application/use-cases/users/send-registration-form/UseCaseSendRegistrationForm';
+import { EnumPrivateCommands } from 'domain/enums/Commands';
 
 class CommandPresentation implements ICommand {
   async execute(
@@ -23,9 +24,20 @@ class CommandPresentation implements ICommand {
       UseCaseSendRegistrationForm,
     );
 
-    await useCaseSendRegistrationForm.execute(messageToReply);
+    try {
+      const questionsFormatted =
+        await useCaseSendRegistrationForm.execute(messageToReply);
+      const response = `.${EnumPrivateCommands.REGISTER}${questionsFormatted}`;
 
-    messageToReply.reply(presentation, message.from);
+      messageToReply.reply(response, message.from);
+    } catch (error) {
+      messageToReply.reply(
+        'Não estou conseguindo buscar fichas para este grupo.',
+        message.from,
+      );
+
+      console.log(error);
+    }
   }
 }
 

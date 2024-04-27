@@ -1,7 +1,7 @@
 import { UserEntity } from 'domain/entities/users/UserEntity';
 import { IRepositoryConnection } from '../IRepositoryConnection';
 
-abstract class IUserRepository<T> extends IRepositoryConnection<T> {
+abstract class IUsersRepository<T> extends IRepositoryConnection<T> {
   abstract create(user: UserEntity): Promise<boolean>;
   abstract update(user: UserEntity): Promise<boolean>;
   abstract findById(id: string): Promise<UserEntity | null>;
@@ -9,4 +9,4 @@ abstract class IUserRepository<T> extends IRepositoryConnection<T> {
   abstract delete(id: string): Promise<boolean>;
 }
 
-export { IUserRepository };
+export { IUsersRepository };

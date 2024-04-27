@@ -1,4 +1,4 @@
-import { IUserRepository } from 'domain/interfaces/repositories/users/IUserRepository';
+import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
 import { IDataBase } from 'src/database/data-source/postgres/PostgresDatabase';
 import { inject } from 'tsyringe';
@@ -10,8 +10,8 @@ type QuestionAnswer = {
 };
 class UseCaseRegisterUser {
   constructor(
-    @inject('UserRepository')
-    private userRepository: IUserRepository<PoolClient>,
+    @inject('UsersRepository')
+    private userRepository: IUsersRepository<PoolClient>,
     @inject('IDataBase') private database: IDataBase<PoolClient>,
   ) {}
 

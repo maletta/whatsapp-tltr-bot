@@ -3,10 +3,10 @@ import {
   AnswerEntity,
   QuestionEntity,
 } from 'domain/entities/chats/QuestionsAndAnswersEntity';
-import { IAnswerRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
+import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
 import { PoolClient } from 'pg';
 
-class PostgresAnswerRepository extends IAnswerRepository<PoolClient> {
+class PostgresAnswerRepository extends IAnswersRepository<PoolClient> {
   public async setConnection(
     connection: PoolClient | Promise<PoolClient>,
   ): Promise<void> {

@@ -1,4 +1,7 @@
+SELECT enumlabel FROM pg_enum WHERE enumtypid = 'question_column'::regtype;
+SELECT unnest(enum_range(NULL::question_column))::text as options;
 CREATE TYPE QUESTION_COLUMN AS ENUM(
+    'QUESTIONS_HEADER',
     'NAME',
     'PRONOUN',
     'AGE',

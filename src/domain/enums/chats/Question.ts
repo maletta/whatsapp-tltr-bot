@@ -1,4 +1,5 @@
 enum RegistrationQuestionsColumns {
+  'QUESTIONS_HEADER' = 'QUESTIONS_HEADER',
   'NAME' = 'NAME',
   'PRONOUN' = 'PRONOUN',
   'AGE' = 'AGE',
