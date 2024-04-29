@@ -4,7 +4,7 @@ import { IRepositoryConnection } from 'domain/interfaces/repositories/IRepositor
 abstract class IChatsRepository<T> extends IRepositoryConnection<T> {
   abstract create(chat: ChatEntityDTO): Promise<ChatEntity | null>;
   abstract update(chat: ChatEntityDTO): Promise<boolean>;
-  abstract findByWhatsAppId(id: string): Promise<ChatEntity | null>;
+  abstract findByWhatsAppRegistry(id: string): Promise<ChatEntity | null>;
 }
 
 export { IChatsRepository };

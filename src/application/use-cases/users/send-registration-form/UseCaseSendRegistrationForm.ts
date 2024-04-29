@@ -89,7 +89,8 @@ class UseCaseSendRegistrationForm {
   ): Promise<ChatEntity | null> {
     const chatRegistry = `${chatGroup.id.user}${chatGroup.id.server}`;
 
-    const chatFound = await this.chatRepository.findByWhatsAppId(chatRegistry);
+    const chatFound =
+      await this.chatRepository.findByWhatsAppRegistry(chatRegistry);
 
     if (chatFound !== null && chatFound !== undefined) {
       return chatFound;

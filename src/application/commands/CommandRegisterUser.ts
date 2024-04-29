@@ -37,17 +37,21 @@ class CommandRegisterUser implements ICommand {
       ? await message.getQuotedMessage()
       : message;
 
-    const contact = await message.getContact();
-    const { name } = contact;
+    try {
+      const useCaseRegisterUse = container.resolve(UseCaseRegisterUser);
+      const answers = await useCaseRegisterUse.execute(message);
 
-    const useCaseRegisterUse = container.resolve(UseCaseRegisterUser);
-    const answers = await useCaseRegisterUse.execute(message, questions);
-
-    // const answers = await new UseCaseRegisterUser().execute(message, questions);
-    messageToReply
-      // .reply(answers.map((item) => item.answer).join('\n'), message.from)
-      .reply(presentation + JSON.stringify(answers), message.from)
-      .then((response) => response.react('👌🏼'));
+      if (answers !== null) {
+        console.log('anwers', answers);
+        messageToReply
+          .reply(answers.map((item) => item.answer).join('\n'), message.from)
+          // .reply(presentation + JSON.stringify(answers), message.from)
+          .then((response) => response.react('👌🏼'));
+      }
+    } catch (error) {
+      console.log('Error on Command Register User');
+      console.log(error);
+    }
   }
 }
 

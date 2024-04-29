@@ -1,6 +1,7 @@
 import {
   IUserEntityDatabaseModel,
   UserEntity,
+  UserEntityDTO,
 } from 'domain/entities/users/UserEntity';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
@@ -18,16 +19,19 @@ class PostgresUserRepository extends IUsersRepository<PoolClient> {
     return this.connection;
   }
 
-  async create(user: UserEntity): Promise<boolean> {
+  async create(user: UserEntityDTO): Promise<UserEntity | null> {
     const connection = this.getConnection();
-    const query = `INSERT INTO users ( id_whatsapp, cellphone, info_name) VALUES ($1, $2, $3)`;
-    const result = await connection.query(query, [
+    const query = `INSERT INTO users ( whatsapp_registry, cellphone, info_name) VALUES ($1, $2, $3) RETURNING *`;
+    const result = await connection.query<IUserEntityDatabaseModel>(query, [
       user.whatsappRegistry,
       user.cellphone,
       user.infoName,
     ]);
 
-    return result.rowCount !== null && result.rowCount > 0;
+    if (result.rowCount !== null && result.rowCount > 0) {
+      return UserEntity.createFromDatabase(result.rows[0]);
+    }
+    return null;
   }
 
   async update(user: UserEntity): Promise<boolean> {

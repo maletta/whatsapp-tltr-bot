@@ -76,7 +76,7 @@ class PostgresQuestionsRepository extends IQuestionsRepository<PoolClient> {
     const { id: userId } = user;
     const { id: chatId } = chat;
     const connection = this.getConnection();
-    const query = 'SELECT * FROM questions where id_user = $1, id_chat = $2';
+    const query = 'SELECT * FROM questions where id_user = $1 AND id_chat = $2';
     const result = await connection.query<QuestionEntity>(query, [
       userId,
       chatId,
