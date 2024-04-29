@@ -5,6 +5,7 @@ import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRep
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
+import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
 import { IDataBase } from 'src/database/data-source/postgres/PostgresDatabase';
 import { inject, injectable } from 'tsyringe';
 import { Message } from 'whatsapp-web.js';
@@ -23,13 +24,13 @@ class UseCaseRegisterUser {
     private usersRepository: IUsersRepository<PoolClient>,
     @inject('QuestionsRepository')
     private questionsRepository: IQuestionsRepository<PoolClient>,
-    @inject('IDataBase') private database: IDataBase<PoolClient>,
+    @inject('PostgresConnection') private database: PostgresConnection,
   ) {}
 
   public async execute(message: Message): Promise<QuestionAnswer[] | null> {
     const completedRegistrationForm = message.body;
 
-    const connection = await this.database.connect();
+    const connection = await this.database.getConnection();
     this.chatsRepository.setConnection(connection);
     this.usersRepository.setConnection(connection);
     this.questionsRepository.setConnection(connection);
@@ -56,14 +57,17 @@ class UseCaseRegisterUser {
         return null;
       }
 
-      const answers = this.extractAnswers(completedRegistrationForm, questions);
+      const answers: QuestionAnswer[] = this.extractAnswers(
+        completedRegistrationForm,
+        questions,
+      );
 
       return answers;
     } catch (error) {
       console.log(error);
       return null;
     } finally {
-      connection.release();
+      this.database.release();
     }
   }
 
@@ -101,7 +105,6 @@ class UseCaseRegisterUser {
   private async findChat(message: Message): Promise<ChatEntity | null> {
     const chat = await message.getChat();
     const whatsAppRegistry = message.from;
-    console.log('message from ', message.from);
     if (!chat.isGroup) {
       return null;
     }
@@ -112,7 +115,6 @@ class UseCaseRegisterUser {
 
   private async findOrCreateUser(message: Message): Promise<UserEntity | null> {
     const userWhatsAppRegistry = message.author!;
-    console.log(message.author);
     const userContact = await message.getContact();
 
     const userFound =

@@ -3,6 +3,7 @@ import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRep
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
+import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
 import {
   IDataBase,
   PostgresDatabase,
@@ -32,6 +33,11 @@ const connectDatabase = async () => {
     container.register<IDataBase<PoolClient>>('IDataBase', {
       useValue: dbWrapper,
     });
+
+    container.register<PostgresConnection>(
+      'PostgresConnection',
+      PostgresConnection,
+    );
 
     container.registerSingleton<IUsersRepository<PoolClient>>(
       'UsersRepository',

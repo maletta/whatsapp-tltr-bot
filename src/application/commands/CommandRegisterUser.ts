@@ -42,7 +42,6 @@ class CommandRegisterUser implements ICommand {
       const answers = await useCaseRegisterUse.execute(message);
 
       if (answers !== null) {
-        console.log('anwers', answers);
         messageToReply
           .reply(answers.map((item) => item.answer).join('\n'), message.from)
           // .reply(presentation + JSON.stringify(answers), message.from)

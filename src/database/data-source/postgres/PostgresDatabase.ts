@@ -19,22 +19,22 @@ class PostgresDatabase implements IDataBase<PoolClient> {
     return this.pool.connect();
   }
 
-  async transaction(
-    callback: (client: PoolClient) => Promise<void>,
-  ): Promise<void> {
-    const client = await this.pool.connect();
-    try {
-      await client.query('BEGIN');
-      await callback(client);
+  // async transaction(
+  //   callback: (client: PoolClient) => Promise<void>,
+  // ): Promise<void> {
+  //   const client = await this.pool.connect();
+  //   try {
+  //     await client.query('BEGIN');
+  //     await callback(client);
 
-      await client.query('COMMIT');
-    } catch (error) {
-      await client.query('ROLLBACK');
-      throw error;
-    } finally {
-      client.release();
-    }
-  }
+  //     await client.query('COMMIT');
+  //   } catch (error) {
+  //     await client.query('ROLLBACK');
+  //     throw error;
+  //   } finally {
+  //     client.release();
+  //   }
+  // }
 }
 
 export { PostgresDatabase, IDataBase };
