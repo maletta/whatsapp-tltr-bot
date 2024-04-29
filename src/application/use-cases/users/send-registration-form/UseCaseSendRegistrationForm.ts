@@ -87,7 +87,7 @@ class UseCaseSendRegistrationForm {
   private async findOrCreateChat(
     chatGroup: IGroupChat,
   ): Promise<ChatEntity | null> {
-    const chatRegistry = `${chatGroup.id.user}${chatGroup.id.server}`;
+    const chatRegistry = `${chatGroup.id.user}@${chatGroup.id.server}`;
 
     const chatFound =
       await this.chatRepository.findByWhatsAppRegistry(chatRegistry);

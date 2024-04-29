@@ -38,18 +38,21 @@ class UseCaseRegisterUser {
       const chat = await this.findChat(message);
 
       if (chat === null) {
+        console.log('chat não encontrado');
         return null;
       }
 
       const user = await this.findOrCreateUser(message);
 
       if (user === null) {
+        console.log('user não encontrado');
         return null;
       }
 
       const questions = await this.questionsRepository.findByChatId(chat.id);
 
       if (questions === null) {
+        console.log('questions não encontrado');
         return null;
       }
 
@@ -72,24 +75,19 @@ class UseCaseRegisterUser {
   ): QuestionAnswer[] {
     const answers: QuestionAnswer[] = [];
 
-    const answersLinesNormalized = message.split('\n').map((answer) => ({
-      normalized: this.normalizeString(answer),
-      nonNormalized: answer,
-    }));
+    const answersLinesNormalized = message
+      .split('\n')
+      .map((answer) => this.normalizeString(answer));
 
     questions.forEach((question) => {
       const questionNormalized = this.normalizeString(question.question);
 
       const answerFound = answersLinesNormalized.find((currentAnswer) => {
-        console.log('question normalized', questionNormalized);
-        console.log('current answer normalized', currentAnswer.normalized);
-        return currentAnswer.normalized.includes(questionNormalized);
+        return currentAnswer.includes(questionNormalized);
       });
 
       if (answerFound !== undefined) {
-        const answer = answerFound.normalized
-          .replace(questionNormalized, '')
-          .trim();
+        const answer = answerFound.replace(questionNormalized, '').trim();
         answers.push({
           question: question,
           answer: answer,
@@ -102,7 +100,8 @@ class UseCaseRegisterUser {
 
   private async findChat(message: Message): Promise<ChatEntity | null> {
     const chat = await message.getChat();
-    const whatsAppRegistry = `${chat.id.user}${chat.id.server}`;
+    const whatsAppRegistry = message.from;
+    console.log('message from ', message.from);
     if (!chat.isGroup) {
       return null;
     }
@@ -112,16 +111,16 @@ class UseCaseRegisterUser {
   }
 
   private async findOrCreateUser(message: Message): Promise<UserEntity | null> {
-    const userFound = await this.usersRepository.findByWhatsAppRegistry(
-      message.author!,
-    );
+    const userWhatsAppRegistry = message.author!;
+    console.log(message.author);
+    const userContact = await message.getContact();
+
+    const userFound =
+      await this.usersRepository.findByWhatsAppRegistry(userWhatsAppRegistry);
 
     if (userFound !== null && userFound !== undefined) {
       return userFound;
     }
-
-    const userContact = await message.getContact();
-    const userWhatsAppRegistry = `${userContact.id.user}${userContact.id.server}`;
 
     const createdUser = await this.usersRepository.create({
       cellphone: userContact.number,
