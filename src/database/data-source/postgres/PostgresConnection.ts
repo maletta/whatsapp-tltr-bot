@@ -24,15 +24,16 @@ class PostgresConnection {
     }
   }
 
-  async transaction(
-    callback: (client: PoolClient) => Promise<void>,
-  ): Promise<void> {
+  async transaction<T>(
+    callback: (client: PoolClient) => Promise<T>,
+  ): Promise<Promise<T>> {
     const client = await this.getConnection();
     try {
       await client.query('BEGIN');
-      await callback(client);
+      const result = await callback(client);
 
       await client.query('COMMIT');
+      return result;
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;

@@ -1,6 +1,7 @@
 import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
 import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
+import { IUsersDetailsRepository } from 'domain/interfaces/repositories/users/IUserDetailsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
 import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
@@ -11,6 +12,7 @@ import {
 import { PostgresAnswerRepository } from 'src/database/data-source/repository/chats/PostgresAnswersRepository';
 import { PostgresChatsRepository } from 'src/database/data-source/repository/chats/PostgresChatsRepository';
 import { PostgresQuestionsRepository } from 'src/database/data-source/repository/chats/PostgresQuestionsRepository';
+import { PostgresUserDetailsRepository } from 'src/database/data-source/repository/users/PostgresUserDetailsRepository';
 import { PostgresUserRepository } from 'src/database/data-source/repository/users/PostgresUserRepository';
 import { container } from 'tsyringe';
 
@@ -37,6 +39,11 @@ const connectDatabase = async () => {
     container.register<PostgresConnection>(
       'PostgresConnection',
       PostgresConnection,
+    );
+
+    container.registerSingleton<IUsersDetailsRepository<PoolClient>>(
+      'UsersDetailsRepository',
+      PostgresUserDetailsRepository,
     );
 
     container.registerSingleton<IUsersRepository<PoolClient>>(

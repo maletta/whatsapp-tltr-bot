@@ -6,6 +6,7 @@ import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRep
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { PoolClient } from 'pg';
 import { IDataBase } from 'src/database/data-source/interfaces/IDataBase';
+import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
 import { inject, injectable } from 'tsyringe';
 import { StringUtils } from 'utils/String.utils';
 import { Message } from 'whatsapp-web.js';
@@ -22,7 +23,7 @@ class UseCaseSendRegistrationForm {
     private chatRepository: IChatsRepository<PoolClient>,
     @inject('QuestionsRepository')
     private questionRepository: IQuestionsRepository<PoolClient>,
-    @inject('IDataBase') private database: IDataBase<PoolClient>,
+    @inject('PostgresConnection') private database: PostgresConnection,
   ) {}
 
   public async execute(message: Message): Promise<string> {
@@ -36,7 +37,7 @@ class UseCaseSendRegistrationForm {
         'Funcionalidade disponível apenas para grupos',
     };
 
-    const connection = await this.database.connect();
+    const connection = await this.database.getConnection();
 
     try {
       const chat = (await message.getChat()) as IChat;
@@ -80,7 +81,7 @@ class UseCaseSendRegistrationForm {
       console.log(error);
       return errorsMessages.NoFormsAvailable;
     } finally {
-      connection.release();
+      this.database.release();
     }
   }
 

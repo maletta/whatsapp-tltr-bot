@@ -1,6 +1,7 @@
 import { ChatEntity } from 'domain/entities/chats/ChatEntity';
 import { QuestionEntity } from 'domain/entities/chats/QuestionsAndAnswersEntity';
 import { UserEntity } from 'domain/entities/users/UserEntity';
+import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
 import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
@@ -22,8 +23,12 @@ class UseCaseRegisterUser {
     private chatsRepository: IChatsRepository<PoolClient>,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository<PoolClient>,
+    @inject('UsersDetailsRepository')
+    private usersDetailsRepository: IUsersRepository<PoolClient>,
     @inject('QuestionsRepository')
     private questionsRepository: IQuestionsRepository<PoolClient>,
+    @inject('AnswersRepository')
+    private answersRepository: IAnswersRepository<PoolClient>,
     @inject('PostgresConnection') private database: PostgresConnection,
   ) {}
 
@@ -33,9 +38,11 @@ class UseCaseRegisterUser {
     const connection = await this.database.getConnection();
     this.chatsRepository.setConnection(connection);
     this.usersRepository.setConnection(connection);
+    this.usersDetailsRepository.setConnection(connection);
     this.questionsRepository.setConnection(connection);
 
     try {
+      // procura chat na base ou cadastra
       const chat = await this.findChat(message);
 
       if (chat === null) {
@@ -43,6 +50,7 @@ class UseCaseRegisterUser {
         return null;
       }
 
+      // busca por usuário na base ou cadastra
       const user = await this.findOrCreateUser(message);
 
       if (user === null) {
@@ -50,6 +58,7 @@ class UseCaseRegisterUser {
         return null;
       }
 
+      // busca questões de cadastro de um chat
       const questions = await this.questionsRepository.findByChatId(chat.id);
 
       if (questions === null) {
@@ -57,10 +66,15 @@ class UseCaseRegisterUser {
         return null;
       }
 
+      // extrai respostas da mensagem do usuário
       const answers: QuestionAnswer[] = this.extractAnswers(
         completedRegistrationForm,
         questions,
       );
+
+      // cadastra as respostas do usuário
+
+      // retorna as respostas
 
       return answers;
     } catch (error) {
@@ -131,6 +145,37 @@ class UseCaseRegisterUser {
     });
 
     return createdUser;
+  }
+
+  private async saveAnswers(
+    user: UserEntity,
+    answersAndQuestions: QuestionAnswer[],
+  ): Promise<boolean> {
+    try {
+      const transactionResult = await this.database.transaction(
+        async (newConnection) => {
+          this.answersRepository.setConnection(newConnection);
+
+          const answersToSave: Promise<boolean>[] = answersAndQuestions.map(
+            (answerAndQuestion) => {
+              return this.answersRepository.create({
+                idQuestion: answerAndQuestion.question.id,
+                idUser: user.id,
+                answer: answerAndQuestion.answer,
+              });
+            },
+          );
+
+          await Promise.all(answersToSave);
+          return true;
+        },
+      );
+
+      return transactionResult;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 
   private normalizeString(str: string): string {
