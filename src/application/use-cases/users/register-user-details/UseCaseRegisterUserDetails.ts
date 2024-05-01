@@ -17,7 +17,7 @@ import { inject, injectable } from 'tsyringe';
 @injectable()
 class UseCaseRegisterUserDetails {
   public constructor(
-    @inject('UserDetailsRepository')
+    @inject('UsersDetailsRepository')
     private userDetailsRepository: IUsersDetailsRepository<PoolClient>,
     @inject('QuestionsRepository')
     private questionsRepository: IQuestionsRepository<PoolClient>,
@@ -35,9 +35,9 @@ class UseCaseRegisterUserDetails {
     const connection = await this.database.getConnection();
 
     try {
-      this.userDetailsRepository.setConnection(connection);
-      this.questionsRepository.setConnection(connection);
-      this.answersRepository.setConnection(connection);
+      await this.userDetailsRepository.setConnection(connection);
+      await this.questionsRepository.setConnection(connection);
+      await this.answersRepository.setConnection(connection);
 
       // busca questões de cadastro de um chat
       const questions = await this.questionsRepository.findByChatId(chat.id);
@@ -67,6 +67,8 @@ class UseCaseRegisterUserDetails {
         chat,
         answers,
       );
+
+      console.log('userDetailsEntity ', userDetailsEntity);
 
       // salva ou atualiza entidade do usuário
       const result =
@@ -133,10 +135,12 @@ class UseCaseRegisterUserDetails {
         RegistrationQuestionsColumns.PRONOUN,
       ),
       age: Number(
-        answersExtractor.getAnswersByQuestionEnum(
-          extractedAnswers,
-          RegistrationQuestionsColumns.AGE,
-        )!,
+        answersExtractor
+          .getAnswersByQuestionEnum(
+            extractedAnswers,
+            RegistrationQuestionsColumns.AGE,
+          )
+          ?.replace(/[^0-9]/g, '') || 0,
       ),
       location: answersExtractor.getAnswersByQuestionEnum(
         extractedAnswers,

@@ -1,13 +1,6 @@
-import { AnswersExtractor } from 'application/services/chats/extract-answers/ExtractAnswers';
 import { ChatEntity } from 'domain/entities/chats/ChatEntity';
-import {
-  AnswerEntity,
-  ExtractedAnswer,
-} from 'domain/entities/chats/QuestionsAndAnswersEntity';
 import { UserEntity } from 'domain/entities/users/UserEntity';
-import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
 import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
-import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
 import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
@@ -22,8 +15,6 @@ class UseCaseRegisterUser {
     private chatsRepository: IChatsRepository<PoolClient>,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository<PoolClient>,
-    @inject('UsersDetailsRepository')
-    private usersDetailsRepository: IUsersRepository<PoolClient>,
     @inject('PostgresConnection')
     private database: PostgresConnection,
   ) {}
@@ -34,7 +25,6 @@ class UseCaseRegisterUser {
     const connection = await this.database.getConnection();
     this.chatsRepository.setConnection(connection);
     this.usersRepository.setConnection(connection);
-    this.usersDetailsRepository.setConnection(connection);
 
     try {
       // procura chat na base ou cadastra
