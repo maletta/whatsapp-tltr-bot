@@ -1,6 +1,7 @@
 import {
   AnswerDTO,
   AnswerEntity,
+  IAnswerDatabaseModel,
   QuestionEntity,
 } from 'domain/entities/chats/QuestionsAndAnswersEntity';
 import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
@@ -19,13 +20,21 @@ class PostgresAnswerRepository extends IAnswersRepository<PoolClient> {
     return this.connection;
   }
 
-  async create(answerDTO: AnswerDTO): Promise<boolean> {
+  async create(answerDTO: AnswerDTO): Promise<AnswerEntity | null> {
     const { answer, idQuestion, idUser } = answerDTO;
     const connection = this.getConnection();
     const query =
-      'INSERT INTO answers (id_question, id_user, answer) VALUES ($1,$2,$3)';
-    const result = await connection.query(query, [idQuestion, idUser, answer]);
-    return result.rowCount !== null && result.rowCount > 0;
+      'INSERT INTO answers (id_question, id_user, answer) VALUES ($1,$2,$3) RETURNING *';
+    const result = await connection.query<IAnswerDatabaseModel>(query, [
+      idQuestion,
+      idUser,
+      answer,
+    ]);
+    if (result.rowCount !== null && result.rowCount > 0) {
+      return AnswerEntity.createFromDatabase(result.rows[0]);
+    }
+
+    return null;
   }
 
   async update(answerEntity: AnswerEntity): Promise<boolean> {

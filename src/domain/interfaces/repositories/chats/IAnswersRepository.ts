@@ -6,7 +6,7 @@ import {
 import { IRepositoryConnection } from '../IRepositoryConnection';
 
 abstract class IAnswersRepository<T> extends IRepositoryConnection<T> {
-  abstract create(answer: AnswerDTO): Promise<boolean>;
+  abstract create(answer: AnswerDTO): Promise<AnswerEntity | null>;
   abstract update(answer: AnswerEntity): Promise<boolean>;
   abstract findById(id: number): Promise<AnswerEntity | null>;
   abstract findByUserAndChat(
