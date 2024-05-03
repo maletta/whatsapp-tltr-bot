@@ -20,6 +20,7 @@ import { StringUtils } from 'utils/String.utils';
 import { Client, Contact, Message } from 'whatsapp-web.js';
 import { IBotMediatorDTO } from '../BotMediator';
 import { MessageExecutor } from './MessageExecutor';
+import { CommandAdvice } from 'application/commands/CommandAdvice';
 
 class MessagesHandler {
   private groups: GroupsManager;
@@ -65,6 +66,10 @@ class MessagesHandler {
     this.commandExecutor.registerCommand(
       EnumPublicCommands.CANCELM,
       new CommandCancel(new TextGenerationHttp()),
+    );
+    this.commandExecutor.registerCommand(
+      EnumPublicCommands.ADVICE,
+      new CommandAdvice(new TextGenerationHttp()),
     );
     this.commandExecutor.registerCommand(
       EnumPublicCommands.PRESENTATION,
