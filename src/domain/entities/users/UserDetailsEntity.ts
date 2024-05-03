@@ -11,9 +11,14 @@ interface IUsersDetailsEntity {
   madnessForLove: string | null;
   instagram: string | null;
   photoUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-type IUsersDetailsEntityDTO = IUsersDetailsEntity;
+type IUsersDetailsEntityDTO = Omit<
+  IUsersDetailsEntity,
+  'createdAt' | 'updatedAt'
+>;
 
 interface IUsersDetailsDatabaseModel {
   id_chat: number;
@@ -28,7 +33,14 @@ interface IUsersDetailsDatabaseModel {
   madness_for_love: string | null;
   instagram: string | null;
   photo_url: string | null;
+  created_at: string;
+  updated_at: string;
 }
+
+type IUsersDetailsDatabaseModelDTO = Omit<
+  IUsersDetailsDatabaseModel,
+  'created_at' | 'updated_at'
+>;
 
 class UsersDetailsEntity {
   public idUser: number;
@@ -43,6 +55,8 @@ class UsersDetailsEntity {
   public madnessForLove: string | null;
   public instagram: string | null;
   public photoUrl: string | null;
+  public createdAt: Date;
+  public updatedAt: Date;
   constructor(user: IUsersDetailsEntity) {
     this.idUser = user.idUser;
     this.idChat = user.idChat;
@@ -56,6 +70,12 @@ class UsersDetailsEntity {
     this.madnessForLove = user.madnessForLove;
     this.instagram = user.instagram;
     this.photoUrl = user.photoUrl;
+    this.createdAt = user.createdAt;
+    this.updatedAt = user.updatedAt;
+  }
+
+  public isNew(): boolean {
+    return this.createdAt.getTime() === this.updatedAt.getTime();
   }
 
   static createFromDatabase(
@@ -74,12 +94,14 @@ class UsersDetailsEntity {
       madnessForLove: data.madness_for_love,
       instagram: data.instagram,
       photoUrl: data.photo_url,
+      createdAt: new Date(data.created_at),
+      updatedAt: new Date(data.updated_at),
     });
   }
 
   static createToDatabase(
     data: IUsersDetailsEntityDTO,
-  ): IUsersDetailsDatabaseModel {
+  ): IUsersDetailsDatabaseModelDTO {
     return {
       id_chat: data.idChat,
       id_user: data.idUser,

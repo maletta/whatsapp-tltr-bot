@@ -2,28 +2,10 @@
 import { UseCaseRegisterUser } from 'application/use-cases/users/register-user/UseCaseRegisterUser';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 import { container } from 'tsyringe';
 
-const questions: string[] = [
-  `୨୧ *Nome*(Apenas o nome): `,
-  `୨୧ *Pronomes* (Quais pronomes devemos usar para você?): `,
-  `୨୧ *Idade* (Quantos anos você tem?): `,
-  `୨୧ *Localização em SP* (De qual parte você é?): `,
-  `୨୧ *Signo* (Qual é o seu signo do zodíaco?): `,
-  `୨୧ *Orientação Sexual* (Como você se identifica?): `,
-  `୨୧ *Relacionamento* (Está namorando? Já superou o/a ex?): `,
-  `୨୧ *Loucura por Amor* (Já fez alguma? Conte-nos!): `,
-  `୨୧ *Instagram* (Qual é o seu @, se quiser compartilhar): `,
-  `୨୧ *Foto* (Envie uma unidade de foto sua): `,
-];
-
-export const presentation =
-  `.cadastro` +
-  `\n\n•｡ꪆৎ ˚⋅ Vamos nos conhecer melhor! ౨ৎ ⋆｡˚` +
-  `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n${questions.join('\n')}`;
-
-class CommandRegisterUser implements ICommand {
+class CommandRegisterUser implements IMessageCommand {
   async execute(
     args: string[],
     client: Client,
@@ -39,12 +21,18 @@ class CommandRegisterUser implements ICommand {
 
     try {
       const useCaseRegisterUse = container.resolve(UseCaseRegisterUser);
-      const answers = await useCaseRegisterUse.execute(message);
+      const registerResponse = await useCaseRegisterUse.execute(message);
 
-      if (answers !== null) {
-        messageToReply
-          .reply(answers.map((item) => item.answer).join('\n'), message.from)
-          // .reply(presentation + JSON.stringify(answers), message.from)
+      if (registerResponse !== null) {
+        const [user, userEntity] = registerResponse;
+        const isNew = userEntity.isNew();
+        const response = `Foi bom te conhecer miawlhor 🐈✨ @${user.cellphone}`;
+        const mentions = [`${user.whatsappRegistry}`];
+        await client
+          .sendMessage(message.from, response, {
+            mentions,
+            quotedMessageId: messageToReply.id._serialized,
+          })
           .then((response) => response.react('👌🏼'));
       }
     } catch (error) {
@@ -55,7 +43,3 @@ class CommandRegisterUser implements ICommand {
 }
 
 export { CommandRegisterUser };
-//  .cadastro
-
-//  Vamos nos conhecer melhor!
-//  •｡ꪆৎ ˚⋅Responda às perguntas abaixo sem deletar as perguntas ౨ৎ ⋆｡˚

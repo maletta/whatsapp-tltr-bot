@@ -2,9 +2,9 @@ import { ITextGeneration } from 'application/services/text-generation/ITextGener
 import { IMessage } from 'common/CustomTypes';
 import { Client, Message, MessageTypes } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 
-class CommandCancel implements ICommand {
+class CommandCancel implements IMessageCommand {
   private textGeneration: ITextGeneration;
 
   constructor(textGeneration: ITextGeneration) {

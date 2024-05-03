@@ -4,7 +4,10 @@ import {
   AnswerEntity,
   ExtractedAnswer,
 } from 'domain/entities/chats/QuestionsAndAnswersEntity';
-import { UsersDetailsEntity } from 'domain/entities/users/UserDetailsEntity';
+import {
+  IUsersDetailsEntityDTO,
+  UsersDetailsEntity,
+} from 'domain/entities/users/UserDetailsEntity';
 import { UserEntity } from 'domain/entities/users/UserEntity';
 import { RegistrationQuestionsColumns } from 'domain/enums/chats/Question';
 import { IAnswersRepository } from 'domain/interfaces/repositories/chats/IAnswersRepository';
@@ -120,10 +123,10 @@ class UseCaseRegisterUserDetails {
     user: UserEntity,
     chat: ChatEntity,
     extractedAnswers: ExtractedAnswer[],
-  ): UsersDetailsEntity {
+  ): IUsersDetailsEntityDTO {
     const answersExtractor = new AnswersExtractor();
 
-    const userDetailsEntity = new UsersDetailsEntity({
+    const userDetailsEntity: IUsersDetailsEntityDTO = {
       idChat: chat.id,
       idUser: user.id,
       name: answersExtractor.getAnswersByQuestionEnum(
@@ -170,7 +173,7 @@ class UseCaseRegisterUserDetails {
         extractedAnswers,
         RegistrationQuestionsColumns.PHOTO,
       ),
-    });
+    };
 
     return userDetailsEntity;
   }

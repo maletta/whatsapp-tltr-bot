@@ -1,12 +1,11 @@
 import { Client, Message } from 'whatsapp-web.js';
 
-import { presentation } from './CommandRegisterUser';
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 import { container } from 'tsyringe';
 import { UseCaseSendRegistrationForm } from 'application/use-cases/users/send-registration-form/UseCaseSendRegistrationForm';
 import { EnumPrivateCommands } from 'domain/enums/Commands';
 
-class CommandPresentation implements ICommand {
+class CommandPresentation implements IMessageCommand {
   async execute(
     args: string[],
     client: Client,

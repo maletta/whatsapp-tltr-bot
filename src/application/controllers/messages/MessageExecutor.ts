@@ -1,17 +1,20 @@
 import { EnumAllCommands } from 'domain/enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from '../commands/interfaces/ICommand';
+import { IMessageCommand } from '../../commands/interfaces/ICommand';
 
-type ICommands = Map<EnumAllCommands, ICommand>;
-class CommandHandler {
-  private commands: ICommands;
+type IIMessageCommands = Map<EnumAllCommands, IMessageCommand>;
+class MessageExecutor {
+  private commands: IIMessageCommands;
 
   constructor() {
-    this.commands = new Map<EnumAllCommands, ICommand>();
+    this.commands = new Map<EnumAllCommands, IMessageCommand>();
   }
 
-  public registerCommand(commandName: EnumAllCommands, command: ICommand) {
+  public registerCommand(
+    commandName: EnumAllCommands,
+    command: IMessageCommand,
+  ) {
     this.commands.set(commandName, command);
   }
 
@@ -34,4 +37,4 @@ class CommandHandler {
   }
 }
 
-export { CommandHandler };
+export { MessageExecutor };

@@ -7,6 +7,7 @@ import { PostgresConnection } from 'src/database/data-source/postgres/PostgresCo
 import { container, inject, injectable } from 'tsyringe';
 import { Message } from 'whatsapp-web.js';
 import { UseCaseRegisterUserDetails } from '../register-user-details/UseCaseRegisterUserDetails';
+import { UsersDetailsEntity } from 'domain/entities/users/UserDetailsEntity';
 
 @injectable()
 class UseCaseRegisterUser {
@@ -19,7 +20,9 @@ class UseCaseRegisterUser {
     private database: PostgresConnection,
   ) {}
 
-  public async execute(message: Message): Promise<any[] | null> {
+  public async execute(
+    message: Message,
+  ): Promise<[UserEntity, UsersDetailsEntity] | null> {
     const completedRegistrationForm = message.body;
 
     const connection = await this.database.getConnection();
@@ -61,7 +64,7 @@ class UseCaseRegisterUser {
 
       // retorna as respostas
 
-      return null;
+      return [user, userDetails];
     } catch (error) {
       console.log(error);
       return null;

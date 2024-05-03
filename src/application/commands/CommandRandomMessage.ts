@@ -1,9 +1,9 @@
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 
-class CommandRandomMessage implements ICommand {
+class CommandRandomMessage implements IMessageCommand {
   private textGeneration: ITextGeneration;
 
   constructor(textGeneration: ITextGeneration) {

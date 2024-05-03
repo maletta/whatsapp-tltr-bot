@@ -1,5 +1,6 @@
 import {
   IUsersDetailsDatabaseModel,
+  IUsersDetailsEntityDTO,
   UsersDetailsEntity,
 } from 'domain/entities/users/UserDetailsEntity';
 
@@ -20,7 +21,7 @@ class PostgresUserDetailsRepository extends IUsersDetailsRepository<PoolClient> 
   }
 
   async createOrUpdate(
-    userDetails: UsersDetailsEntity,
+    userDetails: IUsersDetailsEntityDTO,
   ): Promise<UsersDetailsEntity | null> {
     const connection = this.getConnection();
 
@@ -47,7 +48,7 @@ class PostgresUserDetailsRepository extends IUsersDetailsRepository<PoolClient> 
     INSERT INTO users_details (${queryFields.join(', ')})
     VALUES (${insertValues.join(', ')})
     ON CONFLICT (id_user, id_chat)
-    DO UPDATE SET ${updateValues.join(', ')} RETURNING *;
+    DO UPDATE SET ${updateValues.join(', ')}, updated_at=now() RETURNING *;
     `;
     const result = await connection.query<IUsersDetailsDatabaseModel>(query, [
       ...notNullFields.map(([_, value]) => value), // para campos de inserção
