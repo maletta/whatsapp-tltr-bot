@@ -19,14 +19,14 @@ class CommandEveryone implements IMessageCommand {
     const responseText: string[] = [];
 
     if (chat.isGroup === true) {
-      const paricipants = chat.groupMetadata.participants;
-      const isAdmin = paricipants.some(
+      const participants = chat.groupMetadata.participants;
+      const isAdmin = participants.some(
         ({ id, isAdmin }) =>
           `${id.user}@${id.server}` === message.author && isAdmin,
       );
 
       if (isAdmin) {
-        paricipants.forEach((p) => {
+        participants.forEach((p) => {
           mentions.push(`${p.id.user}@c.us`);
           responseText.push(`@${p.id.user}`);
         });

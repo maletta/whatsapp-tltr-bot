@@ -34,7 +34,9 @@ class CommandRegisterUser implements IMessageCommand {
       const presentation = isNew
         ? `Foi bom te conhecer \`\`\`Miaulhor\`\`\` 🐈✨ `
         : `Atualizei seus dados, agora pode engatinhar por aí 😽✨ `;
-      const response = [`${presentation} @${userEntity.cellphone}`];
+      const response = [
+        `${presentation} - ${userDetailsEntity.name} - @${userEntity.cellphone}`,
+      ];
       const mentions = [`${userEntity.whatsappRegistry}`];
 
       if (isNew) {
