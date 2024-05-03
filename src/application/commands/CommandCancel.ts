@@ -25,13 +25,13 @@ class CommandCancel implements IMessageCommand {
       return;
     }
 
-    if (message.id.fromMe) {
+    const messageQuoted: IMessage =
+      (await message.getQuotedMessage()) as unknown as IMessage;
+
+    if (messageQuoted.id.fromMe) {
       message.reply(`Miau, está corretíssimo!`);
       return;
     }
-
-    const messageQuoted: IMessage =
-      (await message.getQuotedMessage()) as unknown as IMessage;
 
     console.log('message body', message.body);
     console.log('message caption', (message as unknown as IMessage).caption);

@@ -25,13 +25,13 @@ class CommandAdvice implements IMessageCommand {
       return;
     }
 
-    if (message.id.fromMe) {
+    const messageQuoted: IMessage =
+      (await message.getQuotedMessage()) as unknown as IMessage;
+
+    if (messageQuoted.id.fromMe) {
       message.reply(`Eu não preciso de mais conselhos!`);
       return;
     }
-
-    const messageQuoted: IMessage =
-      (await message.getQuotedMessage()) as unknown as IMessage;
 
     console.log('message body', message.body);
     console.log('message caption', (message as unknown as IMessage).caption);
@@ -45,7 +45,7 @@ class CommandAdvice implements IMessageCommand {
 
       if (response) {
         messageQuoted.reply(response);
-        messageQuoted.react('🐾');
+        messageQuoted.react('🩺');
       }
     } catch (error) {
       console.log('Error on send Command Advice ');
