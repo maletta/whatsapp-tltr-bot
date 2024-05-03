@@ -63,8 +63,6 @@ class PostgresChatsRepository extends IChatsRepository<PoolClient> {
     `;
     const result = await connection.query<IChatDatabaseModel>(query, [id]);
 
-    console.log('CHATS REPOSITORY');
-    console.log(result);
     if (result.rowCount === 0) return null;
     return ChatEntity.createFromDatabase(result.rows[0]);
   }
