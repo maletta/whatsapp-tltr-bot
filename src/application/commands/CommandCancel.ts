@@ -29,7 +29,7 @@ class CommandCancel implements IMessageCommand {
       (await message.getQuotedMessage()) as unknown as IMessage;
 
     if (messageQuoted.id.fromMe) {
-      message.reply(`Miau, está corretíssimo!`);
+      message.reply(`Miau, estou corretíssimo!`);
       return;
     }
 
