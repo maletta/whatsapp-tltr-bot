@@ -1,5 +1,6 @@
 import { IGroupChat } from 'common/CustomTypes';
 import { ChatEntity, ChatEntityDTO } from 'domain/entities/chats/ChatEntity';
+import { IChatsConfigurationRepository } from 'domain/interfaces/repositories/chats/IChatsConfigurationRepository';
 import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { PoolClient } from 'pg';
 import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
@@ -10,34 +11,46 @@ class UseCaseFindOrCreateGroupChat {
   constructor(
     @inject('ChatsRepository')
     private chatsRepository: IChatsRepository<PoolClient>,
+    @inject('ChatsConfigurationRepository')
+    private chatsConfigurationRepository: IChatsConfigurationRepository<PoolClient>,
     @inject('PostgresConnection') private database: PostgresConnection,
   ) {}
 
   public async execute(chatGroup: IGroupChat): Promise<ChatEntity | null> {
-    const connection = await this.database.getConnection();
     try {
-      await this.chatsRepository.setConnection(connection);
-      const chatRegistry = `${chatGroup.id.user}@${chatGroup.id.server}`;
+      const response = await this.database.transaction(async (connection) => {
+        await this.chatsRepository.setConnection(connection);
+        await this.chatsConfigurationRepository.setConnection(connection);
 
-      const chatFound =
-        await this.chatsRepository.findByWhatsAppRegistry(chatRegistry);
+        const chatRegistry = `${chatGroup.id.user}@${chatGroup.id.server}`;
 
-      if (chatFound !== null && chatFound !== undefined) {
-        return chatFound;
-      }
+        const chatFound =
+          await this.chatsRepository.findByWhatsAppRegistry(chatRegistry);
 
-      const chatDto: ChatEntityDTO = {
-        name: chatGroup.groupMetadata.subject,
-        whatsappRegistry: chatRegistry,
-      };
-      const createdChat = await this.chatsRepository.create(chatDto);
+        if (chatFound !== null && chatFound !== undefined) {
+          return chatFound;
+        }
 
-      return createdChat;
+        const chatDto: ChatEntityDTO = {
+          name: chatGroup.groupMetadata.subject,
+          whatsappRegistry: chatRegistry,
+        };
+        const createdChat = await this.chatsRepository.create(chatDto);
+
+        if (createdChat === null) {
+          return null;
+        }
+
+        const createdChatConfiguration =
+          await this.chatsConfigurationRepository.create(createdChat);
+
+        return createdChatConfiguration;
+      });
+
+      return response;
     } catch (error) {
       console.log(error);
       return null;
-    } finally {
-      this.database.release();
     }
   }
 }

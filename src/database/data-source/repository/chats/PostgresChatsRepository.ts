@@ -47,8 +47,24 @@ class PostgresChatsRepository extends IChatsRepository<PoolClient> {
 
   async findByWhatsAppRegistry(id: string): Promise<ChatEntity | null> {
     const connection = this.getConnection();
-    const query = 'SELECT * FROM chats where whatsapp_registry = $1';
+    const query = `
+      SELECT
+      c.id,
+      c.name,
+      c.whatsapp_registry,
+      c.created_at,
+      c.updated_at,
+      config.notify_new_user_detail,
+      config.only_registered_user_mode
+      FROM chats c
+      INNER JOIN chats_configuration config
+      ON c.id = config.id_chat
+      WHERE whatsapp_registry = $1
+    `;
     const result = await connection.query<IChatDatabaseModel>(query, [id]);
+
+    console.log('CHATS REPOSITORY');
+    console.log(result);
     if (result.rowCount === 0) return null;
     return ChatEntity.createFromDatabase(result.rows[0]);
   }

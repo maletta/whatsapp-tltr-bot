@@ -1,13 +1,10 @@
 import { OrderQuestionsByEnum } from 'application/services/chats/order-questions-by-enum/OrderQuestionsByEnum';
 import { UseCaseFindOrCreateGroupChat } from 'application/use-cases/chats/find-or-create-group-chat/UseCaseFindOrCreateGroupChat';
 import { IChat } from 'common/CustomTypes';
-import { QuestionEntity } from 'domain/entities/chats/QuestionsAndAnswersEntity';
-import { RegistrationQuestionsColumns } from 'domain/enums/chats/Question';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { PoolClient } from 'pg';
 import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
 import { container, inject, injectable } from 'tsyringe';
-import { StringUtils } from 'utils/String.utils';
 import { Message } from 'whatsapp-web.js';
 
 enum ErrorsEnum {
@@ -77,7 +74,9 @@ class UseCaseSendRegistrationForm {
       const orderQuestionsByEum = new OrderQuestionsByEnum();
       const orderedQuestions = orderQuestionsByEum.execute(questions);
 
-      const questionsResponse = orderedQuestions.join('\n');
+      const questionsResponse = orderedQuestions
+        .map(({ question }) => question)
+        .join('\n');
 
       return questionsResponse;
     } catch (error) {

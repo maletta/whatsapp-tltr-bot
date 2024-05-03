@@ -26,7 +26,8 @@ class CommandPresentation implements IMessageCommand {
     try {
       const questionsFormatted =
         await useCaseSendRegistrationForm.execute(messageToReply);
-      const response = `.${EnumPrivateCommands.REGISTER}${questionsFormatted}`;
+      const commandRegister = `.${EnumPrivateCommands.REGISTER}`;
+      const response = `${commandRegister}${questionsFormatted}`;
 
       messageToReply.reply(response, message.from);
     } catch (error) {

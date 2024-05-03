@@ -22,7 +22,7 @@ class UseCaseRegisterUser {
 
   public async execute(
     message: Message,
-  ): Promise<[UserEntity, UsersDetailsEntity] | null> {
+  ): Promise<[ChatEntity, UserEntity, UsersDetailsEntity] | null> {
     const completedRegistrationForm = message.body;
 
     const connection = await this.database.getConnection();
@@ -64,7 +64,7 @@ class UseCaseRegisterUser {
 
       // retorna as respostas
 
-      return [user, userDetails];
+      return [chat, user, userDetails];
     } catch (error) {
       console.log(error);
       return null;
