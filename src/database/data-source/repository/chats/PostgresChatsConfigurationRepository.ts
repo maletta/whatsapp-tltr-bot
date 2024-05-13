@@ -1,6 +1,8 @@
 import {
+  ChatConfigurationEntity,
   ChatEntity,
-  ChatEntityDTO,
+  ChatEntityWithoutConfiguration,
+  IChatConfigurationDatabaseModel,
   IChatDatabaseModel,
 } from 'domain/entities/chats/ChatEntity';
 import { IChatsConfigurationRepository } from 'domain/interfaces/repositories/chats/IChatsConfigurationRepository';
@@ -19,17 +21,21 @@ class PostgresChatsConfigurationRepository extends IChatsConfigurationRepository
     return this.connection;
   }
 
-  async create(chat: ChatEntity): Promise<ChatEntity | null> {
-    const { name, whatsappRegistry } = chat;
+  async create(
+    chat: ChatEntityWithoutConfiguration,
+  ): Promise<ChatConfigurationEntity | null> {
+    const { id } = chat;
     const connection = this.getConnection();
-    const query = `INSERT INTO chats ( whatsapp_registry, name) VALUES ($1, $2) RETURNING *`;
-    const result = await connection.query<IChatDatabaseModel>(query, [
-      whatsappRegistry,
-      name,
-    ]);
+    const query = `INSERT INTO chats_configuration ( id_chat, notify_new_user_detail,only_registered_user_mode) 
+    VALUES ($1, TRUE, FALSE) RETURNING *`;
+
+    const result = await connection.query<IChatConfigurationDatabaseModel>(
+      query,
+      [id],
+    );
 
     if (result.rowCount !== null && result.rowCount > 0) {
-      return ChatEntity.createFromDatabase(result.rows[0]);
+      return ChatConfigurationEntity.createFromDatabase(result.rows[0]);
     }
 
     return null;

@@ -55,14 +55,16 @@ class CommandJoinUserInChat implements IGroupNotificationCommand {
 
     const newUsersExceptMe = newUsersContact.filter((user) => !user.isMe);
 
-    if (newUsersExceptMe.length === 0) {
-      return;
-    }
-
     const chatEntity = await this.findOrCreateGroupChat(
       client,
       groupNotification,
     );
+
+    console.log('criado ou achado ', chatEntity);
+
+    if (newUsersExceptMe.length === 0) {
+      return;
+    }
 
     if (chatEntity === null) {
       return;

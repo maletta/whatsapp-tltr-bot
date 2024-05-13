@@ -44,7 +44,16 @@ class UseCaseFindOrCreateGroupChat {
         const createdChatConfiguration =
           await this.chatsConfigurationRepository.create(createdChat);
 
-        return createdChatConfiguration;
+        if (createdChatConfiguration === null) {
+          return null;
+        }
+
+        const chatEntity = new ChatEntity({
+          ...createdChat,
+          ...createdChatConfiguration,
+        });
+
+        return chatEntity;
       });
 
       return response;
