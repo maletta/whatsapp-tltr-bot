@@ -2,6 +2,7 @@ import { EnumAllCommands } from 'domain/enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
 import { IMessageCommand } from '../../commands/interfaces/ICommand';
+import { BotConfiguration } from 'config/Configuration';
 
 type IIMessageCommands = Map<EnumAllCommands, IMessageCommand>;
 class MessageExecutor {
@@ -28,11 +29,13 @@ class MessageExecutor {
 
     if (!command) {
       // throw new Error(`Command ${commandName} not found`);
-      console.log(`Command ${commandName} not found`);
+      if (BotConfiguration.isDevelopment()) {
+        console.log(`Command ${commandName} not found`);
+      }
     }
 
     if (command) {
-      await command.execute(args, client, message);
+      command.execute(args, client, message);
     }
   }
 }

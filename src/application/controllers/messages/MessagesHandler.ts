@@ -93,7 +93,9 @@ class MessagesHandler {
       BotConfiguration.isDevelopmentChat([message.from])
     ) {
       const [command, args] = await this.getArgs(message.body);
-      console.log('select command ', command, args);
+      if (BotConfiguration.isDevelopment()) {
+        console.log('select command ', command, args);
+      }
       this.commandExecutor.selectCommand(command, args, this.client, message);
     } else {
       console.log('Not is valid chat in development mode', message.from);
@@ -129,13 +131,13 @@ class MessagesHandler {
 
     // if have prefix but is invalid
     if (command.startsWith(this.prefix) && !this.isValidCommand(command)) {
-      console.log(
-        'invalid',
-        command.startsWith(this.prefix),
-        !this.isValidCommand(command),
-      );
-      console.log('commando', command, command.length);
-      console.log('rest', rest);
+      // console.log(
+      //   'invalid',
+      //   command.startsWith(this.prefix),
+      //   !this.isValidCommand(command),
+      // );
+      // console.log('commando', command, command.length);
+      // console.log('rest', rest);
       return [EnumSystemCommands.INVALID, []];
     }
 
