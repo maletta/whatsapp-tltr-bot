@@ -28,13 +28,6 @@ class CommandJoinUserInChat implements IGroupNotificationCommand {
     client: Client,
     groupNotification: GroupNotification,
   ): Promise<void> {
-    console.log('Command Join User In Chat - execute ');
-    console.log(
-      'message',
-      groupNotification.body,
-      groupNotification.recipientIds,
-    );
-
     const newUsersContact = await groupNotification.getRecipients();
 
     const botIsNewUser = newUsersContact.filter((user) => user.isMe).length > 0;

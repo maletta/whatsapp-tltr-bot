@@ -15,10 +15,6 @@ class CommandRandomMessage implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Random Message - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const randomNumber = Math.floor(Math.random() * 5) + 1;
 
     const promptBadResponse =

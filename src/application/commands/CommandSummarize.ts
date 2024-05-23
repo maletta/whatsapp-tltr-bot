@@ -22,10 +22,6 @@ class CommandSummarize implements IMessageCommand {
   ): Promise<void> {
     const timeLimit = this.getSummarizeTimeFromCommand(args);
 
-    console.log('Command Summarize - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const groupId = message.from;
 
     try {

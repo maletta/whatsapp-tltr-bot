@@ -16,10 +16,6 @@ class CommandInvalid implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Invalid - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const useCaseListCommands = new UseCaseListCommands();
     const commandsList = useCaseListCommands.execute(this.prefix);
 

@@ -16,10 +16,6 @@ class CommandCancel implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Cancel Message - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     if (!message.hasQuotedMsg) {
       message.reply(`Marque uma mensagem para cancelar`);
       return;

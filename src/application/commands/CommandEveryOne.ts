@@ -10,10 +10,6 @@ class CommandEveryone implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Every One - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const chat = (await message.getChat()) as unknown as IChat;
     const mentions: string[] = [];
     const responseText: string[] = [];

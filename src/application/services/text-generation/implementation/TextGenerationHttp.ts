@@ -1,6 +1,7 @@
 import { VertexAI } from '@google-cloud/vertexai';
 
 import { ITextGeneration } from '../ITextGeneration';
+import { BotConfiguration } from 'config/Configuration';
 
 // To do
 // verificar erro de mensagem nula, sem a propriedade aninhada text, ou com text vazio
@@ -59,9 +60,11 @@ class TextGenerationHttp implements ITextGeneration {
       contents: [{ role: 'user', parts: [promptQuestion] }],
     };
 
-    console.log('Prompt Text:');
-    console.log(request.contents[0].parts[0].text);
-    console.log('Non-Streaming Response Text:');
+    if (BotConfiguration.isDevelopment()) {
+      console.log('Prompt Text:');
+      console.log(request.contents[0].parts[0].text);
+      console.log('Non-Streaming Response Text:');
+    }
 
     // Create the response stream
     try {

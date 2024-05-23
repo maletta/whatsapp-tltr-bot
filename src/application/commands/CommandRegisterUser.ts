@@ -13,10 +13,6 @@ class CommandRegisterUser implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Presentation Message - execute');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const messageToReply = message.hasQuotedMsg
       ? await message.getQuotedMessage()
       : message;

@@ -16,10 +16,6 @@ class CommandAdvice implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Advice Message - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     if (!message.hasQuotedMsg) {
       message.reply(`Marque uma mensagem para aconselhar`);
       return;

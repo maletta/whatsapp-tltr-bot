@@ -20,10 +20,6 @@ class CommandHoroscopePrediction implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Horoscope Predicion - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const horoscopeEnum: EnumHoroscope | null =
       this.getHoroscopeFromCommand(args);
 

@@ -17,9 +17,6 @@ class CommandStickerImage implements IMessageCommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Sticker Image - execute ');
-    console.log('message ', message.body);
-
     const options: MessageSendOptions = { sendMediaAsSticker: true };
     const media = await this.selectMedia(message);
 
