@@ -58,13 +58,9 @@ class UseCaseSendRegistrationForm {
         return errorsMessages.NoFormsAvailable;
       }
 
-      console.log('chat id ', chatFromDatabase);
-
       const questions = await this.questionRepository.findByChatId(
         chatFromDatabase.id,
       );
-
-      console.log('found questions', questions);
 
       // se o grupo está cadastrado, mas não existem questões cadastradas
       if (questions === null || questions === undefined) {

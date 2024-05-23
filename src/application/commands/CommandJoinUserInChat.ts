@@ -53,7 +53,7 @@ class CommandJoinUserInChat implements IGroupNotificationCommand {
       groupNotification,
     );
 
-    console.log('criado ou achado ', chatEntity);
+    console.log('criado ou achado ', chatEntity?.name);
 
     if (newUsersExceptMe.length === 0) {
       return;

@@ -29,11 +29,6 @@ class CommandAdvice implements IMessageCommand {
       return;
     }
 
-    console.log('message body', message.body);
-    console.log('message caption', (message as unknown as IMessage).caption);
-    console.log('message quoted body', messageQuoted.body);
-    console.log('message quoted caption', messageQuoted.caption);
-
     try {
       const userMessage = messageQuoted.body;
       const prompt = `Aconselhe a seguinte fala "${userMessage}" em até 2 frases e nada mais: `;

@@ -43,8 +43,6 @@ class UseCaseGenerateSummary {
     messages: string[],
     timeLimit: EnumTimeLimit,
   ): Promise<string | null> {
-    console.log('Time limit ', timeLimit);
-
     const promptMock = `Leia esse conjunto json de mensagens enviadas em grupo do whatsapp. Cada conjunto é composto pelo atributo userId que disintgue o usuário, pelo atributo timestamp que representa o horário de envio da mensagem e pelo atributo body que representa a mensagem enviada. Me diga o que foi conversado resumidamente em poucos tópicos, mas mantenha sigilo sobre a identidade do usuário : `;
     // const promptMock = `Leia esse conjunto json de mensagens enviadas em grupo do whatsapp. Cada conjunto é composto pelo atributo userId que disintgue o usuário, pelo atributo timestamp que representa o horário de envio da mensagem e pelo atributo body que representa a mensagem enviada. Me diga o que foi conversado em tópicos, mas mantenha sigilo sobre a identidade do usuário : `;
 
@@ -84,7 +82,6 @@ class UseCaseGenerateSummary {
         maxTokens: 14000,
       },
     );
-    console.log('messagesByTokenLimit', messagesByTokenLimit.length);
 
     return messagesByTokenLimit;
   }

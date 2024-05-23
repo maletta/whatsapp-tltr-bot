@@ -71,8 +71,6 @@ class UseCaseRegisterUserDetails {
         answers,
       );
 
-      console.log('userDetailsEntity ', userDetailsEntity);
-
       // salva ou atualiza entidade do usuário
       const result =
         this.userDetailsRepository.createOrUpdate(userDetailsEntity);

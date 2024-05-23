@@ -47,7 +47,6 @@ class CommandStickerImage implements IMessageCommand {
   };
 
   private async getMedia(message: Message): Promise<MessageMedia | null> {
-    console.log('Get Media function');
     try {
       if (!this.isValidType(message)) {
         return null;

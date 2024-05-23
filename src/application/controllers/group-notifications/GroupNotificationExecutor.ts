@@ -5,6 +5,7 @@ import {
 } from 'whatsapp-web.js';
 
 import { IGroupNotificationCommand } from '../../commands/interfaces/ICommand';
+import { BotConfiguration } from 'config/Configuration';
 
 type IGroupNotificationCommands = Map<
   GroupNotificationTypes,
@@ -36,7 +37,9 @@ class GroupNotificationsExecutor {
 
     if (!command) {
       // throw new Error(`Command ${commandName} not found`);
-      console.log(`Command ${commandType} not found`);
+      if (BotConfiguration.isDevelopment()) {
+        console.log(`Command ${commandType} not found`);
+      }
     }
 
     if (command) {
