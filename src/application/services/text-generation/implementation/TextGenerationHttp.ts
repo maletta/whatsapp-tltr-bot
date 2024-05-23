@@ -84,7 +84,10 @@ class TextGenerationHttp implements ITextGeneration {
         aggregatedResponse.candidates[0].content.parts[0];
 
       // console.dir(fullTextResponse);
-      console.dir(fullTextResponse, { depth: null });
+
+      if (BotConfiguration.isDevelopment()) {
+        console.dir(fullTextResponse, { depth: null });
+      }
 
       const responseWithoutAsteristc = fullTextResponse.text?.replace(
         /\*\*/g,
