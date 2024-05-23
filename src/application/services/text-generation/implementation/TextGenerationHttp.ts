@@ -73,8 +73,11 @@ class TextGenerationHttp implements ITextGeneration {
 
       // Wait for the response stream to complete
       const aggregatedResponse = await responseStream.response;
-      console.dir('aggregatedResponse', { depth: null });
-      console.dir(aggregatedResponse, { depth: null });
+
+      if (BotConfiguration.isDevelopment()) {
+        console.dir('aggregatedResponse', { depth: null });
+        console.dir(aggregatedResponse, { depth: null });
+      }
 
       // Select the text from the response
       const fullTextResponse =
