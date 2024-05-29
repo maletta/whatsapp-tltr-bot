@@ -9,7 +9,6 @@ import { WhatsAppClient } from 'infrastructure/whatsapp/WhatsAppClient';
 
 import { connectDatabase } from 'common/container';
 import { GroupNotification, GroupNotificationTypes } from 'whatsapp-web.js';
-import { Console } from 'console';
 
 console.log('initialize bot');
 
