@@ -25,6 +25,8 @@ abstract class WhatsAppClient {
             '--no-first-run',
             '--no-zygote',
             '--disable-dev-shm-usage',
+            '--disable-session-crashed-bubble', //
+            '--no-default-browser-check', //
           ],
         },
         ffmpegPath: '/usr/bin/ffmpeg',
@@ -34,12 +36,12 @@ abstract class WhatsAppClient {
         //   remotePath:
         //     'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2409.2.html',
         // },
-        // webVersion: '2.2412.50',
-        // webVersionCache: {
-        //   remotePath:
-        //     'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.50.html',
-        //   type: 'remote',
-        // },
+        webVersion: '2.2412.50',
+        webVersionCache: {
+          remotePath:
+            'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.50.html',
+          type: 'remote',
+        },
       });
     }
 
