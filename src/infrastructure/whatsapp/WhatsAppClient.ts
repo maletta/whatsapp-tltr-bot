@@ -14,6 +14,7 @@ abstract class WhatsAppClient {
     if (WhatsAppClient.client === null || WhatsAppClient.client === undefined) {
       WhatsAppClient.client = new Client({
         authStrategy: new LocalAuth(),
+        takeoverOnConflict: true,
         puppeteer: {
           args: [
             '--no-sandbox',
@@ -32,6 +33,12 @@ abstract class WhatsAppClient {
         //   type: 'remote',
         //   remotePath:
         //     'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2409.2.html',
+        // },
+        // webVersion: '2.2412.50',
+        // webVersionCache: {
+        //   remotePath:
+        //     'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.50.html',
+        //   type: 'remote',
         // },
       });
     }
