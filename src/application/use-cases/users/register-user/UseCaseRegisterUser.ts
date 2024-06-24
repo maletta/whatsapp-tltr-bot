@@ -1,81 +1,107 @@
+import { ChatEntity } from 'domain/entities/chats/ChatEntity';
+import { UserEntity } from 'domain/entities/users/UserEntity';
+import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
 import { IUsersRepository } from 'domain/interfaces/repositories/users/IUserRepository';
 import { PoolClient } from 'pg';
-import { IDataBase } from 'src/database/data-source/postgres/PostgresDatabase';
-import { inject } from 'tsyringe';
+import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
+import { container, inject, injectable } from 'tsyringe';
 import { Message } from 'whatsapp-web.js';
+import { UseCaseRegisterUserDetails } from '../register-user-details/UseCaseRegisterUserDetails';
+import { UsersDetailsEntity } from 'domain/entities/users/UserDetailsEntity';
 
-type QuestionAnswer = {
-  question: string;
-  answer: string;
-};
+@injectable()
 class UseCaseRegisterUser {
   constructor(
+    @inject('ChatsRepository')
+    private chatsRepository: IChatsRepository<PoolClient>,
     @inject('UsersRepository')
-    private userRepository: IUsersRepository<PoolClient>,
-    @inject('IDataBase') private database: IDataBase<PoolClient>,
+    private usersRepository: IUsersRepository<PoolClient>,
+    @inject('PostgresConnection')
+    private database: PostgresConnection,
   ) {}
 
   public async execute(
     message: Message,
-    questions: string[],
-  ): Promise<QuestionAnswer[]> {
-    const presentation = message.body;
+  ): Promise<[ChatEntity, UserEntity, UsersDetailsEntity] | null> {
+    const completedRegistrationForm = message.body;
 
-    const connection = await this.database.connect();
-    this.userRepository.setConnection(connection);
+    const connection = await this.database.getConnection();
+    this.chatsRepository.setConnection(connection);
+    this.usersRepository.setConnection(connection);
 
-    const userFound = await this.userRepository.findByName('alistar');
-    const answers = this.extractAnswers(presentation, questions);
+    try {
+      // procura chat na base ou cadastra
+      const chat = await this.findChat(message);
 
-    return answers;
-  }
-
-  private extractAnswers(
-    message: string,
-    questions: string[],
-  ): QuestionAnswer[] {
-    const answers: QuestionAnswer[] = [];
-
-    let currentQuestionIndex = 0;
-
-    const lines = message.split('\n');
-
-    lines.forEach((line) => {
-      // Se a linha atual contém a pergunta
-
-      const lineNormalized = this.normalizeString(line);
-      const questionNormalized = this.normalizeString(
-        questions[currentQuestionIndex],
-      );
-
-      console.log('current line ', lineNormalized);
-      console.log('current question  ', questionNormalized);
-      if (lineNormalized.includes(questionNormalized)) {
-        console.log('includes line ', line);
-        // Extrai resposta reomvendo a pergunta
-        const answer = lineNormalized.replace(questionNormalized, '').trim();
-
-        answers.push({
-          question: questions[currentQuestionIndex],
-          answer,
-        });
-
-        // Passa para próxima pergunta
-        currentQuestionIndex += 1;
+      if (chat === null) {
+        console.log('chat não encontrado');
+        return null;
       }
 
-      // Se todas as perguntas foram respondidas, sai do loop
-      // if (currentQuestionIndex >= questions.length) break;
-    });
+      // busca por usuário na base ou cadastra
+      const user = await this.findOrCreateUser(message);
 
-    return answers;
+      if (user === null) {
+        console.log('user não encontrado');
+        return null;
+      }
+
+      // registra os detalhes do usuário
+      const useCaseRegisterUserDetails = container.resolve(
+        UseCaseRegisterUserDetails,
+      );
+
+      const userDetails = await useCaseRegisterUserDetails.execute(
+        completedRegistrationForm,
+        user,
+        chat,
+      );
+
+      if (userDetails === null) {
+        console.log('user details não registrado');
+        return null;
+      }
+
+      // retorna as respostas
+
+      return [chat, user, userDetails];
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      this.database.release();
+    }
   }
 
-  private normalizeString(str: string): string {
-    return str
-      .replace(/[^a-zA-Z0-9]/g, '')
-      .toLowerCase()
-      .trim();
+  private async findChat(message: Message): Promise<ChatEntity | null> {
+    const chat = await message.getChat();
+    const whatsAppRegistry = message.from;
+    if (!chat.isGroup) {
+      return null;
+    }
+    const chatFound =
+      await this.chatsRepository.findByWhatsAppRegistry(whatsAppRegistry);
+    return chatFound;
+  }
+
+  private async findOrCreateUser(message: Message): Promise<UserEntity | null> {
+    const userWhatsAppRegistry = message.author!;
+    const userContact = await message.getContact();
+
+    const userFound =
+      await this.usersRepository.findByWhatsAppRegistry(userWhatsAppRegistry);
+
+    if (userFound !== null && userFound !== undefined) {
+      return userFound;
+    }
+
+    const createdUser = await this.usersRepository.create({
+      cellphone: userContact.number,
+      infoName: userContact.pushname,
+      whatsappRegistry: userWhatsAppRegistry,
+    });
+
+    return createdUser;
   }
 }
 

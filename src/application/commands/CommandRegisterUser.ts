@@ -2,57 +2,83 @@
 import { UseCaseRegisterUser } from 'application/use-cases/users/register-user/UseCaseRegisterUser';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 import { container } from 'tsyringe';
+import { ChatEntity } from 'domain/entities/chats/ChatEntity';
+import { IGroupChat } from 'common/CustomTypes';
 
-const questions: string[] = [
-  `୨୧ *Nome*(Apenas o nome): `,
-  `୨୧ *Pronomes* (Quais pronomes devemos usar para você?): `,
-  `୨୧ *Idade* (Quantos anos você tem?): `,
-  `୨୧ *Localização em SP* (De qual parte você é?): `,
-  `୨୧ *Signo* (Qual é o seu signo do zodíaco?): `,
-  `୨୧ *Orientação Sexual* (Como você se identifica?): `,
-  `୨୧ *Relacionamento* (Está namorando? Já superou o/a ex?): `,
-  `୨୧ *Loucura por Amor* (Já fez alguma? Conte-nos!): `,
-  `୨୧ *Instagram* (Qual é o seu @, se quiser compartilhar): `,
-  `୨୧ *Foto* (Envie uma unidade de foto sua): `,
-];
-
-export const presentation =
-  `.cadastro` +
-  `\n\n•｡ꪆৎ ˚⋅ Vamos nos conhecer melhor! ౨ৎ ⋆｡˚` +
-  `\n\`\`\`Responda às perguntas abaixo sem deletar as perguntas\`\`\` 🚀\n\n${questions.join('\n')}`;
-
-class CommandRegisterUser implements ICommand {
+class CommandRegisterUser implements IMessageCommand {
   async execute(
     args: string[],
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Presentation Message - execute');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const messageToReply = message.hasQuotedMsg
       ? await message.getQuotedMessage()
       : message;
 
-    const contact = await message.getContact();
-    const { name } = contact;
+    try {
+      const useCaseRegisterUse = container.resolve(UseCaseRegisterUser);
+      const registerResponse = await useCaseRegisterUse.execute(message);
 
-    const useCaseRegisterUse = container.resolve(UseCaseRegisterUser);
-    const answers = await useCaseRegisterUse.execute(message, questions);
+      if (registerResponse === null) {
+        return;
+      }
 
-    // const answers = await new UseCaseRegisterUser().execute(message, questions);
-    messageToReply
-      // .reply(answers.map((item) => item.answer).join('\n'), message.from)
-      .reply(presentation + JSON.stringify(answers), message.from)
-      .then((response) => response.react('👌🏼'));
+      const [chatEntity, userEntity, userDetailsEntity] = registerResponse;
+      const isNew = userDetailsEntity.isNew();
+      const presentation = isNew
+        ? `Foi bom te conhecer \`\`\`Miaulhor\`\`\` 🐈✨ `
+        : `Atualizei seus dados, agora pode engatinhar por aí 😽✨ `;
+      const response = [
+        `${presentation} - ${userDetailsEntity.name} - @${userEntity.cellphone}`,
+      ];
+      const mentions = [`${userEntity.whatsappRegistry}`];
+
+      if (isNew) {
+        const notifyNewUserDetails = await this.getNotifyNewUserDetails(
+          client,
+          chatEntity,
+        );
+        response.push(notifyNewUserDetails.response);
+        mentions.push(...notifyNewUserDetails.mentions);
+      }
+
+      await client
+        .sendMessage(message.from, response.join('\n'), {
+          mentions,
+          quotedMessageId: messageToReply.id._serialized,
+        })
+        .then((response) => response.react('👌🏼'));
+    } catch (error) {
+      console.log('Error on Command Register User');
+      console.log(error);
+    }
+  }
+
+  private async getNotifyNewUserDetails(
+    client: Client,
+    chatEntity: ChatEntity,
+  ): Promise<{ response: string; mentions: string[] }> {
+    const whatsAppChat = (await client.getChatById(
+      chatEntity.whatsappRegistry,
+    )) as IGroupChat;
+    const paricipants = whatsAppChat.groupMetadata.participants;
+    const adminParticipants = paricipants.filter(({ isAdmin }) => isAdmin);
+
+    const mentions: string[] = [];
+    const response: string[] = [`\n*Admins:*\n`];
+
+    adminParticipants.forEach(({ id }) => {
+      mentions.push(`${id.user}@${id.server}`);
+      response.push(`@${id.user}`);
+    });
+
+    return {
+      mentions,
+      response: response.join('\n'),
+    };
   }
 }
 
 export { CommandRegisterUser };
-//  .cadastro
-
-//  Vamos nos conhecer melhor!
-//  •｡ꪆৎ ˚⋅Responda às perguntas abaixo sem deletar as perguntas ౨ৎ ⋆｡˚

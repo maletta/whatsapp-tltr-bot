@@ -1,13 +1,10 @@
-import { IChat, IGroupChat } from 'common/CustomTypes';
-import { ChatEntity, ChatEntityDTO } from 'domain/entities/chats/ChatEntity';
-import { QuestionEntity } from 'domain/entities/chats/QuestionsAndAnswersEntity';
-import { RegistrationQuestionsColumns } from 'domain/enums/chats/Question';
-import { IChatsRepository } from 'domain/interfaces/repositories/chats/IChatsRepository';
+import { OrderQuestionsByEnum } from 'application/services/chats/order-questions-by-enum/OrderQuestionsByEnum';
+import { UseCaseFindOrCreateGroupChat } from 'application/use-cases/chats/find-or-create-group-chat/UseCaseFindOrCreateGroupChat';
+import { IChat } from 'common/CustomTypes';
 import { IQuestionsRepository } from 'domain/interfaces/repositories/chats/IQuestionsRepository';
 import { PoolClient } from 'pg';
-import { IDataBase } from 'src/database/data-source/interfaces/IDataBase';
-import { inject, injectable } from 'tsyringe';
-import { StringUtils } from 'utils/String.utils';
+import { PostgresConnection } from 'src/database/data-source/postgres/PostgresConnection';
+import { container, inject, injectable } from 'tsyringe';
 import { Message } from 'whatsapp-web.js';
 
 enum ErrorsEnum {
@@ -15,14 +12,16 @@ enum ErrorsEnum {
   'NoFormsAvailable' = 'NoFormsAvailable',
   'NoValidGroupChat' = 'NoValidGroupChat',
 }
+// Refatorar send-registration-form para apenas retornar registration forms
+// e ser aproveitado no lugar de UseCaseFindQuestionByChat
+// o problema é os erros que ele retorna, como tratar os erros
+// para mostrar messagm correta?
 @injectable()
 class UseCaseSendRegistrationForm {
   constructor(
-    @inject('ChatsRepository')
-    private chatRepository: IChatsRepository<PoolClient>,
     @inject('QuestionsRepository')
     private questionRepository: IQuestionsRepository<PoolClient>,
-    @inject('IDataBase') private database: IDataBase<PoolClient>,
+    @inject('PostgresConnection') private database: PostgresConnection,
   ) {}
 
   public async execute(message: Message): Promise<string> {
@@ -36,7 +35,7 @@ class UseCaseSendRegistrationForm {
         'Funcionalidade disponível apenas para grupos',
     };
 
-    const connection = await this.database.connect();
+    const connection = await this.database.getConnection();
 
     try {
       const chat = (await message.getChat()) as IChat;
@@ -46,33 +45,33 @@ class UseCaseSendRegistrationForm {
         return errorsMessages.NoValidGroupChat;
       }
 
-      await this.chatRepository.setConnection(connection);
       await this.questionRepository.setConnection(connection);
 
-      const chatFromDatabase = await this.findOrCreateChat(chat);
+      const useCaseFindOrCreateGroupChat = container.resolve(
+        UseCaseFindOrCreateGroupChat,
+      );
+
+      const chatFromDatabase = await useCaseFindOrCreateGroupChat.execute(chat);
 
       // se não encontrou ou não criou o chat
       if (chatFromDatabase === null || chatFromDatabase === undefined) {
         return errorsMessages.NoFormsAvailable;
       }
 
-      console.log('chat id ', chatFromDatabase);
-
       const questions = await this.questionRepository.findByChatId(
         chatFromDatabase.id,
       );
-
-      console.log('found questions', questions);
 
       // se o grupo está cadastrado, mas não existem questões cadastradas
       if (questions === null || questions === undefined) {
         return errorsMessages.NoQuestionsAvailable;
       }
 
-      const orderedQuestions = this.orderQuestionByEnum(questions);
+      const orderQuestionsByEum = new OrderQuestionsByEnum();
+      const orderedQuestions = orderQuestionsByEum.execute(questions);
 
       const questionsResponse = orderedQuestions
-        .map((item) => StringUtils.replaceBreakingLines(item.question))
+        .map(({ question }) => question)
         .join('\n');
 
       return questionsResponse;
@@ -80,57 +79,8 @@ class UseCaseSendRegistrationForm {
       console.log(error);
       return errorsMessages.NoFormsAvailable;
     } finally {
-      connection.release();
+      this.database.release();
     }
-  }
-
-  private async findOrCreateChat(
-    chatGroup: IGroupChat,
-  ): Promise<ChatEntity | null> {
-    const chatRegistry = `${chatGroup.id.user}${chatGroup.id.server}`;
-
-    const chatFound = await this.chatRepository.findByWhatsAppId(chatRegistry);
-
-    if (chatFound !== null && chatFound !== undefined) {
-      return chatFound;
-    }
-
-    const chatDto: ChatEntityDTO = {
-      name: chatGroup.groupMetadata.subject,
-      whatsappRegistry: chatRegistry,
-    };
-    const createdChat = await this.chatRepository.create(chatDto);
-
-    return createdChat;
-  }
-
-  private orderQuestionByEnum(questions: QuestionEntity[]): QuestionEntity[] {
-    const questionsOrdered: QuestionEntity[] = [];
-    const orderSequence = [
-      RegistrationQuestionsColumns.QUESTIONS_HEADER,
-      RegistrationQuestionsColumns.NAME,
-      RegistrationQuestionsColumns.PRONOUN,
-      RegistrationQuestionsColumns.AGE,
-      RegistrationQuestionsColumns.LOCATION,
-      RegistrationQuestionsColumns.SIGN,
-      RegistrationQuestionsColumns.SEXUAL_ORIENTATION,
-      RegistrationQuestionsColumns.RELATIONSHIP,
-      RegistrationQuestionsColumns.MADNESS_FOR_LOVE,
-      RegistrationQuestionsColumns.INSTAGRAM,
-      RegistrationQuestionsColumns.PHOTO,
-    ];
-
-    orderSequence.forEach((currentEnum) => {
-      const questionFound = questions.find(
-        (q) => q.questionColumnType === currentEnum,
-      );
-
-      if (questionFound !== undefined && questionFound !== null) {
-        questionsOrdered.push(questionFound);
-      }
-    });
-
-    return questionsOrdered;
   }
 }
 

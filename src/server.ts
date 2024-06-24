@@ -8,6 +8,7 @@ import { QRCodeDisplay } from 'infrastructure/qr-code/QRCodeDisplay';
 import { WhatsAppClient } from 'infrastructure/whatsapp/WhatsAppClient';
 
 import { connectDatabase } from 'common/container';
+import { GroupNotification, GroupNotificationTypes } from 'whatsapp-web.js';
 
 console.log('initialize bot');
 
@@ -28,7 +29,16 @@ console.log('initialize bot');
     bot.on('authenticated', () => console.log('authenticated!'));
 
     bot.on('message', (message) => {
-      botMediator.selectCommand(bot, message);
+      botMediator.selectMessageCommand(message);
+    });
+
+    bot.on('group_join', (groupNotification: GroupNotification) => {
+      botMediator.selectGroupNotificationCommand(groupNotification);
+    });
+
+    bot.on('change_state', (state) => {
+      console.log('meu estado do bot alterou ');
+      console.log(state);
     });
 
     bot.initialize();

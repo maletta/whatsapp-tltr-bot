@@ -1,7 +1,11 @@
-import { Client, Message } from 'whatsapp-web.js';
+import { Client, GroupNotification, Message } from 'whatsapp-web.js';
 
-interface ICommand {
+interface IMessageCommand {
   execute(args: string[], client: Client, message: Message): Promise<void>;
 }
+1;
+interface IGroupNotificationCommand {
+  execute(client: Client, groupNotification: GroupNotification): Promise<void>;
+}
 
-export { ICommand };
+export { IMessageCommand, IGroupNotificationCommand };

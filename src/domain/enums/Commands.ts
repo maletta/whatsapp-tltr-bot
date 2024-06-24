@@ -14,6 +14,7 @@ export enum EnumPublicCommands {
   STICKER = 'sticker',
   CANCELM = 'cancelado',
   CANCELF = 'cancelada',
+  ADVICE = 'conselho',
   HOROSCOPE = 'horoscopo',
   PRESENTATION = 'ficha',
 }

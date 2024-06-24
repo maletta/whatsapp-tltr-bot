@@ -4,7 +4,7 @@ import { Client, Message, MessageTypes } from 'whatsapp-web.js';
 
 import { IMessageCommand } from './interfaces/ICommand';
 
-class CommandCancel implements IMessageCommand {
+class CommandAdvice implements IMessageCommand {
   private textGeneration: ITextGeneration;
 
   constructor(textGeneration: ITextGeneration) {
@@ -17,7 +17,7 @@ class CommandCancel implements IMessageCommand {
     message: Message,
   ): Promise<void> {
     if (!message.hasQuotedMsg) {
-      message.reply(`Marque uma mensagem para cancelar`);
+      message.reply(`Marque uma mensagem para aconselhar`);
       return;
     }
 
@@ -25,28 +25,24 @@ class CommandCancel implements IMessageCommand {
       (await message.getQuotedMessage()) as unknown as IMessage;
 
     if (messageQuoted.id.fromMe) {
-      message.reply(`Miau, estou corretíssimo!`);
+      message.reply(`Eu não preciso de mais conselhos!`);
       return;
     }
 
     try {
       const userMessage = messageQuoted.body;
-      const prompt = `Problematize a seguinte fala "${userMessage}" em até 2 frases e nada mais: `;
+      const prompt = `Aconselhe a seguinte fala "${userMessage}" em até 2 frases e nada mais: `;
       const response = await this.textGeneration.generate(prompt);
 
       if (response) {
         messageQuoted.reply(response);
-        messageQuoted.react('🤬');
+        messageQuoted.react('🩺');
       }
     } catch (error) {
-      console.log('Error on send Command Cancel ');
+      console.log('Error on send Command Advice ');
       console.log(error);
     }
   }
-
-  private isValidType = (message: Message) => {
-    return message.type === MessageTypes.TEXT;
-  };
 }
 
-export { CommandCancel };
+export { CommandAdvice };

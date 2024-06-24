@@ -2,14 +2,14 @@ import { StringUtils } from 'utils/String.utils';
 
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 import { ITextGeneration } from 'application/services/text-generation/ITextGeneration';
 import { GroupsManager } from 'domain/entities/group-manager/GroupsManager';
 import { EnumTimeLimit } from 'domain/enums/text-generation/TimeLimit';
 import { TimeLimitRules } from 'domain/value_objects/TimeLimitRules';
 import { UseCaseGenerateSummary } from 'application/use-cases/text-generation/generate-summary/UseCaseGenerateSummary';
 
-class CommandSummarize implements ICommand {
+class CommandSummarize implements IMessageCommand {
   constructor(
     private textGeneration: ITextGeneration,
     private groups: GroupsManager,
@@ -21,10 +21,6 @@ class CommandSummarize implements ICommand {
     message: Message,
   ): Promise<void> {
     const timeLimit = this.getSummarizeTimeFromCommand(args);
-
-    console.log('Command Summarize - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
 
     const groupId = message.from;
 

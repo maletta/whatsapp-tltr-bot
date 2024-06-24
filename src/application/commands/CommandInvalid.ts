@@ -1,9 +1,10 @@
 import { EnumPublicCommands } from 'domain/enums/Commands';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
+import { UseCaseListCommands } from 'application/use-cases/chats/list-commands/UseCaseListCommands';
 
-class CommandInvalid implements ICommand {
+class CommandInvalid implements IMessageCommand {
   private prefix;
 
   constructor(prefix: string) {
@@ -15,26 +16,16 @@ class CommandInvalid implements ICommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Invalid - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
+    const useCaseListCommands = new UseCaseListCommands();
+    const commandsList = useCaseListCommands.execute(this.prefix);
 
-    const validCommands = Object.values(EnumPublicCommands)
-      .map((commands) => `*${this.prefix}${commands.toLowerCase()}* \n`)
-      .join('');
-
-    const responseMessage = `Comando inválido! Use um dos comandos abaixo:\n${validCommands}`;
-    const summarizeValidOptions = [
-      `${this.prefix}${EnumPublicCommands.SUMMARIZE} 30m`,
-      `${this.prefix}${EnumPublicCommands.SUMMARIZE} 1h`,
-      `${this.prefix}${EnumPublicCommands.SUMMARIZE} 2h`,
-      `${this.prefix}${EnumPublicCommands.SUMMARIZE} 4h`,
-      `${this.prefix}${EnumPublicCommands.SUMMARIZE} 6h`,
-    ].join('\n');
-    const summarizeValidOptionMessage = `\nComando válido para resumo:\n${summarizeValidOptions}`;
+    const responseMessage = [
+      `Comando inválido! Use um dos comandos abaixo:\n`,
+      commandsList,
+    ];
 
     message
-      .reply(`${responseMessage}${summarizeValidOptionMessage}`)
+      .reply(responseMessage.join('\n'))
       .then((response) => response.react('😴'));
   }
 }

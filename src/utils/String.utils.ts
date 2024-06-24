@@ -13,10 +13,6 @@ class StringUtils {
 
     return `${dd}-${mm}-${yy} ${hh}:${min}:${ss}`;
   };
-
-  static replaceBreakingLines = (text: string): string => {
-    return text.replace(/\\n/gm, '\n');
-  };
 }
 
 export { StringUtils };

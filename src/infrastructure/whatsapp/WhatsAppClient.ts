@@ -14,6 +14,7 @@ abstract class WhatsAppClient {
     if (WhatsAppClient.client === null || WhatsAppClient.client === undefined) {
       WhatsAppClient.client = new Client({
         authStrategy: new LocalAuth(),
+        takeoverOnConflict: true,
         puppeteer: {
           args: [
             '--no-sandbox',
@@ -24,14 +25,22 @@ abstract class WhatsAppClient {
             '--no-first-run',
             '--no-zygote',
             '--disable-dev-shm-usage',
+            '--disable-session-crashed-bubble', //
+            '--no-default-browser-check', //
           ],
         },
         ffmpegPath: '/usr/bin/ffmpeg',
-        webVersion: '2.2409.2',
+        // webVersion: '2.2409.2',
+        // webVersionCache: {
+        //   type: 'remote',
+        //   remotePath:
+        //     'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2409.2.html',
+        // },
+        webVersion: '2.2412.50',
         webVersionCache: {
-          type: 'remote',
           remotePath:
-            'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2409.2.html',
+            'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.50.html',
+          type: 'remote',
         },
       });
     }

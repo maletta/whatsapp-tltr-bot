@@ -8,18 +8,15 @@ import {
   MessageTypes,
 } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 import { MimeTypesEnum } from 'domain/enums/MimeTypes';
 
-class CommandStickerImage implements ICommand {
+class CommandStickerImage implements IMessageCommand {
   async execute(
     args: string[],
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Sticker Image - execute ');
-    console.log('message ', message.body);
-
     const options: MessageSendOptions = { sendMediaAsSticker: true };
     const media = await this.selectMedia(message);
 
@@ -50,7 +47,6 @@ class CommandStickerImage implements ICommand {
   };
 
   private async getMedia(message: Message): Promise<MessageMedia | null> {
-    console.log('Get Media function');
     try {
       if (!this.isValidType(message)) {
         return null;

@@ -7,9 +7,9 @@ import { EnumHoroscope } from 'domain/enums/text-generation/Horoscope';
 import { StringUtils } from 'utils/String.utils';
 import { Client, Message } from 'whatsapp-web.js';
 
-import { ICommand } from './interfaces/ICommand';
+import { IMessageCommand } from './interfaces/ICommand';
 
-class CommandHoroscopePrediction implements ICommand {
+class CommandHoroscopePrediction implements IMessageCommand {
   constructor(
     private textGeneration: ITextGeneration,
     private groups: GroupsManager,
@@ -20,10 +20,6 @@ class CommandHoroscopePrediction implements ICommand {
     client: Client,
     message: Message,
   ): Promise<void> {
-    console.log('Command Horoscope Predicion - execute ');
-    console.log('args ', args);
-    console.log('message ', message.body);
-
     const horoscopeEnum: EnumHoroscope | null =
       this.getHoroscopeFromCommand(args);
 

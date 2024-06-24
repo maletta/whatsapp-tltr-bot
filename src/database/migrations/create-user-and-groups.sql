@@ -15,6 +15,14 @@ CREATE TABLE chats (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE chats_configuration(
+    id SERIAL PRIMARY KEY,
+    id_chat INTEGER,
+    notify_new_user_detail BOOLEAN DEFAULT FALSE, // Notify when a new user enters the chat
+    only_registered_user_mode BOOLEAN DEFAULT FALSE, // Only registered users can use chat commands
+    FOREIGN KEY (id_chat) REFERENCES chats(id)
+)
+
 CREATE TABLE users_in_chats(
     id_user INTEGER,
     id_chat INTEGER,

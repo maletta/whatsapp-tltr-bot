@@ -51,6 +51,14 @@ interface IAnswerEntity {
 
 type AnswerDTO = Omit<IAnswerEntity, 'id'>;
 
+interface IAnswerDatabaseModel {
+  id: number;
+  id_question: number;
+  id_user: number;
+  answer: string;
+  created_at: string;
+}
+
 class AnswerEntity {
   public readonly id: number;
   public readonly idQuestion: number;
@@ -63,7 +71,21 @@ class AnswerEntity {
     this.idUser = answer.idUser;
     this.answer = answer.answer;
   }
+
+  public static createFromDatabase(data: IAnswerDatabaseModel) {
+    return new AnswerEntity({
+      id: data.id,
+      idQuestion: data.id_question,
+      idUser: data.id_user,
+      answer: data.answer,
+    });
+  }
 }
+
+type ExtractedAnswer = {
+  question: QuestionEntity;
+  answer: string;
+};
 
 export { QuestionEntity, AnswerEntity };
 export type {
@@ -72,4 +94,6 @@ export type {
   IQuestionEntity,
   IAnswerEntity,
   IQuestionDatabaseModel,
+  IAnswerDatabaseModel,
+  ExtractedAnswer,
 };
